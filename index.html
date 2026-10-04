@@ -985,6 +985,47 @@
   .chip-star:hover{ color: var(--mustard-deep); }
   .chip-star.active{ color: var(--mustard); }
 
+  /* ---- Compact pantry list ---- */
+  .chip-compact{ cursor: pointer; font-family: 'Inter', sans-serif; padding: 7px 12px; }
+  .chip-compact.chip-open{ box-shadow: 0 0 0 1.5px var(--tomato), var(--shadow-soft); }
+  .usesoon-header .chip-category-name{ color: var(--tomato-deep); }
+  .usesoon-header-icon{ color: var(--tomato); display: inline-flex; }
+  .pantry-edit{
+    flex-basis: 100%;
+    background: var(--surface);
+    border-radius: 14px;
+    box-shadow: var(--shadow-soft);
+    padding: 12px 14px;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+  }
+  .pantry-edit-row{ display: flex; align-items: center; gap: 10px; }
+  .pantry-edit-label{ font-family: 'Poppins', sans-serif; font-weight: 600; font-size: 12px; color: var(--ink-soft); width: 72px; flex-shrink: 0; }
+  .pantry-edit-input{
+    flex: 1; min-width: 0;
+    font-family: 'Inter', sans-serif; font-size: 14px;
+    padding: 7px 10px;
+    border: 1.5px solid var(--line-light);
+    border-radius: 10px;
+    background: var(--surface);
+    color: var(--ink);
+  }
+  .pantry-edit-input:focus{ outline: none; border-color: var(--tomato); }
+  .pantry-edit-actions{ display: flex; justify-content: space-between; align-items: center; gap: 10px; }
+  .pantry-edit-soon{
+    display: inline-flex; align-items: center; gap: 6px;
+    font-family: 'Poppins', sans-serif; font-weight: 500; font-size: 12.5px;
+    padding: 6px 12px; border-radius: 999px;
+    border: 1.5px solid var(--line-dark); background: transparent; color: var(--ink-soft); cursor: pointer;
+  }
+  .pantry-edit-soon.active{ border-color: var(--tomato); background: #FFE4DC; color: var(--tomato-deep); }
+  .pantry-edit-remove{
+    font-family: 'Poppins', sans-serif; font-weight: 500; font-size: 12.5px;
+    background: none; border: none; color: var(--tomato-deep); cursor: pointer; padding: 6px 4px;
+  }
+  .pantry-edit-remove:hover{ text-decoration: underline; }
+
   .chip-qty{
     width: 52px;
     font-family: 'Inter', sans-serif;
@@ -1444,6 +1485,16 @@
     </div>
 
     <div class="pref-block">
+      <p class="pref-label" data-i18n="pref_difficulty">difficulty</p>
+      <div class="pill-group recipe-pill-group" data-group="difficulty">
+        <button class="pill selected" data-value="no preference">No preference</button>
+        <button class="pill" data-value="easy">Easy</button>
+        <button class="pill" data-value="medium">Medium</button>
+        <button class="pill" data-value="hard">Hard</button>
+      </div>
+    </div>
+
+    <div class="pref-block">
       <p class="pref-label" data-i18n="pref_servings">servings</p>
       <div class="pill-group recipe-pill-group" data-group="servings">
         <button class="pill" data-value="1">1</button>
@@ -1532,7 +1583,7 @@
   <section class="tab-page" id="tabPantry">
     <p class="eyebrow" data-i18n="pantry_eyebrow">pantry</p>
     <h1 class="screen-title" data-i18n="pantry_title">Your pantry</h1>
-    <p class="screen-sub" data-i18n="pantry_sub">Keep this in sync with what's actually in your kitchen. Tap the clock on an item to flag it as "use soon" — it'll get starred automatically next time you cook.</p>
+    <p class="screen-sub" data-i18n="pantry_sub">Keep this in sync with what's actually in your kitchen. Tap an item to change its amount or category, or mark it as "use soon" — those get starred automatically next time you cook.</p>
 
     <p class="section-label" data-i18n="in_stock_label">in stock</p>
     <div class="chips" id="pantryChips"></div>
@@ -1726,6 +1777,16 @@
           <button class="pill selected" data-value="30 minutes">30 min</button>
           <button class="pill" data-value="45 minutes">45 min</button>
           <button class="pill" data-value="an hour or more">1 hr+</button>
+        </div>
+      </div>
+
+      <div class="pref-block">
+        <p class="pref-label" data-i18n="pref_difficulty">difficulty</p>
+        <div class="pill-group plan-pill-group" data-group="difficulty">
+          <button class="pill selected" data-value="no preference">No preference</button>
+          <button class="pill" data-value="easy">Easy</button>
+          <button class="pill" data-value="medium">Medium</button>
+          <button class="pill" data-value="hard">Hard</button>
         </div>
       </div>
 
@@ -2078,7 +2139,7 @@ const translations = {
 
     pantry_eyebrow: "pantry",
     pantry_title: "Your pantry",
-    pantry_sub: "Keep this in sync with what's actually in your kitchen. Tap the clock on an item to flag it as \"use soon\" — it'll get starred automatically next time you cook.",
+    pantry_sub: "Keep this in sync with what's actually in your kitchen. Tap an item to change its amount or category, or mark it as \"use soon\" — those get starred automatically next time you cook.",
     pantry_empty: "Nothing tracked yet — scan a photo, type a few items, or add them one by one.",
     add_items_label: "add items",
     take_upload_photos: "Take or upload photos",
@@ -2226,6 +2287,13 @@ const translations = {
     default_pill_title: "Your profile default",
     pref_meal_type: "meal",
     pref_flavor: "flavor",
+    pref_difficulty: "difficulty",
+    use_soon_group: "Use soon",
+    use_soon_on: "Marked: use soon",
+    use_soon_off: "Mark as use soon",
+    qty_label: "Amount",
+    qty_example: "e.g. 6, 500g, 1 bottle",
+    category_label: "Category",
     add_missing_one: "+ Add 1 missing item to list",
     add_missing_many: "+ Add {n} missing items to list",
     ingredients_label: "ingredients",
@@ -2288,7 +2356,7 @@ const translations = {
 
     pantry_eyebrow: "pantry",
     pantry_title: "Pantry'n",
-    pantry_sub: "Bunu mutfağında gerçekten olanla senkron tut. \"Yakında kullan\" olarak işaretlemek için bir öğenin saatine dokun — bir dahaki sefere otomatik olarak yıldızlanır.",
+    pantry_sub: "Bunu mutfağında gerçekten olanla senkron tut. Miktarını veya kategorisini değiştirmek ya da \"yakında kullan\" olarak işaretlemek için bir öğeye dokun — işaretliler bir dahaki sefere otomatik olarak yıldızlanır.",
     pantry_empty: "Henüz bir şey eklenmedi — fotoğraf tara, birkaç öğe yaz, ya da tek tek ekle.",
     add_items_label: "öğe ekle",
     take_upload_photos: "Fotoğraf çek veya yükle",
@@ -2436,6 +2504,13 @@ const translations = {
     default_pill_title: "Profil varsayılanın",
     pref_meal_type: "öğün",
     pref_flavor: "lezzet",
+    pref_difficulty: "zorluk",
+    use_soon_group: "Yakında kullan",
+    use_soon_on: "İşaretli: yakında kullan",
+    use_soon_off: "Yakında kullan olarak işaretle",
+    qty_label: "Miktar",
+    qty_example: "örn. 6, 500g, 1 şişe",
+    category_label: "Kategori",
     add_missing_one: "+ 1 eksik malzemeyi listeye ekle",
     add_missing_many: "+ {n} eksik malzemeyi listeye ekle",
     ingredients_label: "malzemeler",
@@ -2454,7 +2529,8 @@ const pillLabels = {
     "cuisine:no preference": "No preference", "cuisine:Mediterranean": "Mediterranean", "cuisine:Turkish": "Turkish", "cuisine:East Asian": "East Asian", "cuisine:Mexican": "Mexican", "cuisine:Italian": "Italian", "cuisine:comfort food": "Comfort food",
     "planDays:3": "3 days", "planDays:5": "5 days", "planDays:7": "7 days",
     "mealType:breakfast": "Breakfast", "mealType:lunch": "Lunch", "mealType:dinner": "Dinner",
-    "flavor:no preference": "No preference", "flavor:savory": "Savory", "flavor:spicy": "Spicy", "flavor:sweet": "Sweet", "flavor:sour and tangy": "Sour / tangy", "flavor:light and fresh": "Light & fresh"
+    "flavor:no preference": "No preference", "flavor:savory": "Savory", "flavor:spicy": "Spicy", "flavor:sweet": "Sweet", "flavor:sour and tangy": "Sour / tangy", "flavor:light and fresh": "Light & fresh",
+    "difficulty:no preference": "No preference", "difficulty:easy": "Easy", "difficulty:medium": "Medium", "difficulty:hard": "Hard"
   },
   tr: {
     "time:15 minutes": "15 dk", "time:30 minutes": "30 dk", "time:45 minutes": "45 dk", "time:an hour or more": "1 sa+",
@@ -2465,7 +2541,8 @@ const pillLabels = {
     "cuisine:no preference": "Fark etmez", "cuisine:Mediterranean": "Akdeniz", "cuisine:Turkish": "Türk", "cuisine:East Asian": "Doğu Asya", "cuisine:Mexican": "Meksika", "cuisine:Italian": "İtalyan", "cuisine:comfort food": "Ev yemeği",
     "planDays:3": "3 gün", "planDays:5": "5 gün", "planDays:7": "7 gün",
     "mealType:breakfast": "Kahvaltı", "mealType:lunch": "Öğle yemeği", "mealType:dinner": "Akşam yemeği",
-    "flavor:no preference": "Fark etmez", "flavor:savory": "Tuzlu", "flavor:spicy": "Acı", "flavor:sweet": "Tatlı", "flavor:sour and tangy": "Ekşi", "flavor:light and fresh": "Hafif & ferah"
+    "flavor:no preference": "Fark etmez", "flavor:savory": "Tuzlu", "flavor:spicy": "Acı", "flavor:sweet": "Tatlı", "flavor:sour and tangy": "Ekşi", "flavor:light and fresh": "Hafif & ferah",
+    "difficulty:no preference": "Fark etmez", "difficulty:easy": "Kolay", "difficulty:medium": "Orta", "difficulty:hard": "Zor"
   }
 };
 
@@ -3950,7 +4027,7 @@ function buildMealPlanPrompt(days){
   const missingRule = isStrict
     ? `Every meal MUST be fully makeable from the available pool above (plus basic pantry staples) — missing_ingredients must be an empty array for every day. Do not suggest anything that requires a trip to the store. Pick dishes that genuinely work with only what's listed, even if that means simpler meals.`
     : `If something is genuinely missing for a given day, list it under that day's missing_ingredients.`;
-  return `Available ingredients (a pool to choose from, not a checklist; amounts in parentheses are roughly what's on hand, so don't call for more than that of those items): ${selectedNames.join(', ')}.${priorityLine}${historyLine}${goalGuidanceLine(planPrefs.goal)}${flavorLine(planPrefs.flavor)}
+  return `Available ingredients (a pool to choose from, not a checklist; amounts in parentheses are roughly what's on hand, so don't call for more than that of those items): ${selectedNames.join(', ')}.${priorityLine}${historyLine}${goalGuidanceLine(planPrefs.goal)}${flavorLine(planPrefs.flavor)}${difficultyLine(planPrefs.difficulty, planPrefs.time)}
 Constraints for every meal in the plan: meal type: ${planPrefs.mealType}, about ${planPrefs.time} of cooking time each, ${planPrefs.servings} servings, dietary requirement: ${planPrefs.diet}, cuisine preference: ${planPrefs.cuisine}, preferred cooking method: ${planPrefs.method}.
 Plan exactly ${days} distinct ${planPrefs.mealType} recipes, one per day, each genuinely suited to that meal of the day. Vary style and main technique across the days so the week doesn't feel repetitive — the same dish must not repeat within the plan. Ingredients can reasonably overlap across days (reusing a protein or sauce is normal meal planning), but treat the pool as a whole across all ${days} days, not per day — don't force every ingredient into every dish. It's fine to assume basic pantry staples (salt, pepper, oil, common spices) are on hand even if not listed, but do not assume any other ingredient beyond the pool above is available. ${missingRule} For every ingredient used, and every missing ingredient (if any), give a specific amount scaled to ${planPrefs.servings} servings (e.g. "2 boneless thighs", "1 1/2 cups", "200g") instead of vague amounts. Keep every amount realistic for what that day's dish actually needs — never inflate a missing ingredient to a bulk or wholesale quantity (e.g. write "200g pork shoulder, cubed" for a dish that needs a small portion, not "1.5kg pork shoulder"); the amount should match what a home cook would actually use, not what comes in a typical store package. Estimate calories per serving, plus grams of protein, carbs, and fat per serving, as reasonable approximate numbers — these are estimates, not verified nutrition data.
 Respond with ONLY valid JSON, no markdown fences, no extra text, matching exactly this shape. Every string value must be plain text on a single line — no literal line breaks inside a string:
@@ -4289,7 +4366,10 @@ const CATEGORY_LABELS_TR = {
 function categoryLabel(cat){
   return currentLanguage === 'tr' ? (CATEGORY_LABELS_TR[cat] || cat) : cat;
 }
-let collapsedCategories = new Set();
+let collapsedCategories = new Set();   // Recipes / Meal Plan selection lists (open by default)
+let pantryOpenGroups = new Set();      // Pantry page list (everything closed by default)
+let expandedPantryItemId = null;       // which pantry chip has its edit panel open
+const USE_SOON_GROUP = '__usesoon__';
 
 const CATEGORY_KEYWORDS = {
   'Produce': ['apple', 'banana', 'orange', 'lettuce', 'spinach', 'tomato', 'onion', 'garlic', 'pepper', 'carrot', 'potato', 'cucumber', 'plum', 'pear', 'grape', 'lemon', 'lime', 'avocado', 'broccoli', 'cauliflower', 'mushroom', 'basil', 'cilantro', 'parsley', 'dill', 'mint', 'rosemary', 'thyme', 'sage', 'oregano', 'chive', 'celery', 'corn', 'zucchini', 'kale', 'cabbage', 'ginger', 'coconut', 'melon', 'watermelon', 'cantaloupe', 'berry', 'berries', 'strawberr', 'blueberr', 'raspberr', 'blackberr', 'cherry', 'cherries', 'peach', 'nectarine', 'apricot', 'plantain', 'mango', 'pineapple', 'kiwi', 'fig', 'date', 'pomegranate', 'fruit', 'vegetable', 'greens', 'arugula', 'chard', 'bok choy', 'squash', 'pumpkin', 'eggplant', 'okra', 'radish', 'turnip', 'beet', 'scallion', 'shallot', 'leek', 'sprout', 'herb', 'jalapeno', 'chili pepper', 'artichoke', 'asparagus', 'fennel'],
@@ -4341,6 +4421,7 @@ let selectedForRecipe = new Set();
 let priorityForRecipe = new Set();
 
 function renderChipsInto(container, items, selectable){
+  if (!selectable) return renderPantryList(container, items);
   container.innerHTML = '';
   if (items.length === 0) return;
 
@@ -4517,6 +4598,181 @@ function renderChipsInto(container, items, selectable){
   });
 }
 
+const CLOCK_SVG = '<svg width="13" height="13" viewBox="0 0 24 24" fill="none"><circle cx="12" cy="12" r="8.5" stroke="currentColor" stroke-width="1.7"/><path d="M12 7.5V12l3 2" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"/></svg>';
+
+// Pantry page: compact chips (name + amount). Tap a chip to edit it.
+// Groups start closed; "Use soon" items get their own group at the top.
+function renderPantryList(container, items){
+  container.innerHTML = '';
+  if (items.length === 0) return;
+
+  const groups = [];
+  const soon = items.filter(i => i.useSoon);
+  if (soon.length) groups.push({ key: USE_SOON_GROUP, label: t('use_soon_group'), items: soon });
+  CATEGORY_ORDER.forEach(cat => {
+    const g = items.filter(i => !i.useSoon && (i.category || 'Other') === cat);
+    if (g.length) groups.push({ key: cat, label: categoryLabel(cat), items: g });
+  });
+
+  groups.forEach(group => {
+    const isOpen = pantryOpenGroups.has(group.key);
+    const section = document.createElement('div');
+    section.className = 'chip-category';
+
+    const header = document.createElement('button');
+    header.className = 'chip-category-header' + (isOpen ? '' : ' collapsed') + (group.key === USE_SOON_GROUP ? ' usesoon-header' : '');
+    header.innerHTML = `
+      ${group.key === USE_SOON_GROUP ? '<span class="usesoon-header-icon">' + CLOCK_SVG + '</span>' : ''}
+      <span class="chip-category-name">${group.label}</span>
+      <span class="chip-category-count">${group.items.length}</span>
+      <span class="chip-category-chevron">⌄</span>
+    `;
+    header.addEventListener('click', () => {
+      if (pantryOpenGroups.has(group.key)) pantryOpenGroups.delete(group.key);
+      else pantryOpenGroups.add(group.key);
+      renderPantry();
+    });
+    section.appendChild(header);
+
+    if (isOpen){
+      const body = document.createElement('div');
+      body.className = 'chips chip-category-body';
+      group.items.forEach(item => {
+        const isEditing = expandedPantryItemId === item.id;
+        const chip = document.createElement('button');
+        chip.className = 'chip chip-compact' + (isEditing ? ' chip-open' : '');
+        const dot = document.createElement('span');
+        dot.className = 'dot';
+        dot.style.background = chipColors[item.id % chipColors.length];
+        chip.appendChild(dot);
+        const label = document.createElement('span');
+        label.textContent = item.name;
+        chip.appendChild(label);
+        if (item.quantity){
+          const q = document.createElement('span');
+          q.className = 'chip-qty-text';
+          q.textContent = '· ' + item.quantity;
+          chip.appendChild(q);
+        }
+        chip.addEventListener('click', () => {
+          expandedPantryItemId = isEditing ? null : item.id;
+          renderPantry();
+        });
+        body.appendChild(chip);
+        if (isEditing) body.appendChild(buildPantryEditPanel(item));
+      });
+      section.appendChild(body);
+    }
+    container.appendChild(section);
+  });
+}
+
+function keepPantryItemVisible(item){
+  pantryOpenGroups.add(item.useSoon ? USE_SOON_GROUP : (item.category || 'Other'));
+}
+
+function buildPantryEditPanel(item){
+  const panel = document.createElement('div');
+  panel.className = 'pantry-edit';
+
+  // amount
+  const qtyRow = document.createElement('label');
+  qtyRow.className = 'pantry-edit-row';
+  qtyRow.innerHTML = `<span class="pantry-edit-label">${t('qty_label')}</span>`;
+  const qtyInput = document.createElement('input');
+  qtyInput.type = 'text';
+  qtyInput.className = 'pantry-edit-input';
+  qtyInput.value = item.quantity || '';
+  qtyInput.placeholder = t('qty_example');
+  qtyInput.addEventListener('keydown', (e) => { if (e.key === 'Enter') qtyInput.blur(); });
+  qtyInput.addEventListener('change', async () => {
+    const newQty = qtyInput.value.trim();
+    const prevQty = item.quantity;
+    item.quantity = newQty;
+    renderPantry();
+    const { error } = await supabaseClient.from('pantry_items').update({ quantity: newQty || null }).eq('id', item.id);
+    if (error){
+      console.error('Failed to update quantity:', error);
+      item.quantity = prevQty;
+      renderPantry();
+    }
+  });
+  qtyRow.appendChild(qtyInput);
+  panel.appendChild(qtyRow);
+
+  // category
+  const catRow = document.createElement('label');
+  catRow.className = 'pantry-edit-row';
+  catRow.innerHTML = `<span class="pantry-edit-label">${t('category_label')}</span>`;
+  const catSelect = document.createElement('select');
+  catSelect.className = 'pantry-edit-input';
+  CATEGORY_ORDER.forEach(cat => {
+    const opt = document.createElement('option');
+    opt.value = cat;
+    opt.textContent = categoryLabel(cat);
+    if (cat === item.category) opt.selected = true;
+    catSelect.appendChild(opt);
+  });
+  catSelect.addEventListener('change', async () => {
+    const newCat = catSelect.value;
+    const prevCat = item.category;
+    item.category = newCat;
+    keepPantryItemVisible(item);
+    renderPantry();
+    const { error } = await supabaseClient.from('pantry_items').update({ category: newCat }).eq('id', item.id);
+    if (error){
+      console.error('Failed to update category:', error);
+      item.category = prevCat;
+      renderPantry();
+    }
+  });
+  catRow.appendChild(catSelect);
+  panel.appendChild(catRow);
+
+  // actions
+  const actions = document.createElement('div');
+  actions.className = 'pantry-edit-actions';
+
+  const soonBtn = document.createElement('button');
+  soonBtn.className = 'pantry-edit-soon' + (item.useSoon ? ' active' : '');
+  soonBtn.innerHTML = CLOCK_SVG + `<span>${item.useSoon ? t('use_soon_on') : t('use_soon_off')}</span>`;
+  soonBtn.addEventListener('click', async () => {
+    const newVal = !item.useSoon;
+    item.useSoon = newVal;
+    keepPantryItemVisible(item);
+    renderPantry();
+    const { error } = await supabaseClient.from('pantry_items').update({ use_soon: newVal }).eq('id', item.id);
+    if (error){
+      console.error('Failed to update use-soon:', error);
+      item.useSoon = !newVal;
+      renderPantry();
+    }
+  });
+  actions.appendChild(soonBtn);
+
+  const removeBtn = document.createElement('button');
+  removeBtn.className = 'pantry-edit-remove';
+  removeBtn.textContent = t('remove');
+  removeBtn.addEventListener('click', () => {
+    showConfirm(t('confirm_remove_pantry').replace('{title}', item.name), async () => {
+      const { error } = await supabaseClient.from('pantry_items').delete().eq('id', item.id);
+      if (error){
+        console.error('Failed to delete pantry item:', error);
+        return;
+      }
+      pantryItems = pantryItems.filter(p => p.id !== item.id);
+      selectedForRecipe.delete(item.id);
+      priorityForRecipe.delete(item.id);
+      if (expandedPantryItemId === item.id) expandedPantryItemId = null;
+      renderPantry();
+    });
+  });
+  actions.appendChild(removeBtn);
+
+  panel.appendChild(actions);
+  return panel;
+}
+
 function renderPantry(){
   renderChipsInto(pantryChipsEl, pantryItems, false);
   renderChipsInto(chipsEl, pantryItems, true);
@@ -4567,6 +4823,7 @@ async function addPantryItem(name, category, quantity){
   pantryItems.push(item);
   selectedForRecipe.add(item.id);
   renderPantry();
+  return item;
 }
 
 async function loadPantryFromDb(){
@@ -4648,7 +4905,11 @@ pantryManualInput.addEventListener('keydown', async (e) => {
     e.preventDefault();
     const value = pantryManualInput.value;
     pantryManualInput.value = '';
-    await addPantryItem(value);
+    const added = await addPantryItem(value);
+    if (added){
+      keepPantryItemVisible(added);
+      renderPantry();
+    }
   }
 });
 
@@ -4709,13 +4970,13 @@ renderPantry();
 let recipes = [];
 let expandedIndex = null;
 
-const prefs = { time: "30 minutes", servings: "2", diet: "no restrictions", cuisine: "no preference", method: "no preference", planDays: "5", goal: "no specific goal", allowMissing: "allow", mealType: "dinner", flavor: "no preference" };
+const prefs = { time: "30 minutes", servings: "2", diet: "no restrictions", cuisine: "no preference", method: "no preference", planDays: "5", goal: "no specific goal", allowMissing: "allow", mealType: "dinner", flavor: "no preference", difficulty: "no preference" };
 // Meal Plan has its own copy: seeded from the defaults each time you open the
 // Meal Plan page, but changes there never touch the profile or Recipes.
 // Recipes and Meal Plan each keep their own working copy of the preferences.
 // Both start from the profile defaults (prefs), and a change in the Profile
 // flows into them, but manual changes on those pages never touch the profile.
-const SCOPED_PREF_KEYS = ['time', 'servings', 'diet', 'cuisine', 'method', 'goal', 'allowMissing', 'mealType', 'flavor'];
+const SCOPED_PREF_KEYS = ['time', 'servings', 'diet', 'cuisine', 'method', 'goal', 'allowMissing', 'mealType', 'flavor', 'difficulty'];
 
 // Recipes picks a sensible meal for the time of day; Meal Plan defaults to dinners.
 function mealTypeForNow(){
@@ -5026,7 +5287,7 @@ function buildRecipePrompt(){
   const missingRule = isStrict
     ? `The dish MUST be fully makeable from the available pool above plus basic pantry staples only — missing_ingredients must be an empty array. Do not suggest anything that requires a trip to the store. Pick a dish that genuinely works with only what's listed, even if that means something simpler.`
     : `If something important is genuinely missing, list it under missing_ingredients rather than silently assuming it.`;
-  return `Available ingredients (a pool to choose from, not a checklist; amounts in parentheses are roughly what's on hand, so don't call for more than that of those items): ${selectedNames.join(', ')}.${priorityLine}${historyLine}${goalGuidanceLine(recipePrefs.goal)}${flavorLine(recipePrefs.flavor)}${varietyLine(recipePrefs.mealType)}
+  return `Available ingredients (a pool to choose from, not a checklist; amounts in parentheses are roughly what's on hand, so don't call for more than that of those items): ${selectedNames.join(', ')}.${priorityLine}${historyLine}${goalGuidanceLine(recipePrefs.goal)}${flavorLine(recipePrefs.flavor)}${difficultyLine(recipePrefs.difficulty, recipePrefs.time)}${varietyLine(recipePrefs.mealType)}
 Constraints: meal type: ${recipePrefs.mealType}, about ${recipePrefs.time} of cooking time, ${recipePrefs.servings} servings, dietary requirement: ${recipePrefs.diet}, cuisine preference: ${recipePrefs.cuisine}, preferred cooking method: ${recipePrefs.method}.
 Suggest exactly 1 realistic ${recipePrefs.mealType} option that genuinely suits that meal of the day. Treat the ingredient list as what's available, not as a requirement to use everything — a good dish usually only calls for a subset of it, except for any priority ingredients noted above, which must appear. Never force a non-priority ingredient into the dish just because it's on the list; leftover, unused ingredients are completely normal and not a problem to solve. It's fine to assume basic pantry staples (salt, pepper, oil, common spices) are on hand even if not listed, but do not assume any other ingredient beyond the pool above is available. ${missingRule} For every ingredient used, and every missing ingredient (if any), give a specific amount scaled to ${recipePrefs.servings} servings (e.g. "2 boneless thighs", "1 1/2 cups", "200g") instead of vague amounts like "some" or "a bit of" — the missing-ingredient amounts double as shopping quantities. Keep every amount realistic for what this one dish actually needs — never inflate a missing ingredient to a bulk or wholesale quantity (e.g. write "200g pork shoulder, cubed" for a dish that needs a small portion, not "1.5kg pork shoulder"); the amount should match what a home cook would actually use in this recipe, not what comes in a typical store package. Estimate calories per serving, plus grams of protein, carbs, and fat per serving, as reasonable approximate numbers based on the ingredients and portions actually used — these are estimates, not verified nutrition data.
 Respond with ONLY valid JSON, no markdown fences, no extra text, matching exactly this shape. Every string value must be plain text on a single line — no literal line breaks inside a string:
@@ -5413,6 +5674,15 @@ function varietyLine(mealType){
   const families = DISH_FAMILIES[mealType] || DISH_FAMILIES.dinner;
   const nudge = families[Math.floor(Math.random() * families.length)];
   return `\nAlready suggested this session, and the user asked for something else: ${list}. Your suggestion must be a genuinely different dish — not a renamed version, regional variant, or small tweak of any of these. Change the dish family and the main cooking technique, and build it around different main ingredients from the pool wherever the pool allows. If it fits the constraints and ingredients, lean toward: ${nudge}.`;
+}
+
+function difficultyLine(target, time){
+  const rules = `\nDifficulty labeling (be honest, do not default to Easy): "Easy" = one main technique, few steps, little timing pressure, no sub-recipes. "Medium" = two or more techniques or components that need some coordination, or a simple sub-recipe such as a sauce, dough, or marinade. "Hard" = advanced technique (e.g. yeasted or laminated dough, emulsions, multi-stage braising, precise timing) and/or many components.`;
+  if (!target || target === 'no preference') return rules;
+  const fit = (target !== 'easy' && (time === '15 minutes' || time === '30 minutes'))
+    ? ` The time limit (${time}) is tight for that, so get as close to ${target} as the time allows and keep the label honest.`
+    : '';
+  return rules + `\nTarget difficulty: ${target}. Choose a dish that genuinely is ${target} by the definitions above.${fit}`;
 }
 
 function flavorLine(flavor){
