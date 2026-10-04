@@ -925,8 +925,28 @@
   .chip button{ border: none; background: none; color: var(--ink-soft); font-size: 16px; line-height: 1; cursor: pointer; padding: 2px 4px; }
   .chip button:hover{ color: var(--tomato); }
 
+  /* Category groups stack vertically (the outer containers used to be flex rows,
+     which made the group headers wrap side by side). */
+  #pantryChips, #chips, #planChips{ display: block; }
   .chip-category{ margin-top: 18px; }
   .chip-category:first-child{ margin-top: 4px; }
+
+  /* Pantry page: categories as a clean full-width list */
+  #pantryChips{
+    background: var(--surface);
+    border-radius: 16px;
+    box-shadow: var(--shadow-soft);
+    padding: 0 16px;
+    margin-top: 8px;
+  }
+  #pantryChips:empty{ display: none; }
+  #pantryChips .chip-category{ margin: 0; border-bottom: 1px solid var(--line-light); }
+  #pantryChips .chip-category:last-child{ border-bottom: none; }
+  #pantryChips .chip-category-header{ padding: 15px 0; gap: 10px; }
+  #pantryChips .chip-category-name{ font-size: 14.5px; letter-spacing: 0; }
+  #pantryChips .chip-category-count{ margin-left: auto; font-size: 12px; padding: 2px 9px; }
+  #pantryChips .chip-category-chevron{ margin-left: 4px; }
+  #pantryChips .chip-category-body{ margin: 0 0 14px; }
 
   .chip-category-header{
     display: flex;
@@ -984,6 +1004,37 @@
   }
   .chip-star:hover{ color: var(--mustard-deep); }
   .chip-star.active{ color: var(--mustard); }
+
+  .allergies-input{
+    width: 100%;
+    font-family: 'Inter', sans-serif; font-size: 14px;
+    padding: 10px 12px;
+    border: 1.5px solid var(--line-light);
+    border-radius: 12px;
+    background: var(--surface);
+    color: var(--ink);
+    resize: vertical;
+  }
+  .allergies-input:focus{ outline: none; border-color: var(--tomato); }
+  .allergies-hint{ font-size: 12px; color: var(--ink-soft); margin: 6px 0 0; }
+
+  /* ---- Shopping list: bought -> pantry ---- */
+  .list-bought-row{ display: flex; flex-direction: column; align-items: flex-end; gap: 8px; margin-top: 14px; }
+  .list-toast{ display: none; text-align: right; font-size: 13px; color: var(--herb-deep); margin: 8px 0 0; }
+
+  /* ---- Meal Plan extras ---- */
+  .pref-hint{ font-size: 12.5px; color: var(--ink-soft); margin: 8px 0 0; line-height: 1.45; }
+  .plan-size-note{ font-size: 12.5px; color: var(--mustard-deep); background: #FFF1D2; border-radius: 10px; padding: 8px 12px; margin: 0 0 12px; }
+  .plan-cal-prep{ font-family: 'Poppins', sans-serif; font-size: 9px; font-weight: 600; color: var(--tomato-deep); text-transform: uppercase; letter-spacing: 0.03em; }
+  .plan-prep{ background: var(--surface); border-radius: 16px; box-shadow: var(--shadow-card); padding: 0 18px; margin: 4px 0 18px; border-left: 4px solid var(--tomato); }
+  .plan-prepsummary{ display: flex; align-items: center; justify-content: space-between; list-style: none; cursor: pointer; padding: 15px 0; font-family: 'Poppins', sans-serif; font-weight: 700; font-size: 15px; color: var(--ink); }
+  .plan-prepsummary::-webkit-details-marker{ display: none; }
+  .plan-prep[open] .plan-prefs-chevron{ transform: rotate(180deg); }
+  .plan-prep-session{ border-top: 1px solid var(--line-light); padding: 14px 0 16px; }
+  .plan-prep-head{ font-family: 'Poppins', sans-serif; font-weight: 600; font-size: 14.5px; margin: 0; color: var(--ink); }
+  .plan-prep-meta{ font-size: 12.5px; color: var(--ink-soft); margin: 2px 0 8px; }
+  .plan-prep-subhead{ font-family: 'Poppins', sans-serif; font-weight: 600; font-size: 11.5px; text-transform: uppercase; letter-spacing: 0.03em; color: var(--herb-deep); margin: 10px 0 6px; }
+  .plan-prep-tips{ margin: 0 0 12px; padding-left: 18px; font-size: 14px; color: var(--ink); }
 
   /* ---- Compact pantry list ---- */
   .chip-compact{ cursor: pointer; font-family: 'Inter', sans-serif; padding: 7px 12px; }
@@ -1655,8 +1706,9 @@
       <button class="btn" id="printListBtn" data-i18n="print_list">🖶 Print list</button>
     </div>
 
-    <div class="row" id="listClearRow" style="display:none; justify-content: flex-end;">
-      <button class="btn btn-ghost" id="clearCheckedBtn" data-i18n="clear_checked">Clear checked</button>
+    <div class="list-bought-row" id="listClearRow" style="display:none;">
+      <button class="btn btn-solid" id="moveBoughtToPantryBtn">Add bought items to pantry</button>
+      <button class="text-link" id="clearCheckedBtn" data-i18n="clear_without_adding">Clear without adding to pantry</button>
     </div>
   </section>
 
@@ -1727,7 +1779,7 @@
   <section class="tab-page" id="tabPlan">
     <p class="eyebrow" data-i18n="plan_eyebrow">meal plan</p>
     <h1 class="screen-title" data-i18n="plan_title">Plan a few meals at once</h1>
-    <p class="screen-sub" data-i18n="plan_sub">Uses the same pantry, priorities, and preferences as Recipes — pick how many days and generate them together.</p>
+    <p class="screen-sub" data-i18n="plan_sub">Uses your pantry and profile — pick how many days and meals, and how you like to cook.</p>
 
     <div class="row" style="justify-content: space-between; margin-top: 0;">
       <p class="section-label" style="margin: 0;" data-i18n="in_stock_label">in stock</p>
@@ -1742,9 +1794,9 @@
 
     <div class="pref-block" style="margin-top: 26px;">
       <p class="pref-label" data-i18n="pref_how_many_days">how many days</p>
-      <div class="pill-group" data-group="planDays">
+      <div class="pill-group plan-pill-group" data-group="planDays">
         <button class="pill" data-value="3">3 days</button>
-        <button class="pill selected" data-value="5">5 days</button>
+        <button class="pill" data-value="5">5 days</button>
         <button class="pill" data-value="7">7 days</button>
       </div>
     </div>
@@ -1754,123 +1806,61 @@
       <input type="date" class="date-input" id="planStartDateInput">
     </div>
 
-    <details class="plan-prefs">
+    <details class="plan-prefs" open>
       <summary class="plan-prefs-summary">
-        <span data-i18n="plan_prefs_title">Dietary restrictions &amp; preferences</span>
+        <span data-i18n="plan_settings_title">Plan settings</span>
         <span class="plan-prefs-chevron">⌄</span>
       </summary>
-      <p class="plan-prefs-note" data-i18n="plan_prefs_note">Starts from your profile defaults. Changes here only apply to this plan.</p>
-      <button class="text-link scoped-reset" id="planPrefsReset" style="display:none;" data-i18n="reset_to_defaults">↺ Reset to my defaults</button>
+      <p class="plan-prefs-note" data-i18n="plan_universal_note">Diet, allergies and servings come from your Profile.</p>
+
       <div class="pref-block">
-        <p class="pref-label" data-i18n="pref_meal_type">meal</p>
-        <div class="pill-group plan-pill-group" data-group="mealType">
+        <p class="pref-label" data-i18n="pref_meals">meals</p>
+          <div class="pill-group plan-pill-group" data-group="meals" data-multi="true">
           <button class="pill" data-value="breakfast">Breakfast</button>
           <button class="pill" data-value="lunch">Lunch</button>
-          <button class="pill selected" data-value="dinner">Dinner</button>
+          <button class="pill" data-value="dinner">Dinner</button>
         </div>
       </div>
 
       <div class="pref-block">
-        <p class="pref-label" data-i18n="pref_time">time available</p>
-        <div class="pill-group plan-pill-group" data-group="time">
-          <button class="pill" data-value="15 minutes">15 min</button>
-          <button class="pill selected" data-value="30 minutes">30 min</button>
-          <button class="pill" data-value="45 minutes">45 min</button>
-          <button class="pill" data-value="an hour or more">1 hr+</button>
+        <p class="pref-label" data-i18n="pref_cook_style">cooking rhythm</p>
+          <div class="pill-group plan-pill-group" data-group="cookStyle">
+          <button class="pill" data-value="fresh">Fresh every day</button>
+          <button class="pill" data-value="leftovers">Use up leftovers</button>
+          <button class="pill" data-value="batch">Batch cook</button>
         </div>
+        <p class="pref-hint" id="cookStyleHint"></p>
       </div>
 
       <div class="pref-block">
-        <p class="pref-label" data-i18n="pref_difficulty">difficulty</p>
-        <div class="pill-group plan-pill-group" data-group="difficulty">
-          <button class="pill selected" data-value="no preference">No preference</button>
-          <button class="pill" data-value="easy">Easy</button>
-          <button class="pill" data-value="medium">Medium</button>
-          <button class="pill" data-value="hard">Hard</button>
-        </div>
-      </div>
-
-      <div class="pref-block">
-        <p class="pref-label" data-i18n="pref_servings">servings</p>
-        <div class="pill-group plan-pill-group" data-group="servings">
-          <button class="pill" data-value="1">1</button>
-          <button class="pill selected" data-value="2">2</button>
-          <button class="pill" data-value="3">3</button>
-          <button class="pill" data-value="4">4</button>
-          <button class="pill" data-value="6">6</button>
-        </div>
-      </div>
-
-      <div class="pref-block">
-        <p class="pref-label" data-i18n="pref_diet">diet</p>
-        <div class="pill-group plan-pill-group" data-group="diet">
-          <button class="pill selected" data-value="no restrictions">No restrictions</button>
-          <button class="pill" data-value="vegetarian">Vegetarian</button>
-          <button class="pill" data-value="vegan">Vegan</button>
-          <button class="pill" data-value="gluten-free">Gluten-free</button>
-          <button class="pill" data-value="dairy-free">Dairy-free</button>
-          <button class="pill" data-value="pescatarian">Pescatarian</button>
-        </div>
-      </div>
-
-      <div class="pref-block">
-        <p class="pref-label" data-i18n="pref_goal">nutrition goal</p>
-        <div class="pill-group plan-pill-group" data-group="goal">
-          <button class="pill selected" data-value="no specific goal">No specific goal</button>
+        <p class="pref-label" data-i18n="pref_focus">plan goal</p>
+          <div class="pill-group plan-pill-group" data-group="focus">
+          <button class="pill" data-value="balanced">Balanced</button>
           <button class="pill" data-value="weight loss">Weight loss</button>
           <button class="pill" data-value="build muscle">Build muscle</button>
-          <button class="pill" data-value="maintain weight">Maintain weight</button>
-          <button class="pill" data-value="eat healthier">Eat healthier</button>
+          <button class="pill" data-value="budget">Budget-friendly</button>
+          <button class="pill" data-value="use up pantry">Use up my pantry</button>
+        </div>
+      </div>
+
+      <div class="pref-block" id="weekdayQuickBlock">
+        <p class="pref-label" data-i18n="pref_weekday_quick">quick on weekdays</p>
+          <div class="pill-group plan-pill-group" data-group="weekdayQuick">
+          <button class="pill" data-value="yes">Yes</button>
+          <button class="pill" data-value="no">No</button>
         </div>
       </div>
 
       <div class="pref-block">
-        <p class="pref-label" data-i18n="pref_allow_missing">extra ingredients</p>
-        <div class="pill-group plan-pill-group" data-group="allowMissing">
-          <button class="pill selected" data-value="allow">Okay to need a few things</button>
+        <p class="pref-label" data-i18n="pref_plan_shopping">shopping</p>
+          <div class="pill-group plan-pill-group" data-group="allowMissing">
+          <button class="pill" data-value="allow">Okay to need a few things</button>
           <button class="pill" data-value="strict">Only what I already have</button>
         </div>
       </div>
-
-      <div class="pref-block">
-        <p class="pref-label" data-i18n="pref_method">cooking method</p>
-        <div class="pill-group plan-pill-group" data-group="method">
-          <button class="pill selected" data-value="no preference">No preference</button>
-          <button class="pill" data-value="stovetop">Stovetop</button>
-          <button class="pill" data-value="oven-baked">Baked</button>
-          <button class="pill" data-value="air fryer">Air fryer</button>
-          <button class="pill" data-value="grilled">Grilled</button>
-          <button class="pill" data-value="slow cooker or instant pot">Slow cooker</button>
-          <button class="pill" data-value="no-cook">No-cook</button>
-        </div>
-      </div>
-
-      <div class="pref-block">
-        <p class="pref-label" data-i18n="pref_cuisine">cuisine mood</p>
-        <div class="pill-group plan-pill-group" data-group="cuisine">
-          <button class="pill selected" data-value="no preference">No preference</button>
-          <button class="pill" data-value="Mediterranean">Mediterranean</button>
-          <button class="pill" data-value="Turkish">Turkish</button>
-          <button class="pill" data-value="East Asian">East Asian</button>
-          <button class="pill" data-value="Mexican">Mexican</button>
-          <button class="pill" data-value="Italian">Italian</button>
-          <button class="pill" data-value="comfort food">Comfort food</button>
-        </div>
-      </div>
-
-      <div class="pref-block">
-        <p class="pref-label" data-i18n="pref_flavor">flavor</p>
-        <div class="pill-group plan-pill-group" data-group="flavor">
-          <button class="pill selected" data-value="no preference">No preference</button>
-          <button class="pill" data-value="savory">Savory</button>
-          <button class="pill" data-value="spicy">Spicy</button>
-          <button class="pill" data-value="sweet">Sweet</button>
-          <button class="pill" data-value="sour and tangy">Sour / tangy</button>
-          <button class="pill" data-value="light and fresh">Light & fresh</button>
-        </div>
-      </div>
-
     </details>
+
+    <p class="plan-size-note" id="planSizeNote" style="display:none;"></p>
 
     <div class="row">
       <button class="btn btn-solid" id="generatePlanBtn" data-i18n="generate_plan">Generate plan</button>
@@ -1888,6 +1878,8 @@
     </div>
 
     <div class="plan-calendar-strip" id="planCalendarStrip" style="display:none;"></div>
+
+    <div id="planPrepCard"></div>
 
     <div class="row" id="planActionsRow" style="display:none; justify-content: space-between; margin-top: 24px;">
       <button class="btn btn-ghost" id="clearPlanBtn" data-i18n="clear_plan">Clear plan</button>
@@ -1939,6 +1931,12 @@
     </div>
 
     <div class="pref-block">
+      <p class="pref-label" data-i18n="pref_allergies">allergies &amp; dislikes</p>
+      <textarea class="allergies-input" id="allergiesInput" rows="2" data-i18n-placeholder="allergies_placeholder" placeholder="e.g. peanuts, celery, mushrooms"></textarea>
+      <p class="allergies-hint" data-i18n="allergies_hint">These are never used in any recipe or plan.</p>
+    </div>
+
+    <div class="pref-block">
       <p class="pref-label" data-i18n="pref_goal">nutrition goal</p>
       <div class="pill-group" data-group="goal">
         <button class="pill selected" data-value="no specific goal">No specific goal</button>
@@ -1950,36 +1948,10 @@
     </div>
 
     <div class="pref-block">
-      <p class="pref-label" data-i18n="pref_default_cuisine">default cuisine</p>
-      <div class="pill-group" data-group="cuisine">
-        <button class="pill selected" data-value="no preference">No preference</button>
-        <button class="pill" data-value="Mediterranean">Mediterranean</button>
-        <button class="pill" data-value="Turkish">Turkish</button>
-        <button class="pill" data-value="East Asian">East Asian</button>
-        <button class="pill" data-value="Mexican">Mexican</button>
-        <button class="pill" data-value="Italian">Italian</button>
-        <button class="pill" data-value="comfort food">Comfort food</button>
-      </div>
-    </div>
-
-    <div class="pref-block">
       <p class="pref-label" data-i18n="pref_default_allow_missing">default extra ingredients</p>
       <div class="pill-group" data-group="allowMissing">
         <button class="pill selected" data-value="allow">Okay to need a few things</button>
         <button class="pill" data-value="strict">Only what I already have</button>
-      </div>
-    </div>
-
-    <div class="pref-block">
-      <p class="pref-label" data-i18n="pref_default_method">default cooking method</p>
-      <div class="pill-group" data-group="method">
-        <button class="pill selected" data-value="no preference">No preference</button>
-        <button class="pill" data-value="stovetop">Stovetop</button>
-        <button class="pill" data-value="oven-baked">Baked</button>
-        <button class="pill" data-value="air fryer">Air fryer</button>
-        <button class="pill" data-value="grilled">Grilled</button>
-        <button class="pill" data-value="slow cooker or instant pot">Slow cooker</button>
-        <button class="pill" data-value="no-cook">No-cook</button>
       </div>
     </div>
 
@@ -2183,13 +2155,13 @@ const translations = {
 
     plan_eyebrow: "meal plan",
     plan_title: "Plan a few meals at once",
-    plan_sub: "Uses the same pantry, priorities, and preferences as Recipes — pick how many days and generate them together.",
+    plan_sub: "Uses your pantry and profile — pick how many days and meals, and how you like to cook.",
     pantry_empty_plan: "Your pantry is empty — add items in the Pantry tab first.",
     pref_how_many_days: "how many days",
     pref_starts_on: "starts on",
     generate_plan: "Generate plan",
     plan_empty_title: "No plan yet",
-    plan_empty_desc: "Pick your days and hit \"Generate plan\" to line up a few dinners at once.",
+    plan_empty_desc: "Pick your days and meals, then hit \"Generate plan\".",
     clear_plan: "Clear plan",
     print_plan: "🖶 Print plan",
     save_plan: "💾 Save plan",
@@ -2294,6 +2266,27 @@ const translations = {
     qty_label: "Amount",
     qty_example: "e.g. 6, 500g, 1 bottle",
     category_label: "Category",
+    clear_without_adding: "Clear without adding to pantry",
+    move_bought_to_pantry: "Add bought items to pantry ({n})",
+    moved_to_pantry: "{n} item(s) moved to your pantry.",
+    pref_allergies: "allergies & dislikes",
+    allergies_placeholder: "e.g. peanuts, celery, mushrooms",
+    allergies_hint: "These are never used in any recipe or plan.",
+    plan_settings_title: "Plan settings",
+    plan_universal_note: "Diet, allergies and servings come from your Profile.",
+    pref_meals: "meals",
+    pref_cook_style: "cooking rhythm",
+    pref_focus: "plan goal",
+    pref_weekday_quick: "quick on weekdays",
+    pref_plan_shopping: "shopping",
+    style_hint_fresh: "You cook every day; every day brings a different dish.",
+    style_hint_leftovers: "You cook most days, and one day's leftovers become a different dish the next day.",
+    style_hint_batch: "You cook everything in one go (two sessions for longer plans). You'll get a prep-day game plan, and dishes are picked to keep and reheat well.",
+    plan_size_note: "{n} recipes will be created — this can take a minute or two.",
+    prep_title: "Prep day plan",
+    prep_session: "Prep session {n}",
+    prep_storage: "Storage",
+    prep_badge: "prep",
     add_missing_one: "+ Add 1 missing item to list",
     add_missing_many: "+ Add {n} missing items to list",
     ingredients_label: "ingredients",
@@ -2400,13 +2393,13 @@ const translations = {
 
     plan_eyebrow: "yemek planı",
     plan_title: "Birkaç öğünü bir arada planla",
-    plan_sub: "Tarifler ile aynı pantry, öncelik ve tercihleri kullanır — kaç gün istediğini seç, hepsini birden oluştur.",
+    plan_sub: "Pantry'ni ve profilini kullanır — kaç gün ve hangi öğünler olacağını, nasıl pişirmek istediğini seç.",
     pantry_empty_plan: "Pantry'n boş — önce Pantry sekmesinden öğe ekle.",
     pref_how_many_days: "kaç gün",
     pref_starts_on: "başlangıç tarihi",
     generate_plan: "Plan oluştur",
     plan_empty_title: "Henüz bir plan yok",
-    plan_empty_desc: "Gün sayısını seç ve \"Generate plan\"a basarak birkaç akşam yemeğini sıraya diz.",
+    plan_empty_desc: "Gün ve öğünleri seç, sonra \"Plan oluştur\"a bas.",
     clear_plan: "Planı temizle",
     print_plan: "🖶 Planı yazdır",
     save_plan: "💾 Planı kaydet",
@@ -2511,6 +2504,27 @@ const translations = {
     qty_label: "Miktar",
     qty_example: "örn. 6, 500g, 1 şişe",
     category_label: "Kategori",
+    clear_without_adding: "Pantry'ye eklemeden temizle",
+    move_bought_to_pantry: "Satın alınanları pantry'ye ekle ({n})",
+    moved_to_pantry: "{n} öğe pantry'ne eklendi.",
+    pref_allergies: "alerjiler ve sevmediklerin",
+    allergies_placeholder: "örn. fıstık, kereviz, mantar",
+    allergies_hint: "Bunlar hiçbir tarifte veya planda kullanılmaz.",
+    plan_settings_title: "Plan ayarları",
+    plan_universal_note: "Diyet, alerjiler ve porsiyon Profil'den gelir.",
+    pref_meals: "öğünler",
+    pref_cook_style: "pişirme düzeni",
+    pref_focus: "planın amacı",
+    pref_weekday_quick: "hafta içi hızlı olsun",
+    pref_plan_shopping: "alışveriş",
+    style_hint_fresh: "Her gün mutfağa girersin, her gün farklı bir yemek.",
+    style_hint_leftovers: "Çoğu gün pişirirsin; bir günün artanı ertesi gün başka bir yemeğe dönüşür.",
+    style_hint_batch: "Hepsini tek seferde pişirirsin (uzun planlarda iki seferde). Bir hazırlık günü planı gelir; yemekler iyi saklanan ve ısıtınca bozulmayanlardan seçilir.",
+    plan_size_note: "{n} tarif oluşturulacak — bu bir iki dakika sürebilir.",
+    prep_title: "Hazırlık günü planı",
+    prep_session: "Hazırlık {n}",
+    prep_storage: "Saklama",
+    prep_badge: "hazırlık",
     add_missing_one: "+ 1 eksik malzemeyi listeye ekle",
     add_missing_many: "+ {n} eksik malzemeyi listeye ekle",
     ingredients_label: "malzemeler",
@@ -2530,7 +2544,11 @@ const pillLabels = {
     "planDays:3": "3 days", "planDays:5": "5 days", "planDays:7": "7 days",
     "mealType:breakfast": "Breakfast", "mealType:lunch": "Lunch", "mealType:dinner": "Dinner",
     "flavor:no preference": "No preference", "flavor:savory": "Savory", "flavor:spicy": "Spicy", "flavor:sweet": "Sweet", "flavor:sour and tangy": "Sour / tangy", "flavor:light and fresh": "Light & fresh",
-    "difficulty:no preference": "No preference", "difficulty:easy": "Easy", "difficulty:medium": "Medium", "difficulty:hard": "Hard"
+    "difficulty:no preference": "No preference", "difficulty:easy": "Easy", "difficulty:medium": "Medium", "difficulty:hard": "Hard",
+    "meals:breakfast": "Breakfast", "meals:lunch": "Lunch", "meals:dinner": "Dinner",
+    "cookStyle:fresh": "Fresh every day", "cookStyle:leftovers": "Use up leftovers", "cookStyle:batch": "Batch cook",
+    "focus:balanced": "Balanced", "focus:weight loss": "Weight loss", "focus:build muscle": "Build muscle", "focus:budget": "Budget-friendly", "focus:use up pantry": "Use up my pantry",
+    "weekdayQuick:yes": "Yes", "weekdayQuick:no": "No"
   },
   tr: {
     "time:15 minutes": "15 dk", "time:30 minutes": "30 dk", "time:45 minutes": "45 dk", "time:an hour or more": "1 sa+",
@@ -2542,11 +2560,27 @@ const pillLabels = {
     "planDays:3": "3 gün", "planDays:5": "5 gün", "planDays:7": "7 gün",
     "mealType:breakfast": "Kahvaltı", "mealType:lunch": "Öğle yemeği", "mealType:dinner": "Akşam yemeği",
     "flavor:no preference": "Fark etmez", "flavor:savory": "Tuzlu", "flavor:spicy": "Acı", "flavor:sweet": "Tatlı", "flavor:sour and tangy": "Ekşi", "flavor:light and fresh": "Hafif & ferah",
-    "difficulty:no preference": "Fark etmez", "difficulty:easy": "Kolay", "difficulty:medium": "Orta", "difficulty:hard": "Zor"
+    "difficulty:no preference": "Fark etmez", "difficulty:easy": "Kolay", "difficulty:medium": "Orta", "difficulty:hard": "Zor",
+    "meals:breakfast": "Kahvaltı", "meals:lunch": "Öğle", "meals:dinner": "Akşam",
+    "cookStyle:fresh": "Her gün taze", "cookStyle:leftovers": "Artanları değerlendir", "cookStyle:batch": "Toplu hazırlık",
+    "focus:balanced": "Dengeli", "focus:weight loss": "Kilo verme", "focus:build muscle": "Kas yapma", "focus:budget": "Bütçe dostu", "focus:use up pantry": "Elimdekileri bitir",
+    "weekdayQuick:yes": "Evet", "weekdayQuick:no": "Hayır"
   }
 };
 
 let currentLanguage = 'en';
+try {
+  const savedLang = localStorage.getItem('ftt_lang');
+  if (savedLang === 'tr' || savedLang === 'en') currentLanguage = savedLang;
+} catch (e) {}
+
+function applyBrand(){
+  const tr = currentLanguage === 'tr';
+  document.querySelectorAll('.wordmark').forEach(el => {
+    el.innerHTML = tr ? 'Dolaptan <span>Sofraya</span>' : 'Fridge<span>-to-</span>Table';
+  });
+  document.title = tr ? 'Dolaptan Sofraya' : 'Fridge-to-Table';
+}
 
 function t(key){
   const dict = translations[currentLanguage] || translations.en;
@@ -2574,6 +2608,8 @@ function applyTranslations(){
   });
   translatePills();
   document.documentElement.lang = currentLanguage;
+  applyBrand();
+  try { localStorage.setItem('ftt_lang', currentLanguage); } catch (e) {}
   document.documentElement.style.setProperty('--changed-label', JSON.stringify(t('changed_badge')));
   // These stores are declared further down; guard in case this ever runs earlier.
   try { syncRecipePills(); syncPlanPills(); } catch (e) {}
@@ -2773,7 +2809,8 @@ function resetPlanFlow(){
   planStartDate = todayIso();
   planStartDateInput.value = planStartDate;
   planSaved = false;
-  seedPlanPrefsFromDefaults();
+  planPrep = [];
+  syncPlanPills();
   resetIngredientSelection();
   renderPantry();
   renderMealPlan();
@@ -3066,6 +3103,7 @@ function openCookMode(recipe){
 }
 
 function showCookModeComplete(){
+  cookModeMadeThisBtn.style.display = (cookRecipe && cookRecipe.isPrep) ? 'none' : '';
   stopCookTimer();
   cookModeStepView.style.display = 'none';
   cookModeNavRow.style.display = 'none';
@@ -3135,7 +3173,7 @@ const listManualAddBtn = document.getElementById('listManualAddBtn');
 const listNavBadge = document.getElementById('listCellBadge');
 
 function dbToShoppingItem(row){
-  return { id: row.id, name: row.name, checked: !!row.checked, source: row.source || 'manual' };
+  return { id: row.id, name: row.name, amount: row.amount || '', checked: !!row.checked, source: row.source || 'manual' };
 }
 
 async function loadShoppingListFromDb(){
@@ -3153,15 +3191,17 @@ async function loadShoppingListFromDb(){
   renderShoppingList();
 }
 
-async function addToShoppingList(names, source){
+// entries can be plain names ("feta") or recipe ingredients ({ item: "feta", amount: "50g" })
+async function addToShoppingList(entries, source){
   const toInsert = [];
-  (names || []).forEach(name => {
-    const clean = (name || '').trim();
+  (entries || []).forEach(entry => {
+    const clean = (typeof entry === 'string' ? entry : (entry && entry.item) || '').trim();
+    const amount = (typeof entry === 'string' ? '' : (entry && entry.amount) || '').toString().trim();
     if (!clean) return;
     const exists = shoppingList.some(item => item.name.toLowerCase() === clean.toLowerCase())
       || toInsert.some(item => item.name.toLowerCase() === clean.toLowerCase());
     if (exists) return;
-    toInsert.push({ name: clean, checked: false, source: source || 'manual' });
+    toInsert.push({ name: clean, amount: amount || null, checked: false, source: source || 'manual' });
   });
 
   if (!toInsert.length) return;
@@ -3182,7 +3222,10 @@ function renderShoppingList(){
 
   shoppingListEmpty.style.display = shoppingList.length ? 'none' : 'flex';
   listPrintRow.style.display = shoppingList.length ? 'flex' : 'none';
-  listClearRow.style.display = shoppingList.some(i => i.checked) ? 'flex' : 'none';
+  const boughtCount = shoppingList.filter(i => i.checked).length;
+  listClearRow.style.display = boughtCount ? 'flex' : 'none';
+  const moveBtn = document.getElementById('moveBoughtToPantryBtn');
+  if (moveBtn) moveBtn.textContent = t('move_bought_to_pantry').replace('{n}', boughtCount);
 
   sorted.forEach(item => {
     const li = document.createElement('li');
@@ -3207,7 +3250,7 @@ function renderShoppingList(){
     body.className = 'list-item-body';
     const nameEl = document.createElement('span');
     nameEl.className = 'list-item-name';
-    nameEl.textContent = item.name;
+    nameEl.textContent = item.amount ? `${item.name} · ${item.amount}` : item.name;
     body.appendChild(nameEl);
     if (item.source && item.source !== 'manual'){
       const sourceEl = document.createElement('span');
@@ -3249,13 +3292,56 @@ function addManualListItem(){
   const val = listManualInput.value.trim();
   if (!val) return;
   listManualInput.value = '';
-  addToShoppingList([val], 'manual');
+  const split = splitQuantityFromName(val);
+  addToShoppingList([{ item: split.name, amount: split.quantity }], 'manual');
 }
 
 listManualAddBtn.addEventListener('click', addManualListItem);
 listManualInput.addEventListener('keydown', (e) => {
   if (e.key === 'Enter'){ e.preventDefault(); addManualListItem(); }
 });
+const moveBoughtToPantryBtn = document.getElementById('moveBoughtToPantryBtn');
+
+moveBoughtToPantryBtn.addEventListener('click', async () => {
+  const bought = shoppingList.filter(i => i.checked);
+  if (!bought.length) return;
+  moveBoughtToPantryBtn.disabled = true;
+  for (const item of bought){
+    const existing = pantryItems.find(p => p.name.toLowerCase() === item.name.toLowerCase());
+    if (existing){
+      // already in the pantry: refresh the amount if we know it
+      if (item.amount && item.amount !== existing.quantity){
+        existing.quantity = item.amount;
+        await supabaseClient.from('pantry_items').update({ quantity: item.amount }).eq('id', existing.id);
+      }
+    } else {
+      await addPantryItem(item.name, null, item.amount);
+    }
+  }
+  const ids = bought.map(i => i.id);
+  const { error } = await supabaseClient.from('shopping_list').delete().in('id', ids);
+  if (error) console.error('Failed to remove bought items from list:', error);
+  else shoppingList = shoppingList.filter(i => !ids.includes(i.id));
+  moveBoughtToPantryBtn.disabled = false;
+  renderPantry();
+  renderShoppingList();
+  showListToast(t('moved_to_pantry').replace('{n}', bought.length));
+});
+
+function showListToast(msg){
+  let toast = document.getElementById('listToast');
+  if (!toast){
+    toast = document.createElement('p');
+    toast.id = 'listToast';
+    toast.className = 'list-toast';
+    listClearRow.parentNode.insertBefore(toast, listClearRow.nextSibling);
+  }
+  toast.textContent = msg;
+  toast.style.display = 'block';
+  clearTimeout(showListToast._timer);
+  showListToast._timer = setTimeout(() => { toast.style.display = 'none'; }, 3500);
+}
+
 clearCheckedBtn.addEventListener('click', async () => {
   const checkedIds = shoppingList.filter(i => i.checked).map(i => i.id);
   if (!checkedIds.length) return;
@@ -3544,7 +3630,8 @@ function dbToSavedPlan(row){
     id: row.id,
     startDate: row.start_date,
     savedAt: row.created_at ? formatDayLabel(row.created_at.slice(0, 10)) : '',
-    days: row.days || []
+    days: row.days || [],
+    prep: row.prep || []
   };
 }
 
@@ -3565,7 +3652,8 @@ async function loadSavedPlansFromDb(){
 
 function planDateRangeLabel(plan){
   const start = formatDayLabel(plan.startDate);
-  const end = formatDayLabel(addDaysIso(plan.startDate, plan.days.length - 1));
+  const lastDay = plan.days.length ? Math.max(...plan.days.map((r, i) => planDayOf(r, i))) : 1;
+  const end = formatDayLabel(addDaysIso(plan.startDate, lastDay - 1));
   return `${start} – ${end}`;
 }
 
@@ -3581,7 +3669,8 @@ function renderSavedPlans(){
     bubble.className = 'bubble' + (isExpanded ? ' expanded' : '');
 
     const dayCardsHtml = plan.days.map((recipe, i) => {
-      const dayDate = addDaysIso(plan.startDate, i);
+      const dayDate = addDaysIso(plan.startDate, planDayOf(recipe, i) - 1);
+      const slotLabel = planSlotLabel(plan.startDate, recipe, i);
       const usedHtml = (recipe.ingredients_used || []).map(u => `<li>${formatIngredient(u)}</li>`).join('');
       const missingHtml = (recipe.missing_ingredients || []).map(m => `<li class="missing">${formatIngredient(m)}<span class="tag">${t('missing_tag')}</span></li>`).join('');
       const stepsHtml = (recipe.steps || []).map(s => `<li>${s}</li>`).join('');
@@ -3594,7 +3683,7 @@ function renderSavedPlans(){
         <div class="bubble saved-plan-day${dayExpanded ? ' expanded' : ''}" data-day-key="${dayKey}">
           <button class="bubble-head">
             <div class="bubble-head-left">
-              <div class="bubble-name">${formatDayLabel(dayDate)} — ${recipe.title || t('untitled')}</div>
+              <div class="bubble-name">${slotLabel} — ${recipe.title || t('untitled')}</div>
               <div class="bubble-stats">
                 <span class="badge ${difficultyBadgeClass(recipe.difficulty)}">${difficultyLabel(recipe.difficulty)}</span>
                 <span class="badge badge-kcal">${kcal} / serving</span>
@@ -3673,13 +3762,14 @@ function renderSavedPlans(){
       btn.addEventListener('click', (e) => {
         e.stopPropagation();
         const dayIdx = parseInt(btn.dataset.dayKey.split('-').pop(), 10);
-        printRecipe(plan.days[dayIdx], formatDayLabel(addDaysIso(plan.startDate, dayIdx)));
+        printRecipe(plan.days[dayIdx], planSlotLabel(plan.startDate, plan.days[dayIdx], dayIdx));
       });
     });
 
     bubble.querySelector('.saved-plan-load-btn').addEventListener('click', (e) => {
       e.stopPropagation();
       mealPlan = JSON.parse(JSON.stringify(plan.days));
+      planPrep = JSON.parse(JSON.stringify(plan.prep || []));
       planStartDate = plan.startDate;
       planStartDateInput.value = planStartDate;
       planSaved = true;
@@ -3980,6 +4070,7 @@ renderMealHistory();
 
 /* ============ MEAL PLAN ============ */
 let mealPlan = [];
+let planPrep = [];   // batch-cooking prep sessions returned with the plan
 let expandedPlanIndex = null;
 let planStartDate = todayIso();
 let planSaved = false;
@@ -4014,26 +4105,61 @@ document.getElementById('planSelectNoneBtn').addEventListener('click', () => {
 });
 
 function buildMealPlanPrompt(days){
+  const meals = MEAL_ORDER.filter(m => planPrefs.meals.includes(m));
+  const total = days * meals.length;
   const selectedNames = pantryItems.filter(i => selectedForRecipe.has(i.id)).map(i => i.quantity ? `${i.name} (${i.quantity})` : i.name);
   const priorityNames = pantryItems.filter(i => priorityForRecipe.has(i.id) && selectedForRecipe.has(i.id)).map(i => i.name);
   const priorityLine = priorityNames.length
-    ? `\nPriority ingredients — these need using up soon, so make sure they get used somewhere across the plan (not necessarily every day): ${priorityNames.join(', ')}.`
+    ? `\nPriority ingredients — these need using up soon, so make sure they get used somewhere across the plan: ${priorityNames.join(', ')}.`
     : '';
   const recentTitles = mealHistory.slice(-5).map(m => m.title).filter(Boolean);
-  const historyLine = recentTitles.length
-    ? `\nRecently cooked, avoid repeating these: ${recentTitles.join(', ')}.`
+  const historyLine = recentTitles.length ? `\nRecently cooked, avoid repeating these: ${recentTitles.join(', ')}.` : '';
+
+  const weekdayNames = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
+  const dayList = Array.from({ length: days }, (_, i) => {
+    const iso = addDaysIso(planStartDate, i);
+    return `Day ${i + 1} = ${weekdayNames[new Date(iso + 'T00:00:00').getDay()]} ${iso}`;
+  }).join('; ');
+
+  const focusText = {
+    'balanced': 'Plan goal: balanced, varied, satisfying meals.',
+    'weight loss': 'Plan goal: weight loss — lighter, higher-volume, lower-calorie meals built on lean protein and vegetables; go easy on oil, cheese, and refined carbs; keep portions reasonable.',
+    'build muscle': 'Plan goal: build muscle — a solid protein portion in every meal and enough carbs to support training.',
+    'budget': 'Plan goal: budget-friendly — keep the total cost low: cheap staples, few extra purchases, and reuse the same ingredients across days so nothing bought goes to waste.',
+    'use up pantry': 'Plan goal: use up my pantry — use as much of the available pool as possible across the plan, perishables first, to minimize waste.'
+  }[planPrefs.focus] || '';
+
+  let styleText = '';
+  if (planPrefs.cookStyle === 'leftovers'){
+    styleText = 'Cooking rhythm: cook once, eat twice. Some dishes should deliberately make extra, and a later meal (usually the next day) turns those leftovers into a genuinely different dish (e.g. roast chicken -> chicken wraps). When a recipe reuses leftovers, say so in its description, list the leftover as a normal ingredient with an amount (never as missing), and size the original recipe to cover both meals.';
+  } else if (planPrefs.cookStyle === 'batch'){
+    const split = days > 4
+      ? ` Food shouldn't sit in the fridge for more than about 4 days, so use two prep sessions: one on day 1 for the first half of the plan and one mid-plan (around day ${Math.ceil(days / 2) + 1}) for the rest; mention freezing where it helps.`
+      : ' Use a single prep session on day 1.';
+    styleText = `Cooking rhythm: batch cooking (meal prep) — the user cooks everything in advance instead of cooking every day.${split} Choose dishes that keep well refrigerated for several days and reheat or assemble well (stews, curries, soups, grain bowls, roasted vegetables, baked dishes, sturdy salads); avoid dishes that go soggy or must be eaten freshly made. In each recipe, the steps are what gets done during the prep session, and the final step must say how to store it and how to reheat or assemble it on the day it's eaten. Also fill "prep_sessions": one efficient combined game plan per session that orders the work so oven, stovetop and chopping overlap (e.g. "Start the rice; while it cooks, chop all vegetables for days 1-3..."), with total time and storage tips (containers, fridge vs freezer).`;
+  } else {
+    styleText = 'Cooking rhythm: the user cooks every day — each dish is cooked fresh on its own day.';
+  }
+  const quickText = (planPrefs.cookStyle !== 'batch' && planPrefs.weekdayQuick === 'yes')
+    ? '\nWeekday meals (Monday-Friday, using the dates above) must take at most 30 minutes; weekend meals can take longer.'
     : '';
-  const isStrict = planPrefs.allowMissing === 'strict';
-  const missingRule = isStrict
-    ? `Every meal MUST be fully makeable from the available pool above (plus basic pantry staples) — missing_ingredients must be an empty array for every day. Do not suggest anything that requires a trip to the store. Pick dishes that genuinely work with only what's listed, even if that means simpler meals.`
-    : `If something is genuinely missing for a given day, list it under that day's missing_ingredients.`;
-  return `Available ingredients (a pool to choose from, not a checklist; amounts in parentheses are roughly what's on hand, so don't call for more than that of those items): ${selectedNames.join(', ')}.${priorityLine}${historyLine}${goalGuidanceLine(planPrefs.goal)}${flavorLine(planPrefs.flavor)}${difficultyLine(planPrefs.difficulty, planPrefs.time)}
-Constraints for every meal in the plan: meal type: ${planPrefs.mealType}, about ${planPrefs.time} of cooking time each, ${planPrefs.servings} servings, dietary requirement: ${planPrefs.diet}, cuisine preference: ${planPrefs.cuisine}, preferred cooking method: ${planPrefs.method}.
-Plan exactly ${days} distinct ${planPrefs.mealType} recipes, one per day, each genuinely suited to that meal of the day. Vary style and main technique across the days so the week doesn't feel repetitive — the same dish must not repeat within the plan. Ingredients can reasonably overlap across days (reusing a protein or sauce is normal meal planning), but treat the pool as a whole across all ${days} days, not per day — don't force every ingredient into every dish. It's fine to assume basic pantry staples (salt, pepper, oil, common spices) are on hand even if not listed, but do not assume any other ingredient beyond the pool above is available. ${missingRule} For every ingredient used, and every missing ingredient (if any), give a specific amount scaled to ${planPrefs.servings} servings (e.g. "2 boneless thighs", "1 1/2 cups", "200g") instead of vague amounts. Keep every amount realistic for what that day's dish actually needs — never inflate a missing ingredient to a bulk or wholesale quantity (e.g. write "200g pork shoulder, cubed" for a dish that needs a small portion, not "1.5kg pork shoulder"); the amount should match what a home cook would actually use, not what comes in a typical store package. Estimate calories per serving, plus grams of protein, carbs, and fat per serving, as reasonable approximate numbers — these are estimates, not verified nutrition data.
+  const missingRule = planPrefs.allowMissing === 'strict'
+    ? 'Every meal MUST be fully makeable from the available pool above (plus basic pantry staples) — missing_ingredients must be an empty array for every recipe. Pick dishes that genuinely work with only what is listed, even if that means simpler meals.'
+    : 'One shopping trip for the whole plan is fine: list what each recipe needs beyond the pool under its missing_ingredients, and reuse those extra purchases across days where sensible.';
+
+  return `Available ingredients (a pool to choose from, not a checklist; amounts in parentheses are roughly what's on hand, so don't call for more than that of those items): ${selectedNames.join(', ')}.${priorityLine}${historyLine}${allergiesLine()}
+Plan dates: ${dayList}.
+Meals each day: ${meals.join(', ')}.
+Universal constraints: ${prefs.servings} servings per meal, dietary requirement: ${prefs.diet} (a hard constraint, never violate it).
+${focusText}
+${styleText}${quickText}${difficultyLine('no preference', '')}
+Plan exactly ${total} recipes: for each day 1-${days}, one recipe for each of these meals in this order: ${meals.join(', ')}. Every recipe must genuinely suit its meal of the day, and every dish must be distinct across the whole plan (leftover-based dishes count as distinct only if they are clearly a different dish). Vary dish types, techniques, and cuisines across the plan. Treat the pool as a whole across the plan, not per meal — don't force every ingredient into every dish. It's fine to assume basic pantry staples (salt, pepper, oil, common spices) are on hand, but do not assume any other ingredient beyond the pool is available. ${missingRule} For every ingredient used and every missing ingredient, give a specific realistic amount for ${prefs.servings} servings (e.g. "2 boneless thighs", "1 1/2 cups", "200g") — never inflate to bulk or store-package sizes. Estimate calories per serving plus grams of protein, carbs, and fat per serving as reasonable approximations — these are estimates, not verified nutrition data.
 Respond with ONLY valid JSON, no markdown fences, no extra text, matching exactly this shape. Every string value must be plain text on a single line — no literal line breaks inside a string:
 {
   "recipes": [
     {
+      "day": number,
+      "meal": "breakfast | lunch | dinner",
       "title": "string",
       "description": "one or two sentence description",
       "total_time": "string like '30 minutes'",
@@ -4047,9 +4173,65 @@ Respond with ONLY valid JSON, no markdown fences, no extra text, matching exactl
       "missing_ingredients": [{"item": "string", "amount": "string"}],
       "steps": ["string", ...]
     }
+  ],
+  "prep_sessions": [
+    { "day": number, "title": "string", "total_time": "string", "steps": ["string", ...], "storage_tips": ["string", ...] }
   ]
 }
-Always return exactly ${days} items in the recipes array, in day order. The dietary requirement is a hard constraint, never suggest something that violates it. If a specific cooking method is given (not "no preference"), every meal must actually be cooked that way.${aiLanguageLine()}`;
+Keep "meal" values and "difficulty" exactly as the English words shown. "prep_sessions" must be an empty array unless the cooking rhythm is batch cooking.${aiLanguageLine()}`;
+}
+
+// Make sure every recipe knows its day and meal, and keep them in day/meal order.
+function normalizePlanRecipes(list){
+  const perDay = Math.max(1, planPrefs.meals.length);
+  list.forEach((r, i) => {
+    if (!r.day) r.day = Math.floor(i / perDay) + 1;
+    if (!r.meal && planPrefs.meals.length === 1) r.meal = planPrefs.meals[0];
+  });
+  return list.sort((a, b) => (a.day - b.day) || (MEAL_ORDER.indexOf(a.meal) - MEAL_ORDER.indexOf(b.meal)));
+}
+
+function mealLabel(meal){
+  const dict = pillLabels[currentLanguage] || pillLabels.en;
+  return dict['mealType:' + meal] || '';
+}
+
+function planDayOf(recipe, index){ return recipe.day || (index + 1); }
+
+function planSlotLabel(startDate, recipe, index){
+  const date = formatDayLabel(addDaysIso(startDate, planDayOf(recipe, index) - 1));
+  const meal = recipe.meal ? mealLabel(recipe.meal) : '';
+  return meal ? `${date} · ${meal}` : date;
+}
+
+function renderPlanPrep(){
+  const box = document.getElementById('planPrepCard');
+  if (!box) return;
+  box.innerHTML = '';
+  if (!planPrep.length) return;
+  const details = document.createElement('details');
+  details.className = 'plan-prep';
+  details.open = true;
+  details.innerHTML = `<summary class="plan-prepsummary"><span>${t('prep_title')}</span><span class="plan-prefs-chevron">⌄</span></summary>`;
+  planPrep.forEach((session, i) => {
+    const sec = document.createElement('div');
+    sec.className = 'plan-prep-session';
+    const dateLabel = formatDayLabel(addDaysIso(planStartDate, (session.day || 1) - 1));
+    const steps = (session.steps || []).map(s => `<li>${escapeHtml(s)}</li>`).join('');
+    const tips = (session.storage_tips || []).map(s => `<li>${escapeHtml(s)}</li>`).join('');
+    sec.innerHTML = `
+      <p class="plan-prep-head">${escapeHtml(session.title || t('prep_session').replace('{n}', i + 1))}</p>
+      <p class="plan-prep-meta">${dateLabel}${session.total_time ? ' · ' + escapeHtml(session.total_time) : ''}</p>
+      <ol class="steps">${steps}</ol>
+      ${tips ? `<p class="plan-prep-subhead">${t('prep_storage')}</p><ul class="plan-prep-tips">${tips}</ul>` : ''}
+      <button class="bubble-cook-btn plan-prep-cook">${t('cook_mode')}</button>
+    `;
+    sec.querySelector('.plan-prep-cook').addEventListener('click', () => {
+      openCookMode({ title: session.title || t('prep_title'), steps: session.steps || [], ingredients_used: [], isPrep: true });
+    });
+    details.appendChild(sec);
+  });
+  box.appendChild(details);
 }
 
 function renderPlanCalendarStrip(){
@@ -4059,18 +4241,26 @@ function renderPlanCalendarStrip(){
     return;
   }
   planCalendarStrip.style.display = 'flex';
-  planCalendarStrip.innerHTML = mealPlan.map((recipe, i) => {
-    const date = addDaysIso(planStartDate, i);
-    const isSelected = expandedPlanIndex === i;
+  const maxDay = Math.max(...mealPlan.map((r, i) => planDayOf(r, i)));
+  const prepDays = new Set(planPrep.map(s => s.day || 1));
+  const cells = [];
+  for (let day = 1; day <= maxDay; day++){
+    const idxs = mealPlan.map((r, i) => planDayOf(r, i) === day ? i : -1).filter(i => i >= 0);
+    if (!idxs.length) continue;
+    const date = addDaysIso(planStartDate, day - 1);
+    const allCooked = idxs.every(i => mealPlan[i].cooked);
+    const isSelected = idxs.includes(expandedPlanIndex);
     const isToday = date === todayIso();
-    return `
-      <button class="plan-cal-cell${isSelected ? ' selected' : ''}${recipe.cooked ? ' cooked' : ''}${isToday ? ' today' : ''}" data-index="${i}">
+    cells.push(`
+      <button class="plan-cal-cell${isSelected ? ' selected' : ''}${allCooked ? ' cooked' : ''}${isToday ? ' today' : ''}" data-index="${idxs[0]}">
         <span class="plan-cal-weekday">${formatWeekdayShort(date)}</span>
         <span class="plan-cal-daynum">${dayNumberOf(date)}</span>
-        ${recipe.cooked ? '<span class="plan-cal-check">✓</span>' : ''}
+        ${allCooked ? '<span class="plan-cal-check">✓</span>' : ''}
+        ${prepDays.has(day) ? `<span class="plan-cal-prep">${t('prep_badge')}</span>` : ''}
       </button>
-    `;
-  }).join('');
+    `);
+  }
+  planCalendarStrip.innerHTML = cells.join('');
 
   planCalendarStrip.querySelectorAll('.plan-cal-cell').forEach(cell => {
     cell.addEventListener('click', () => {
@@ -4085,10 +4275,18 @@ function renderPlanCalendarStrip(){
   });
 }
 
+function swapPlanDishes(a, b){
+  const A = mealPlan[a], B = mealPlan[b];
+  const slotA = { day: A.day, meal: A.meal }, slotB = { day: B.day, meal: B.meal };
+  mealPlan[a] = Object.assign(B, slotA);
+  mealPlan[b] = Object.assign(A, slotB);
+}
+
 function renderMealPlan(){
   planEmptyResults.style.display = mealPlan.length ? 'none' : 'flex';
   planActionsRow.style.display = mealPlan.length ? 'flex' : 'none';
   renderPlanCalendarStrip();
+  renderPlanPrep();
   savePlanBtn.textContent = planSaved ? t('saved_check') : t('save_plan');
   savePlanBtn.disabled = planSaved;
   savePlanBtn.classList.toggle('saved', planSaved);
@@ -4098,7 +4296,8 @@ function renderMealPlan(){
     const isExpanded = expandedPlanIndex === i;
     const editKey = 'plan-' + i;
     const isEditing = editingRecipeKey === editKey;
-    const dayDate = addDaysIso(planStartDate, i);
+    const dayDate = addDaysIso(planStartDate, planDayOf(recipe, i) - 1);
+    const slotLabel = planSlotLabel(planStartDate, recipe, i);
 
     const bubble = document.createElement('div');
     bubble.className = 'bubble' + (isExpanded ? ' expanded' : '');
@@ -4147,7 +4346,7 @@ function renderMealPlan(){
         </div>
         <div class="bubble-head-main">
           <div class="bubble-head-left">
-            <div class="bubble-name">${formatDayLabel(dayDate)} — ${recipe.title || t('untitled')}</div>
+            <div class="bubble-name">${slotLabel} — ${recipe.title || t('untitled')}</div>
             <div class="bubble-stats">
               <span class="badge ${difficultyBadgeClass(recipe.difficulty)}">${difficultyLabel(recipe.difficulty)}</span>
               <span class="badge badge-kcal">${kcal} / serving</span>
@@ -4174,7 +4373,7 @@ function renderMealPlan(){
     moveUpBtn.addEventListener('click', (e) => {
       e.stopPropagation();
       if (i === 0) return;
-      [mealPlan[i - 1], mealPlan[i]] = [mealPlan[i], mealPlan[i - 1]];
+      swapPlanDishes(i - 1, i);
       if (expandedPlanIndex === i) expandedPlanIndex = i - 1;
       else if (expandedPlanIndex === i - 1) expandedPlanIndex = i;
       renderMealPlan();
@@ -4182,7 +4381,7 @@ function renderMealPlan(){
     moveDownBtn.addEventListener('click', (e) => {
       e.stopPropagation();
       if (i === mealPlan.length - 1) return;
-      [mealPlan[i + 1], mealPlan[i]] = [mealPlan[i], mealPlan[i + 1]];
+      swapPlanDishes(i, i + 1);
       if (expandedPlanIndex === i) expandedPlanIndex = i + 1;
       else if (expandedPlanIndex === i + 1) expandedPlanIndex = i;
       renderMealPlan();
@@ -4216,7 +4415,7 @@ function renderMealPlan(){
     });
     bubble.querySelector('.bubble-print-btn').addEventListener('click', (e) => {
       e.stopPropagation();
-      printRecipe(recipe, formatDayLabel(dayDate));
+      printRecipe(recipe, slotLabel);
     });
 
     const listBtn = bubble.querySelector('.bubble-list-btn');
@@ -4225,7 +4424,7 @@ function renderMealPlan(){
         e.stopPropagation();
         listBtn.disabled = true;
         listBtn.textContent = t('adding_dots');
-        await addToShoppingList(missingList.map(ingredientName), recipe.title || 'a recipe');
+        await addToShoppingList(missingList, recipe.title || t('untitled'));
         listBtn.textContent = t('added_check');
         listBtn.classList.add('added');
       });
@@ -4264,14 +4463,16 @@ async function generateMealPlan(){
   }
 
   generatePlanBtn.disabled = true;
-  planStatus.textContent = "Planning your week...";
+  planStatus.textContent = t('loading_plan');
 
   try {
-    const days = parseInt(prefs.planDays, 10) || 5;
-    const tokenBudget = Math.min(8000, 900 + days * 900);
-    const raw = await callClaude([{ role: "user", content: buildMealPlanPrompt(prefs.planDays) }], tokenBudget);
+    const days = parseInt(planPrefs.planDays, 10) || 5;
+    const total = days * planPrefs.meals.length;
+    const tokenBudget = Math.min(16000, 1000 + total * 800);
+    const raw = await callClaude([{ role: "user", content: buildMealPlanPrompt(days) }], tokenBudget);
     const parsed = parseJsonLoose(raw);
-    mealPlan = parsed.recipes || [];
+    mealPlan = normalizePlanRecipes(parsed.recipes || []);
+    planPrep = Array.isArray(parsed.prep_sessions) ? parsed.prep_sessions : [];
     expandedPlanIndex = null;
     planSaved = false;
     renderMealPlan();
@@ -4302,6 +4503,7 @@ generatePlanBtn.addEventListener('click', async () => {
 
 clearPlanBtn.addEventListener('click', () => {
   mealPlan = [];
+  planPrep = [];
   expandedPlanIndex = null;
   planSaved = false;
   renderMealPlan();
@@ -4320,7 +4522,8 @@ savePlanBtn.addEventListener('click', async () => {
     .from('meal_plans')
     .insert({
       start_date: planStartDate,
-      days: JSON.parse(JSON.stringify(mealPlan))
+      days: JSON.parse(JSON.stringify(mealPlan)),
+      prep: JSON.parse(JSON.stringify(planPrep))
     })
     .select()
     .single();
@@ -4343,7 +4546,7 @@ planAddAllToListBtn.addEventListener('click', async () => {
   planAddAllToListBtn.textContent = t('adding_dots');
   for (const recipe of mealPlan){
     const missing = recipe.missing_ingredients || [];
-    if (missing.length) await addToShoppingList(missing.map(ingredientName), recipe.title || 'meal plan');
+    if (missing.length) await addToShoppingList(missing, recipe.title || t('untitled'));
   }
   planAddAllToListBtn.textContent = t('added_check');
 });
@@ -4970,7 +5173,7 @@ renderPantry();
 let recipes = [];
 let expandedIndex = null;
 
-const prefs = { time: "30 minutes", servings: "2", diet: "no restrictions", cuisine: "no preference", method: "no preference", planDays: "5", goal: "no specific goal", allowMissing: "allow", mealType: "dinner", flavor: "no preference", difficulty: "no preference" };
+const prefs = { time: "30 minutes", servings: "2", diet: "no restrictions", cuisine: "no preference", method: "no preference", planDays: "5", goal: "no specific goal", allowMissing: "allow", mealType: "dinner", flavor: "no preference", difficulty: "no preference", allergies: "" };
 // Meal Plan has its own copy: seeded from the defaults each time you open the
 // Meal Plan page, but changes there never touch the profile or Recipes.
 // Recipes and Meal Plan each keep their own working copy of the preferences.
@@ -4986,10 +5189,13 @@ function mealTypeForNow(){
   return 'dinner';
 }
 const recipePrefs = {};
-const planPrefs = {};
+const PLAN_DEFAULTS = { planDays: '5', meals: ['dinner'], cookStyle: 'fresh', focus: 'balanced', weekdayQuick: 'no', allowMissing: 'allow' };
+const MEAL_ORDER = ['breakfast', 'lunch', 'dinner'];
+let planPrefs = JSON.parse(JSON.stringify(PLAN_DEFAULTS));
+
 
 // Keys that have a profile default in the sidebar (time has no profile default).
-const PROFILE_DEFAULT_KEYS = ['servings', 'diet', 'cuisine', 'method', 'goal', 'allowMissing'];
+const PROFILE_DEFAULT_KEYS = ['servings', 'diet', 'goal', 'allowMissing'];
 
 function syncScopedPills(groupClass, store, resetBtnId){
   let anyChanged = false;
@@ -5011,26 +5217,59 @@ function syncScopedPills(groupClass, store, resetBtnId){
   if (resetBtn) resetBtn.style.display = anyChanged ? 'inline-block' : 'none';
 }
 function syncRecipePills(){ syncScopedPills('recipe-pill-group', recipePrefs, 'recipePrefsReset'); }
-function syncPlanPills(){ syncScopedPills('plan-pill-group', planPrefs, 'planPrefsReset'); }
+// Meal Plan settings are plan-only: no link to the Profile, remembered per user.
+function syncPlanPills(){
+  document.querySelectorAll('.plan-pill-group[data-group]').forEach(group => {
+    const key = group.dataset.group;
+    const val = planPrefs[key];
+    group.querySelectorAll('.pill').forEach(pill => {
+      const on = Array.isArray(val) ? val.includes(pill.dataset.value) : pill.dataset.value === val;
+      pill.classList.toggle('selected', on);
+    });
+  });
+  const isBatch = planPrefs.cookStyle === 'batch';
+  const quickBlock = document.getElementById('weekdayQuickBlock');
+  if (quickBlock) quickBlock.style.display = isBatch ? 'none' : '';
+  const hint = document.getElementById('cookStyleHint');
+  if (hint) hint.textContent = t('style_hint_' + planPrefs.cookStyle);
+  const sizeNote = document.getElementById('planSizeNote');
+  if (sizeNote){
+    const total = (parseInt(planPrefs.planDays, 10) || 5) * planPrefs.meals.length;
+    sizeNote.style.display = total > 10 ? 'block' : 'none';
+    sizeNote.textContent = t('plan_size_note').replace('{n}', total);
+  }
+}
+
+function applyPlanPrefsFromRow(row){
+  const saved = (row && row.plan_prefs) || {};
+  planPrefs = Object.assign(JSON.parse(JSON.stringify(PLAN_DEFAULTS)), saved);
+  if (!Array.isArray(planPrefs.meals) || !planPrefs.meals.length) planPrefs.meals = ['dinner'];
+  syncPlanPills();
+}
+
+let planPrefsSaveTimer = null;
+function savePlanPrefs(){
+  clearTimeout(planPrefsSaveTimer);
+  planPrefsSaveTimer = setTimeout(async () => {
+    if (!currentUserId) return;
+    const { error } = await supabaseClient.from('profiles').update({ plan_prefs: planPrefs }).eq('user_id', currentUserId);
+    if (error) console.error('Failed to save plan settings:', error);
+  }, 400);
+}
 
 function seedRecipePrefsFromDefaults(){
   SCOPED_PREF_KEYS.forEach(k => { recipePrefs[k] = prefs[k]; });
   recipePrefs.mealType = mealTypeForNow();
   syncRecipePills();
 }
-function seedPlanPrefsFromDefaults(){
-  SCOPED_PREF_KEYS.forEach(k => { planPrefs[k] = prefs[k]; });
-  syncPlanPills();
-}
 syncPrefPills();
 
 const PROFILE_KEY_TO_COLUMN = {
   diet: 'diet',
-  cuisine: 'cuisine',
-  method: 'method',
   goal: 'goal',
   allowMissing: 'allow_missing',
-  servings: 'servings'
+  servings: 'servings',
+  allergies: 'allergies'
 };
 
 async function loadProfileFromDb(){
@@ -5057,14 +5296,15 @@ async function loadProfileFromDb(){
 
 function applyProfileRow(row){
   if (row.diet != null) prefs.diet = row.diet;
-  if (row.cuisine != null) prefs.cuisine = row.cuisine;
-  if (row.method != null) prefs.method = row.method;
   if (row.goal != null) prefs.goal = row.goal;
+  prefs.allergies = row.allergies || '';
+  const allergiesEl = document.getElementById('allergiesInput');
+  if (allergiesEl) allergiesEl.value = prefs.allergies;
   if (row.allow_missing != null) prefs.allowMissing = row.allow_missing;
   if (row.servings != null) prefs.servings = row.servings;
   syncPrefPills();
   seedRecipePrefsFromDefaults();
-  seedPlanPrefsFromDefaults();
+  applyPlanPrefsFromRow(row);
   if (row.language && row.language !== currentLanguage){
     currentLanguage = row.language;
     document.querySelectorAll('#languageToggle .pill').forEach(p => {
@@ -5163,9 +5403,7 @@ document.querySelectorAll('.pill-group:not(.plan-pill-group):not(.recipe-pill-gr
         updateProfileField(key, pill.dataset.value);
         // A profile change is reflected in Recipes and Meal Plan right away.
         recipePrefs[key] = pill.dataset.value;
-        planPrefs[key] = pill.dataset.value;
         syncRecipePills();
-        syncPlanPills();
       }
     });
   });
@@ -5185,19 +5423,33 @@ document.querySelectorAll('.recipe-pill-group').forEach(group => {
 // Meal Plan: temporary, never saved to the profile
 document.querySelectorAll('.plan-pill-group').forEach(group => {
   const key = group.dataset.group;
+  const multi = group.dataset.multi === 'true';
   group.querySelectorAll('.pill').forEach(pill => {
     pill.addEventListener('click', () => {
-      planPrefs[key] = pill.dataset.value;
+      const v = pill.dataset.value;
+      if (multi){
+        const cur = new Set(planPrefs[key] || []);
+        if (cur.has(v)){ if (cur.size > 1) cur.delete(v); }   // keep at least one meal
+        else cur.add(v);
+        planPrefs[key] = MEAL_ORDER.filter(m => cur.has(m));
+      } else {
+        planPrefs[key] = v;
+      }
       syncPlanPills();
+      savePlanPrefs();
     });
   });
 });
 
+document.getElementById('allergiesInput').addEventListener('change', (e) => {
+  prefs.allergies = e.target.value.trim();
+  updateProfileField('allergies', prefs.allergies || null);
+});
+
 document.getElementById('recipePrefsReset').addEventListener('click', seedRecipePrefsFromDefaults);
-document.getElementById('planPrefsReset').addEventListener('click', seedPlanPrefsFromDefaults);
 
 seedRecipePrefsFromDefaults();
-seedPlanPrefsFromDefaults();
+syncPlanPills();
 
 /* ============ CLAUDE API ============ */
 async function callClaude(messages, maxTokens){
@@ -5287,7 +5539,7 @@ function buildRecipePrompt(){
   const missingRule = isStrict
     ? `The dish MUST be fully makeable from the available pool above plus basic pantry staples only — missing_ingredients must be an empty array. Do not suggest anything that requires a trip to the store. Pick a dish that genuinely works with only what's listed, even if that means something simpler.`
     : `If something important is genuinely missing, list it under missing_ingredients rather than silently assuming it.`;
-  return `Available ingredients (a pool to choose from, not a checklist; amounts in parentheses are roughly what's on hand, so don't call for more than that of those items): ${selectedNames.join(', ')}.${priorityLine}${historyLine}${goalGuidanceLine(recipePrefs.goal)}${flavorLine(recipePrefs.flavor)}${difficultyLine(recipePrefs.difficulty, recipePrefs.time)}${varietyLine(recipePrefs.mealType)}
+  return `Available ingredients (a pool to choose from, not a checklist; amounts in parentheses are roughly what's on hand, so don't call for more than that of those items): ${selectedNames.join(', ')}.${priorityLine}${historyLine}${allergiesLine()}${goalGuidanceLine(recipePrefs.goal)}${flavorLine(recipePrefs.flavor)}${difficultyLine(recipePrefs.difficulty, recipePrefs.time)}${varietyLine(recipePrefs.mealType)}
 Constraints: meal type: ${recipePrefs.mealType}, about ${recipePrefs.time} of cooking time, ${recipePrefs.servings} servings, dietary requirement: ${recipePrefs.diet}, cuisine preference: ${recipePrefs.cuisine}, preferred cooking method: ${recipePrefs.method}.
 Suggest exactly 1 realistic ${recipePrefs.mealType} option that genuinely suits that meal of the day. Treat the ingredient list as what's available, not as a requirement to use everything — a good dish usually only calls for a subset of it, except for any priority ingredients noted above, which must appear. Never force a non-priority ingredient into the dish just because it's on the list; leftover, unused ingredients are completely normal and not a problem to solve. It's fine to assume basic pantry staples (salt, pepper, oil, common spices) are on hand even if not listed, but do not assume any other ingredient beyond the pool above is available. ${missingRule} For every ingredient used, and every missing ingredient (if any), give a specific amount scaled to ${recipePrefs.servings} servings (e.g. "2 boneless thighs", "1 1/2 cups", "200g") instead of vague amounts like "some" or "a bit of" — the missing-ingredient amounts double as shopping quantities. Keep every amount realistic for what this one dish actually needs — never inflate a missing ingredient to a bulk or wholesale quantity (e.g. write "200g pork shoulder, cubed" for a dish that needs a small portion, not "1.5kg pork shoulder"); the amount should match what a home cook would actually use in this recipe, not what comes in a typical store package. Estimate calories per serving, plus grams of protein, carbs, and fat per serving, as reasonable approximate numbers based on the ingredients and portions actually used — these are estimates, not verified nutrition data.
 Respond with ONLY valid JSON, no markdown fences, no extra text, matching exactly this shape. Every string value must be plain text on a single line — no literal line breaks inside a string:
@@ -5527,7 +5779,14 @@ function printRecipe(recipe, label){
 }
 
 function printMealPlan(){
-  printArea.innerHTML = mealPlan.map((r, i) => recipePrintHtml(r, formatDayLabel(addDaysIso(planStartDate, i)))).join('');
+  const prepHtml = planPrep.map((s, i) => `
+    <div class="print-recipe">
+      <p class="print-day">${formatDayLabel(addDaysIso(planStartDate, (s.day || 1) - 1))}</p>
+      <h1 class="print-title">${escapeHtml(s.title || t('prep_session').replace('{n}', i + 1))}</h1>
+      <ol>${(s.steps || []).map(x => `<li>${escapeHtml(x)}</li>`).join('')}</ol>
+      ${(s.storage_tips || []).length ? `<p class="print-section-title">${t('prep_storage')}</p><ul>${s.storage_tips.map(x => `<li>${escapeHtml(x)}</li>`).join('')}</ul>` : ''}
+    </div>`).join('');
+  printArea.innerHTML = prepHtml + mealPlan.map((r, i) => recipePrintHtml(r, planSlotLabel(planStartDate, r, i))).join('');
   window.print();
 }
 
@@ -5622,7 +5881,7 @@ function renderRecipeOptions(){
       listBtn.addEventListener('click', async () => {
         listBtn.disabled = true;
         listBtn.textContent = t('adding_dots');
-        await addToShoppingList(missingList.map(ingredientName), recipe.title || 'a recipe');
+        await addToShoppingList(missingList, recipe.title || t('untitled'));
         listBtn.textContent = t('added_check');
         listBtn.classList.add('added');
       });
@@ -5685,6 +5944,11 @@ function difficultyLine(target, time){
   return rules + `\nTarget difficulty: ${target}. Choose a dish that genuinely is ${target} by the definitions above.${fit}`;
 }
 
+function allergiesLine(){
+  if (!prefs.allergies) return '';
+  return `\nAllergies and dislikes — NEVER use any of these, or anything that contains them, in any form (leave out pantry items that conflict): ${prefs.allergies}.`;
+}
+
 function flavorLine(flavor){
   if (!flavor || flavor === 'no preference') return '';
   return `\nFlavor: the dish should clearly taste ${flavor}.`;
@@ -5740,6 +6004,15 @@ tryAnotherBtn.addEventListener('click', async () => {
     showLoadingError(errorBox2.textContent || t('err_generate_recipe'));
   }
 });
+
+
+/* ============ STARTUP: language remembered in this browser ============ */
+if (currentLanguage !== 'en'){
+  document.querySelectorAll('#languageToggle .pill').forEach(p => {
+    p.classList.toggle('selected', p.dataset.lang === currentLanguage);
+  });
+  applyTranslations();
+}
 
 </script>
 </body>
