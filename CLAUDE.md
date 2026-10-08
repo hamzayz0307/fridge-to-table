@@ -26,7 +26,8 @@ Pantry-based recipe and meal-planning web app. Owner: Hamza (works in Turkish �
 - Navigation: floating bottom bar with 4 tabs — Today (home), Kitchen (pantry), Plan (meal prep + guest menu via a top switch), List (shopping list) — plus a round Profile button. Profile is a full page holding the universal settings, saved recipes and meal history. Recipes, saved and history are sub-pages with a back button.
 
 ## Visual style (redesign in progress)
-- Stage 1 done: white page, light grey cards (`--surface`), near-black primary buttons and selected pills, colored round icons per category (`--ic-*`), Newsreader (display/serif) + Instrument Sans (UI). No all-caps labels.
+- Page is a soft sage tint (`--bg`) with white cards (`--surface`); each section gets a color wash at the top (`body[data-page]` → `--wash`: home tomato, kitchen green, plan blue, list mustard, profile plum); home has faint kitchen line doodles behind the greeting. Elements inside white cards use `--bg-soft`.
+- Stage 1 done: light cards, near-black primary buttons and selected pills, colored round icons per category (`--ic-*`), Newsreader (display/serif) + Instrument Sans (UI). No all-caps labels.
 - Stage 2: carry the style through Kitchen, Plan and List pages. Stage 3: dark theme (Light / Dark / System in Profile).
 
 ## Working conventions

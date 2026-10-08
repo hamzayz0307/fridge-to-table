@@ -10,9 +10,11 @@
   :root{
     --font-ui: 'Instrument Sans', system-ui, -apple-system, sans-serif;
     --font-display: 'Newsreader', Georgia, 'Times New Roman', serif;
-    --bg: #FFFFFF;
-    --bg-soft: #ECEEE9;
-    --surface: #F3F4F1;
+    --bg: #EDF0E9;
+    --bg-soft: #F1F3EE;
+    --surface: #FFFFFF;
+    --track: rgba(21, 23, 26, 0.06);
+    --wash: #F6DCD3;
     --surface-raised: #FFFFFF;
     --ink: #15171A;
     --ink-soft: #6C7069;
@@ -1537,6 +1539,46 @@
   .profile-footer{ border-top: 1px solid var(--line-light); padding-top: 22px; margin-top: 10px; }
   .onboard-name{ width: 100%; }
 
+  /* =====================================================================
+     Page background: tinted page, white cards, a color wash per section
+     ===================================================================== */
+  body{ position: relative; }
+  body::before{
+    content: ""; position: absolute; top: 0; left: 0; right: 0; height: 420px; z-index: -1; pointer-events: none;
+    background: linear-gradient(180deg, var(--wash) 0%, color-mix(in srgb, var(--wash) 45%, var(--bg)) 45%, var(--bg) 100%);
+    transition: background 0.3s ease;
+  }
+  body[data-page="home"]{ --wash: #F7DDD4; }
+  body[data-page="pantry"]{ --wash: #D5EEDD; }
+  body[data-page="plan"]{ --wash: #D9E7F7; }
+  body[data-page="list"]{ --wash: #F6E8C2; }
+  body[data-page="profile"]{ --wash: #E7DDF6; }
+
+  /* white things that sit inside white cards get a soft tint so they stay visible */
+  .plan-prefs .pill:not(.selected), .bubble .pill:not(.selected), .empty-card .pill:not(.selected),
+  .capture-card .pill:not(.selected), .guest-course .pill:not(.selected),
+  #pantryChips .chip, .bubble .chip, .plan-prefs .chip,
+  .plan-prefs .stepper, .bubble .stepper{ background: var(--bg-soft); }
+  .row-card:hover, .tile:hover{ background: #FAFBF8; }
+  .row-badge{ background: var(--bg-soft); }
+
+  /* segmented controls: grey track, white thumb */
+  .plan-switch, .plan-mode-toggle{ background: var(--track); }
+  .plan-switch-btn.selected, .plan-mode-toggle .pill.selected, .plan-mode-toggle .pill.selected:hover{ background: #fff; color: var(--ink); box-shadow: 0 1px 3px rgba(21,23,26,.10); }
+  .icon-btn{ background: rgba(255,255,255,0.85); }
+
+  /* C: kitchen doodles behind the home greeting */
+  #tabHome{ position: relative; }
+  #tabHome::before{
+    content: ""; position: absolute; z-index: -1; pointer-events: none;
+    top: -26px; left: -20px; right: -20px; height: 300px;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='230' height='190' viewBox='0 0 230 190' fill='none' stroke='%23C2553F' stroke-opacity='.22' stroke-width='1.6' stroke-linecap='round' stroke-linejoin='round'%3E %3Ccircle cx='42' cy='40' r='19'/%3E%3Ccircle cx='42' cy='40' r='14'/%3E %3Cpath d='M42 26v28M28 40h28M32 30l20 20M52 30L32 50'/%3E %3Cpath d='M150 78C152 58 160 42 176 26'/%3E %3Cpath d='M153 62c-12-2-17-10-17-18 10 1 16 8 17 18Z'/%3E%3Cpath d='M158 48c11-4 14-13 13-20-10 3-14 11-13 20Z'/%3E%3Cpath d='M166 37c-9-5-11-12-10-18 8 2 11 9 10 18Z'/%3E %3Cpath d='M108 170l12-30'/%3E%3Cpath d='M120 140c-12-12-8-36 6-38 14 2 12 28-6 38Z'/%3E%3Cpath d='M120 140c-4-12-1-30 6-38 6 8 5 28-6 38Z'/%3E %3Cellipse cx='30' cy='116' rx='8' ry='12' transform='rotate%28-25 30 116%29'/%3E%3Cpath d='M35 127l16 36'/%3E %3Ccircle cx='196' cy='136' r='15'/%3E%3Cpath d='M190 122l6 5 6-5M196 127v-7'/%3E %3Ccircle cx='72' cy='96' r='2.2'/%3E%3Ccircle cx='80' cy='101' r='2.2'/%3E%3Ccircle cx='88' cy='96' r='2.2'/%3E %3Cpath d='M210 60c0-6 4-9 0-14M218 60c0-6 4-9 0-14'/%3E %3C/svg%3E");
+    background-size: 230px 190px; background-position: 18px 8px;
+    -webkit-mask-image: linear-gradient(180deg, #000 0%, rgba(0,0,0,.55) 55%, transparent 100%);
+            mask-image: linear-gradient(180deg, #000 0%, rgba(0,0,0,.55) 55%, transparent 100%);
+  }
+  @media (prefers-reduced-motion: reduce){ body::before{ transition: none; } }
+
   /* bottom navigation */
   .bottom-nav{
     position: fixed; left: 0; right: 0; bottom: calc(12px + env(safe-area-inset-bottom));
@@ -2058,6 +2100,15 @@
       </div>
     </details>
 
+    <p class="plan-size-note" id="planSizeNote" style="display:none;"></p>
+
+    <div class="row">
+      <button class="btn btn-solid" id="generatePlanBtn" data-i18n="generate_plan">Generate plan</button>
+      <span class="status-text" id="planStatus"></span>
+    </div>
+
+    <div id="planError" class="error-box"></div>
+
     <div class="row plan-stock-head" style="justify-content: space-between;">
       <p class="section-label" style="margin: 0;" data-i18n="in_stock_label">in stock</p>
       <div class="row" style="margin-top: 0;">
@@ -2069,14 +2120,6 @@
     <div class="chips" id="planChips"></div>
     <p class="empty-desc" id="planEmptyHint" style="margin-top:14px;" data-i18n="pantry_empty_plan">Your pantry is empty — add items in the Pantry tab first.</p>
 
-    <p class="plan-size-note" id="planSizeNote" style="display:none;"></p>
-
-    <div class="row">
-      <button class="btn btn-solid" id="generatePlanBtn" data-i18n="generate_plan">Generate plan</button>
-      <span class="status-text" id="planStatus"></span>
-    </div>
-
-    <div id="planError" class="error-box"></div>
 
     <div id="planEmptyResults" class="empty-card" style="margin-top:24px;">
       <div class="empty-icon">
@@ -3391,6 +3434,7 @@ function goToPage(name){
   backBtn.style.display = hasBack ? 'flex' : 'none';
   document.getElementById('appRoot').classList.toggle('has-back', hasBack);
   const navKey = NAV_FOR_PAGE[name];
+  document.body.dataset.page = navKey || 'home';
   document.querySelectorAll('[data-nav]').forEach(b => {
     const on = b.dataset.nav === navKey;
     b.classList.toggle('active', on);
