@@ -1025,6 +1025,57 @@
   /* ---- Meal Plan extras ---- */
   .pref-hint{ font-size: 12.5px; color: var(--ink-soft); margin: 8px 0 0; line-height: 1.45; }
   .plan-size-note{ font-size: 12.5px; color: var(--mustard-deep); background: #FFF1D2; border-radius: 10px; padding: 8px 12px; margin: 0 0 12px; }
+  .onboard-overlay{ z-index: 48; }
+  .onboard-card{ max-width: 380px; max-height: calc(100vh - 48px); overflow-y: auto; }
+  .onboard-card .pref-label{ margin: 16px 0 8px; }
+  .onboard-title{ font-family: 'Poppins', sans-serif; font-weight: 700; font-size: 22px; margin: 0 0 6px; color: var(--ink); }
+  .onboard-sub{ font-size: 14px; color: var(--ink-soft); margin: 0 0 4px; line-height: 1.45; }
+  .onboard-actions{ display: flex; justify-content: space-between; align-items: center; gap: 12px; margin-top: 22px; }
+  .tour-layer{ position: fixed; inset: 0; z-index: 49; display: none; }
+  .tour-layer.open{ display: block; }
+  .tour-spot{
+    position: fixed; border-radius: 18px; pointer-events: none;
+    box-shadow: 0 0 0 9999px rgba(30, 36, 29, 0.62), 0 0 0 3px var(--tomato);
+    transition: top 0.25s ease, left 0.25s ease, width 0.25s ease, height 0.25s ease;
+  }
+  .tour-card{
+    position: fixed; left: 16px; right: 16px; max-width: 360px; margin: 0 auto;
+    background: var(--surface); border-radius: 18px; padding: 18px 18px 14px; box-shadow: var(--shadow-card);
+  }
+  .tour-step-title{ font-family: 'Poppins', sans-serif; font-weight: 700; font-size: 16px; margin: 0 0 6px; color: var(--ink); }
+  .tour-step-text{ font-size: 14px; color: var(--ink-soft); margin: 0 0 14px; line-height: 1.45; }
+  .tour-foot{ display: flex; align-items: center; justify-content: space-between; gap: 10px; flex-wrap: wrap; }
+  .tour-dots{ display: flex; gap: 5px; }
+  .tour-dot{ width: 7px; height: 7px; border-radius: 50%; background: var(--line-dark); }
+  .tour-dot.on{ background: var(--tomato); width: 18px; border-radius: 999px; }
+  .tour-buttons{ display: flex; align-items: center; gap: 8px; margin-left: auto; }
+  .tour-buttons .btn{ padding: 8px 14px; font-size: 13px; }
+  .tour-replay{ display: block; margin: 0 auto 14px; }
+  .home-cell-wide{ grid-column: 1 / -1; flex-direction: row; align-items: center; gap: 14px; min-height: 0; }
+  .home-cell-text{ display: flex; flex-direction: column; gap: 4px; }
+  .stepper{ display: inline-flex; align-items: center; gap: 14px; background: var(--surface); border-radius: 999px; padding: 6px; box-shadow: var(--shadow-soft); }
+  .stepper-btn{ width: 38px; height: 38px; border-radius: 50%; border: none; background: var(--bg-soft); font-size: 20px; color: var(--ink); cursor: pointer; }
+  .stepper-btn:hover{ background: var(--line-light); }
+  .stepper-value{ font-family: 'Poppins', sans-serif; font-weight: 700; font-size: 18px; min-width: 28px; text-align: center; }
+  .course-list{ display: flex; flex-direction: column; gap: 8px; }
+  .course-row{ display: flex; gap: 8px; align-items: center; }
+  .course-type, .course-note{
+    font-family: 'Inter', sans-serif; font-size: 14px; padding: 9px 10px;
+    border: 1.5px solid var(--line-light); border-radius: 12px; background: var(--surface); color: var(--ink);
+  }
+  .course-type{ flex: 0 0 38%; min-width: 0; }
+  .course-note{ flex: 1; min-width: 0; }
+  .course-type:focus, .course-note:focus{ outline: none; border-color: var(--tomato); }
+  .course-del{ border: none; background: none; font-size: 20px; color: var(--ink-soft); cursor: pointer; padding: 4px 6px; }
+  .course-del:disabled{ opacity: 0.3; cursor: default; }
+  .course-add{ margin-top: 10px; display: inline-block; }
+  .guest-menu-title{ font-family: 'Poppins', sans-serif; font-weight: 700; font-size: 19px; margin: 28px 0 6px; color: var(--ink); }
+  .badge-course{ background: #FFE4DC; color: var(--tomato-deep); }
+  .plan-actions{ display: flex; flex-direction: column; gap: 10px; margin-top: 20px; }
+  .plan-actions-main{ width: 100%; justify-content: center; }
+  .plan-actions-secondary{ display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; }
+  .plan-actions-secondary .btn{ justify-content: center; padding-left: 8px; padding-right: 8px; font-size: 13px; }
+  #planPrepCard .plan-prep{ margin-top: 18px; }
   .plan-mode-toggle{ background: var(--bg-soft); border-radius: 999px; padding: 4px; display: flex; gap: 4px; margin-top: 4px; }
   .plan-mode-toggle .pill{ flex: 1; border: none; background: transparent; font-family: 'Poppins', sans-serif; font-weight: 600; font-size: 14px; padding: 10px 12px; color: var(--ink-soft); }
   .plan-mode-toggle .pill.selected{ background: var(--surface); color: var(--ink); box-shadow: var(--shadow-soft); }
@@ -1478,6 +1529,16 @@
         <span class="home-cell-name" data-i18n="cell_plan_name">Meal prep</span>
         <span class="home-cell-desc" data-i18n="cell_plan_desc">Cook once, eat all week</span>
       </button>
+
+      <button class="home-cell home-cell-wide" data-page="guest">
+        <span class="home-cell-icon icon-tomato">
+          <svg width="24" height="24" viewBox="0 0 24 24" fill="none"><path d="M4 15h16M5 15a7 7 0 0 1 14 0" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"/><path d="M12 8V6.5M10.5 6.5h3" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"/><path d="M3 18h18" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"/></svg>
+        </span>
+        <span class="home-cell-text">
+          <span class="home-cell-name" data-i18n="cell_guest_name">Guest menu</span>
+          <span class="home-cell-desc" data-i18n="cell_guest_desc">A full menu for your guests, with a host timeline</span>
+        </span>
+      </button>
     </div>
   </section>
 
@@ -1732,6 +1793,7 @@
     <div class="view-toggle" id="savedViewToggle" style="margin-bottom: 18px;">
       <button class="pill selected" data-view="recipes" data-i18n="view_recipes">Recipes</button>
       <button class="pill" data-view="plans" data-i18n="view_plans">Meal plans</button>
+      <button class="pill" data-view="guests" data-i18n="view_guests">Guest menus</button>
     </div>
 
     <div id="savedRecipesView">
@@ -1759,6 +1821,14 @@
       </div>
 
       <div class="recipe-options" id="savedPlansOptions"></div>
+    </div>
+
+    <div id="savedGuestsView" style="display:none;">
+      <div id="savedGuestsEmpty" class="empty-card">
+        <h2 class="empty-title" data-i18n="saved_guests_empty_title">No saved guest menus yet</h2>
+        <p class="empty-desc" data-i18n="saved_guests_empty_desc">Create a menu on the Guest menu page and hit "Save menu".</p>
+      </div>
+      <div class="recipe-options" id="savedGuestsOptions"></div>
     </div>
   </section>
 
@@ -1905,18 +1975,94 @@
 
     <div class="plan-calendar-strip" id="planCalendarStrip" style="display:none;"></div>
 
+    <div class="recipe-options" id="planOptions" style="margin-top: 16px;"></div>
+
     <div id="planPrepCard"></div>
 
-    <div class="row" id="planActionsRow" style="display:none; justify-content: space-between; margin-top: 24px;">
-      <button class="btn btn-ghost" id="clearPlanBtn" data-i18n="clear_plan">Clear plan</button>
-      <div class="row" style="margin-top:0;">
-        <button class="btn" id="printPlanBtn" data-i18n="print_plan">🖶 Print plan</button>
+    <div class="plan-actions" id="planActionsRow" style="display:none;">
+      <button class="btn btn-solid plan-actions-main" id="planAddAllToListBtn" data-i18n="add_all_to_list">+ Add all missing to Shopping List</button>
+      <div class="plan-actions-secondary">
         <button class="btn" id="savePlanBtn" data-i18n="save_plan">💾 Save plan</button>
-        <button class="btn btn-solid" id="planAddAllToListBtn" data-i18n="add_all_to_list">+ Add all missing to Shopping List</button>
+        <button class="btn" id="printPlanBtn" data-i18n="print_plan">🖶 Print plan</button>
+        <button class="btn btn-ghost" id="clearPlanBtn" data-i18n="clear_plan">Clear plan</button>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ TAB: GUEST MENU ============ -->
+  <section class="tab-page" id="tabGuest">
+    <p class="eyebrow" data-i18n="guest_eyebrow">guest menu</p>
+    <h1 class="screen-title" data-i18n="guest_title">Plan a menu for guests</h1>
+    <p class="screen-sub" data-i18n="guest_sub">Tell us how many people are coming and what you'd like on the table. Uses your pantry; anything extra goes to your shopping list.</p>
+
+    <div class="pref-block">
+      <p class="pref-label" data-i18n="guest_count_label">how many people (including you)</p>
+      <div class="stepper">
+        <button class="stepper-btn" id="guestMinus" aria-label="-">−</button>
+        <span class="stepper-value" id="guestCount">6</span>
+        <button class="stepper-btn" id="guestPlus" aria-label="+">+</button>
       </div>
     </div>
 
-    <div class="recipe-options" id="planOptions" style="margin-top: 16px;"></div>
+    <div class="pref-block">
+      <p class="pref-label" data-i18n="guest_courses_label">the menu</p>
+      <div class="course-list" id="courseList"></div>
+      <button class="text-link course-add" id="courseAddBtn" data-i18n="course_add">+ Add a dish</button>
+    </div>
+
+    <div class="pref-block">
+      <p class="pref-label" data-i18n="guest_occasion_label">occasion</p>
+      <div class="pill-group guest-pill-group" data-group="occasion">
+        <button class="pill" data-value="casual">Casual dinner</button>
+        <button class="pill" data-value="special">Special occasion</button>
+        <button class="pill" data-value="crowd">Big gathering</button>
+      </div>
+    </div>
+
+    <div class="pref-block">
+      <p class="pref-label" data-i18n="guest_prep_label">time to prepare</p>
+      <div class="pill-group guest-pill-group" data-group="prepTime">
+        <button class="pill" data-value="3h">3 hours</button>
+        <button class="pill" data-value="5h">5 hours</button>
+        <button class="pill" data-value="10h">10 hours</button>
+        <button class="pill" data-value="1d">1 day</button>
+        <button class="pill" data-value="2d">2 days</button>
+      </div>
+      <p class="pref-hint" id="guestPrepHint"></p>
+    </div>
+
+    <div class="pref-block">
+      <p class="pref-label" data-i18n="guest_restrictions_label">guests' restrictions</p>
+      <textarea class="allergies-input" id="guestNotesInput" rows="2" data-i18n-placeholder="guest_restrictions_placeholder" placeholder="e.g. one vegetarian, one can't eat gluten"></textarea>
+      <p class="pref-hint" data-i18n="guest_restrictions_hint">Your own diet and allergies from the Profile are applied too.</p>
+    </div>
+
+    <div class="pref-block">
+      <p class="pref-label" data-i18n="pref_plan_shopping">shopping</p>
+      <div class="pill-group guest-pill-group" data-group="allowMissing">
+        <button class="pill" data-value="allow">Okay to need a few things</button>
+        <button class="pill" data-value="strict">Only what I already have</button>
+      </div>
+    </div>
+
+    <div class="row">
+      <button class="btn btn-solid" id="generateGuestBtn" data-i18n="guest_generate">Create menu</button>
+    </div>
+    <div id="guestError" class="error-box"></div>
+
+    <div id="guestResult" style="display:none;">
+      <h2 class="guest-menu-title" id="guestMenuTitle"></h2>
+      <div class="recipe-options" id="guestOptions"></div>
+      <div id="guestTimelineCard"></div>
+      <div class="plan-actions" id="guestActionsRow">
+        <button class="btn btn-solid plan-actions-main" id="guestAddAllBtn" data-i18n="add_all_to_list">+ Add all missing to Shopping List</button>
+        <div class="plan-actions-secondary">
+          <button class="btn" id="guestSaveBtn" data-i18n="guest_save">💾 Save menu</button>
+          <button class="btn" id="guestPrintBtn" data-i18n="guest_print">🖶 Print menu</button>
+          <button class="btn btn-ghost" id="guestClearBtn" data-i18n="guest_clear">Clear</button>
+        </div>
+      </div>
+    </div>
   </section>
 
   </main>
@@ -1993,6 +2139,7 @@
     </div>
 
     <div class="pref-block" style="border-top: 1px solid var(--line-light); padding-top: 20px; margin-top: 8px;">
+      <button class="text-link tour-replay" id="tourReplayBtn" data-i18n="tour_replay">Show the tour again</button>
       <button class="btn btn-ghost" id="signOutBtn" style="width:100%; justify-content:center;" data-i18n="sign_out">Sign out</button>
     </div>
   </aside>
@@ -2062,6 +2209,62 @@
       <div class="confirm-actions">
         <button class="btn btn-ghost" id="usedUpSkipBtn" data-i18n="usedup_skip">Skip</button>
         <button class="btn btn-solid" id="usedUpSaveBtn" data-i18n="usedup_save">Update pantry</button>
+      </div>
+    </div>
+  </div>
+
+  <div class="confirm-overlay onboard-overlay" id="onboardSetup">
+    <div class="confirm-card onboard-card">
+      <p class="onboard-title" data-i18n="onboard_title">Welcome! 👋</p>
+      <p class="onboard-sub" data-i18n="onboard_sub">A few quick things so every suggestion fits you. You can change them later in your Profile.</p>
+
+      <p class="pref-label" data-i18n="pref_language">language</p>
+      <div class="view-toggle onboard-lang" id="onboardLang">
+        <button class="pill" data-lang="en">English</button>
+        <button class="pill" data-lang="tr">Türkçe</button>
+      </div>
+
+      <p class="pref-label" data-i18n="onboard_servings">how many people do you usually cook for?</p>
+      <div class="pill-group onboard-pill-group" data-group="servings">
+        <button class="pill" data-value="1">1</button>
+        <button class="pill" data-value="2">2</button>
+        <button class="pill" data-value="3">3</button>
+        <button class="pill" data-value="4">4</button>
+        <button class="pill" data-value="6">6</button>
+      </div>
+
+      <p class="pref-label" data-i18n="pref_diet">diet</p>
+      <div class="pill-group onboard-pill-group" data-group="diet">
+        <button class="pill" data-value="no restrictions">No restrictions</button>
+        <button class="pill" data-value="vegetarian">Vegetarian</button>
+        <button class="pill" data-value="vegan">Vegan</button>
+        <button class="pill" data-value="gluten-free">Gluten-free</button>
+        <button class="pill" data-value="dairy-free">Dairy-free</button>
+        <button class="pill" data-value="pescatarian">Pescatarian</button>
+      </div>
+
+      <p class="pref-label" data-i18n="pref_allergies">allergies &amp; dislikes</p>
+      <textarea class="allergies-input" id="onboardAllergies" rows="2" data-i18n-placeholder="allergies_placeholder" placeholder="e.g. peanuts, celery, mushrooms"></textarea>
+
+      <div class="onboard-actions">
+        <button class="text-link" id="onboardLaterBtn" data-i18n="onboard_later">I'll set it up later</button>
+        <button class="btn btn-solid" id="onboardStartBtn" data-i18n="onboard_start">Continue →</button>
+      </div>
+    </div>
+  </div>
+
+  <div class="tour-layer" id="tourLayer">
+    <div class="tour-spot" id="tourSpot"></div>
+    <div class="tour-card" id="tourCard">
+      <p class="tour-step-title" id="tourTitle"></p>
+      <p class="tour-step-text" id="tourText"></p>
+      <div class="tour-foot">
+        <div class="tour-dots" id="tourDots"></div>
+        <div class="tour-buttons">
+          <button class="text-link" id="tourSkipBtn" data-i18n="tour_skip">Skip</button>
+          <button class="btn btn-ghost" id="tourBackBtn" data-i18n="tour_back">Back</button>
+          <button class="btn btn-solid" id="tourNextBtn" data-i18n="tour_next">Next</button>
+        </div>
       </div>
     </div>
   </div>
@@ -2321,6 +2524,69 @@ const translations = {
     dish_word: "Dish",
     days_portions: "{d} days · {p} portions",
     prep_containers: "Containers",
+    cell_guest_name: "Guest menu",
+    cell_guest_desc: "A full menu for your guests, with a host timeline",
+    guest_eyebrow: "guest menu",
+    guest_title: "Plan a menu for guests",
+    guest_sub: "Tell us how many people are coming and what you'd like on the table. Uses your pantry; anything extra goes to your shopping list.",
+    guest_count_label: "how many people (including you)",
+    guest_courses_label: "the menu",
+    course_add: "+ Add a dish",
+    guest_occasion_label: "occasion",
+    guest_prep_label: "time to prepare",
+    guest_restrictions_label: "guests' restrictions",
+    guest_restrictions_placeholder: "e.g. one vegetarian, one can't eat gluten",
+    guest_restrictions_hint: "Your own diet and allergies from the Profile are applied too.",
+    guest_generate: "Create menu",
+    guest_save: "💾 Save menu",
+    guest_print: "🖶 Print menu",
+    guest_clear: "Clear",
+    view_guests: "Guest menus",
+    saved_guests_empty_title: "No saved guest menus yet",
+    saved_guests_empty_desc: "Create a menu on the Guest menu page and hit \"Save menu\".",
+    course_soup: "Soup",
+    course_starter: "Starter / meze",
+    course_salad: "Salad",
+    course_main: "Main dish",
+    course_side: "Side dish",
+    course_dessert: "Dessert",
+    course_drink: "Drink",
+    course_note_placeholder: "note, e.g. lemony",
+    guest_prep_hint_3h: "Everything on the day, with quick dishes that fit the window.",
+    guest_prep_hint_5h: "Everything on the day; oven, stovetop and cold dishes overlap.",
+    guest_prep_hint_10h: "A full day in the kitchen — slow-cooked dishes are on the table.",
+    guest_prep_hint_1d: "Make-ahead items (dessert, marinades, cold starters) move to the evening before.",
+    guest_prep_hint_2d: "Work spread over two days before, so the day itself is just finishing and serving.",
+    err_generate_guest: "Couldn't create the menu just now. Try again in a moment.",
+    loading_guest: "Putting your menu together...",
+    serving_tips: "Serving tips",
+    host_timeline: "Host timeline",
+    people_count: "{n} people",
+    guest_open: "Open menu",
+    guest_delete: "Delete menu",
+    confirm_delete_guest: "Delete the menu \"{title}\"?",
+    onboard_title: "Welcome! 👋",
+    onboard_sub: "A few quick things so every suggestion fits you. You can change them later in your Profile.",
+    onboard_servings: "how many people do you usually cook for?",
+    onboard_later: "I'll set it up later",
+    onboard_start: "Continue →",
+    tour_skip: "Skip",
+    tour_back: "Back",
+    tour_next: "Next",
+    tour_done: "Got it!",
+    tour_replay: "Show the tour again",
+    tour_pantry_title: "Your pantry",
+    tour_pantry_text: "Snap a photo of your fridge or shelves and your ingredients are added automatically. You can also type them.",
+    tour_surprise_title: "Surprise me",
+    tour_surprise_text: "Not sure what to cook? One tap gives you a recipe from what you already have.",
+    tour_recipes_title: "Recipes",
+    tour_recipes_text: "Pick ingredients and preferences like time, flavor and difficulty to get a tailored suggestion.",
+    tour_prep_title: "Meal prep",
+    tour_prep_text: "Cook a few dishes once and eat all week, with a prep-day game plan. A daily plan is here too.",
+    tour_guest_title: "Guest menu",
+    tour_guest_text: "Having people over? Get a full menu scaled to your guests, plus a timeline for the host.",
+    tour_profile_title: "Your profile",
+    tour_profile_text: "Diet, allergies, servings and language live here and apply everywhere. You can replay this tour from here too.",
     add_missing_one: "+ Add 1 missing item to list",
     add_missing_many: "+ Add {n} missing items to list",
     ingredients_label: "ingredients",
@@ -2567,6 +2833,69 @@ const translations = {
     dish_word: "Yemek",
     days_portions: "{d} gün · {p} porsiyon",
     prep_containers: "Kutu planı",
+    cell_guest_name: "Misafir menüsü",
+    cell_guest_desc: "Misafirlerin için eksiksiz bir menü ve ev sahibi zaman çizelgesi",
+    guest_eyebrow: "misafir menüsü",
+    guest_title: "Misafirlerin için menü hazırla",
+    guest_sub: "Kaç kişi geleceğini ve sofrada ne olmasını istediğini söyle. Pantry'ni kullanır; eksikler alışveriş listene gider.",
+    guest_count_label: "kaç kişi (sen dahil)",
+    guest_courses_label: "menü",
+    course_add: "+ Yemek ekle",
+    guest_occasion_label: "davet türü",
+    guest_prep_label: "hazırlık süresi",
+    guest_restrictions_label: "misafirlerin kısıtları",
+    guest_restrictions_placeholder: "örn. biri vejetaryen, biri glüten yemiyor",
+    guest_restrictions_hint: "Profil'deki kendi diyetin ve alerjilerin de uygulanır.",
+    guest_generate: "Menü oluştur",
+    guest_save: "💾 Menüyü kaydet",
+    guest_print: "🖶 Menüyü yazdır",
+    guest_clear: "Temizle",
+    view_guests: "Misafir menüleri",
+    saved_guests_empty_title: "Henüz kayıtlı misafir menüsü yok",
+    saved_guests_empty_desc: "Misafir menüsü sayfasında bir menü oluştur ve \"Menüyü kaydet\"e bas.",
+    course_soup: "Çorba",
+    course_starter: "Meze / başlangıç",
+    course_salad: "Salata",
+    course_main: "Ana yemek",
+    course_side: "Garnitür",
+    course_dessert: "Tatlı",
+    course_drink: "İçecek",
+    course_note_placeholder: "not, örn. limonlu",
+    guest_prep_hint_3h: "Her şey aynı gün, bu süreye sığan pratik yemeklerle.",
+    guest_prep_hint_5h: "Her şey aynı gün; fırın, ocak ve soğuk yemekler paralel ilerler.",
+    guest_prep_hint_10h: "Mutfakta bütün bir gün — uzun pişen yemekler de mümkün.",
+    guest_prep_hint_1d: "Önceden yapılabilenler (tatlı, marine, soğuk mezeler) bir önceki akşama alınır.",
+    guest_prep_hint_2d: "İşler iki güne yayılır; o gün sadece son dokunuşlar ve servis kalır.",
+    err_generate_guest: "Şu an menü oluşturulamadı. Biraz sonra tekrar dene.",
+    loading_guest: "Menün hazırlanıyor...",
+    serving_tips: "Servis ipuçları",
+    host_timeline: "Ev sahibi zaman çizelgesi",
+    people_count: "{n} kişilik",
+    guest_open: "Menüyü aç",
+    guest_delete: "Menüyü sil",
+    confirm_delete_guest: "\"{title}\" menüsü silinsin mi?",
+    onboard_title: "Hoş geldin! 👋",
+    onboard_sub: "Önerilerin sana uysun diye birkaç kısa soru. Hepsini sonra Profil'den değiştirebilirsin.",
+    onboard_servings: "genelde kaç kişilik pişiriyorsun?",
+    onboard_later: "Sonra ayarlarım",
+    onboard_start: "Devam →",
+    tour_skip: "Atla",
+    tour_back: "Geri",
+    tour_next: "İleri",
+    tour_done: "Anladım!",
+    tour_replay: "Turu tekrar göster",
+    tour_pantry_title: "Pantry'n",
+    tour_pantry_text: "Buzdolabının veya rafların fotoğrafını çek, malzemeler otomatik eklensin. İstersen yazarak da ekleyebilirsin.",
+    tour_surprise_title: "Beni şaşırt",
+    tour_surprise_text: "Ne pişireceğini bilemedin mi? Tek dokunuşla elindekilerden bir tarif.",
+    tour_recipes_title: "Tarifler",
+    tour_recipes_text: "Malzemeleri ve süre, lezzet, zorluk gibi tercihleri seç; sana özel bir öneri al.",
+    tour_prep_title: "Meal prep",
+    tour_prep_text: "Birkaç yemeği tek seferde pişir, bütün hafta ye; hazırlık günü planıyla birlikte. Günlük plan da burada.",
+    tour_guest_title: "Misafir menüsü",
+    tour_guest_text: "Misafirin mi var? Kişi sayısına göre ölçeklenmiş eksiksiz bir menü ve ev sahibi için zaman çizelgesi.",
+    tour_profile_title: "Profilin",
+    tour_profile_text: "Diyet, alerjiler, porsiyon ve dil burada; her yerde geçerli. Bu turu da buradan tekrar izleyebilirsin.",
     add_missing_one: "+ 1 eksik malzemeyi listeye ekle",
     add_missing_many: "+ {n} eksik malzemeyi listeye ekle",
     ingredients_label: "malzemeler",
@@ -2593,7 +2922,9 @@ const pillLabels = {
     "weekdayQuick:yes": "Yes", "weekdayQuick:no": "No",
     "mode:prep": "Meal prep", "mode:daily": "Daily plan",
     "dishCount:1": "1 dish", "dishCount:2": "2 dishes", "dishCount:3": "3 dishes",
-    "distribution:alternate": "Alternating", "distribution:block": "Back to back"
+    "distribution:alternate": "Alternating", "distribution:block": "Back to back",
+    "occasion:casual": "Casual dinner", "occasion:special": "Special occasion", "occasion:crowd": "Big gathering",
+    "prepTime:3h": "3 hours", "prepTime:5h": "5 hours", "prepTime:10h": "10 hours", "prepTime:1d": "1 day", "prepTime:2d": "2 days"
   },
   tr: {
     "time:15 minutes": "15 dk", "time:30 minutes": "30 dk", "time:45 minutes": "45 dk", "time:an hour or more": "1 sa+",
@@ -2612,7 +2943,9 @@ const pillLabels = {
     "weekdayQuick:yes": "Evet", "weekdayQuick:no": "Hayır",
     "mode:prep": "Meal prep", "mode:daily": "Günlük plan",
     "dishCount:1": "1 yemek", "dishCount:2": "2 yemek", "dishCount:3": "3 yemek",
-    "distribution:alternate": "Dönüşümlü", "distribution:block": "Arka arkaya"
+    "distribution:alternate": "Dönüşümlü", "distribution:block": "Arka arkaya",
+    "occasion:casual": "Rahat akşam yemeği", "occasion:special": "Özel davet", "occasion:crowd": "Kalabalık sofra",
+    "prepTime:3h": "3 saat", "prepTime:5h": "5 saat", "prepTime:10h": "10 saat", "prepTime:1d": "1 gün", "prepTime:2d": "2 gün"
   }
 };
 
@@ -2680,6 +3013,7 @@ async function setLanguage(lang){
   if (typeof renderMealHistory === 'function') renderMealHistory();
   if (typeof renderMealPlan === 'function' && typeof mealPlan !== 'undefined' && mealPlan.length) renderMealPlan();
   if (typeof renderSavedPlans === 'function') renderSavedPlans();
+  try { renderGuestPage(); renderSavedGuestMenus(); } catch (e) {}
   if (currentUserId){
     const { error } = await supabaseClient.from('profiles').update({ language: lang, updated_at: new Date().toISOString() }).eq('user_id', currentUserId);
     if (error) console.error('Failed to update language:', error);
@@ -2767,6 +3101,7 @@ function showApp(){
     loadSavedRecipesFromDb();
     loadMealHistoryFromDb();
     loadSavedPlansFromDb();
+    loadSavedGuestMenusFromDb();
     loadShoppingListFromDb();
     loadProfileFromDb();
   }
@@ -2812,7 +3147,8 @@ const tabPages = {
   list: document.getElementById('tabList'),
   saved: document.getElementById('tabSaved'),
   history: document.getElementById('tabHistory'),
-  plan: document.getElementById('tabPlan')
+  plan: document.getElementById('tabPlan'),
+  guest: document.getElementById('tabGuest')
 };
 const backBtn = document.getElementById('backBtn');
 
@@ -2824,6 +3160,7 @@ function goToPage(name){
   if (name === 'recipes') resetRecipesFlow();
   if (name === 'pantry') resetPantryCapture();
   if (name === 'plan') resetPlanFlow();
+  if (name === 'guest') renderGuestPage();
 }
 
 function resetIngredientSelection(){
@@ -3662,6 +3999,7 @@ document.querySelectorAll('#savedViewToggle .pill').forEach(pill => {
     const view = pill.dataset.view;
     savedRecipesView.style.display = view === 'recipes' ? 'block' : 'none';
     savedPlansView.style.display = view === 'plans' ? 'block' : 'none';
+    document.getElementById('savedGuestsView').style.display = view === 'guests' ? 'block' : 'none';
   });
 });
 
@@ -5481,6 +5819,7 @@ function applyProfileRow(row){
   syncPrefPills();
   seedRecipePrefsFromDefaults();
   applyPlanPrefsFromRow(row);
+  if (row.onboarded === false) setTimeout(startOnboarding, 300);
   if (row.language && row.language !== currentLanguage){
     currentLanguage = row.language;
     document.querySelectorAll('#languageToggle .pill').forEach(p => {
@@ -5559,7 +5898,7 @@ function clearError(box){ box.style.display = 'none'; box.textContent = ''; }
 
 /* ============ PREFERENCE PILLS ============ */
 function syncPrefPills(){
-  document.querySelectorAll('.pill-group[data-group]:not(.plan-pill-group):not(.recipe-pill-group)').forEach(group => {
+  document.querySelectorAll('.pill-group[data-group]:not(.plan-pill-group):not(.recipe-pill-group):not(.guest-pill-group):not(.onboard-pill-group)').forEach(group => {
     const key = group.dataset.group;
     if (!(key in prefs)) return;
     group.querySelectorAll('.pill').forEach(pill => {
@@ -5569,7 +5908,7 @@ function syncPrefPills(){
 }
 
 // Profile (sidebar) + other non-scoped groups like "how many days"
-document.querySelectorAll('.pill-group:not(.plan-pill-group):not(.recipe-pill-group)').forEach(group => {
+document.querySelectorAll('.pill-group:not(.plan-pill-group):not(.recipe-pill-group):not(.guest-pill-group):not(.onboard-pill-group)').forEach(group => {
   const key = group.dataset.group;
   group.querySelectorAll('.pill').forEach(pill => {
     pill.addEventListener('click', () => {
@@ -6181,6 +6520,561 @@ tryAnotherBtn.addEventListener('click', async () => {
   }
 });
 
+
+/* ============ GUEST MENU ============ */
+const COURSE_TYPES = ['soup', 'starter', 'salad', 'main', 'side', 'dessert', 'drink'];
+const GUEST_DEFAULTS = {
+  guests: 6,
+  courses: [{ type: 'soup', note: '' }, { type: 'salad', note: '' }, { type: 'main', note: '' }, { type: 'dessert', note: '' }],
+  occasion: 'casual', prepTime: '5h', allowMissing: 'allow', guestNotes: ''
+};
+let guestPrefs = JSON.parse(JSON.stringify(GUEST_DEFAULTS));
+try {
+  const savedGuest = JSON.parse(localStorage.getItem('ftt_guest_prefs') || 'null');
+  if (savedGuest && Array.isArray(savedGuest.courses)) guestPrefs = Object.assign(guestPrefs, savedGuest);
+} catch (e) {}
+let guestMenu = [];       // recipes
+let guestTimeline = [];   // [{ when, tasks: [] }]
+let guestServingTips = [];
+let guestMenuTitle = '';
+let guestSaved = false;
+let expandedGuestIndex = null;
+let savedGuestMenus = [];
+let expandedSavedGuestId = null;
+
+const courseList = document.getElementById('courseList');
+const guestCountEl = document.getElementById('guestCount');
+const guestNotesInput = document.getElementById('guestNotesInput');
+const guestErrorBox = document.getElementById('guestError');
+const generateGuestBtn = document.getElementById('generateGuestBtn');
+const guestOptions = document.getElementById('guestOptions');
+const guestSaveBtn = document.getElementById('guestSaveBtn');
+
+function courseLabel(type){ return t('course_' + type); }
+
+function persistGuestPrefs(){
+  try { localStorage.setItem('ftt_guest_prefs', JSON.stringify(guestPrefs)); } catch (e) {}
+}
+
+function renderCourseList(){
+  courseList.innerHTML = '';
+  guestPrefs.courses.forEach((course, i) => {
+    const row = document.createElement('div');
+    row.className = 'course-row';
+    const sel = document.createElement('select');
+    sel.className = 'course-type';
+    COURSE_TYPES.forEach(type => {
+      const opt = document.createElement('option');
+      opt.value = type;
+      opt.textContent = courseLabel(type);
+      if (type === course.type) opt.selected = true;
+      sel.appendChild(opt);
+    });
+    sel.addEventListener('change', () => { course.type = sel.value; persistGuestPrefs(); });
+    const note = document.createElement('input');
+    note.type = 'text';
+    note.className = 'course-note';
+    note.value = course.note || '';
+    note.placeholder = t('course_note_placeholder');
+    note.addEventListener('input', () => { course.note = note.value; persistGuestPrefs(); });
+    const del = document.createElement('button');
+    del.className = 'course-del';
+    del.textContent = '×';
+    del.setAttribute('aria-label', t('remove'));
+    del.disabled = guestPrefs.courses.length <= 1;
+    del.addEventListener('click', () => {
+      if (guestPrefs.courses.length <= 1) return;
+      guestPrefs.courses.splice(i, 1);
+      persistGuestPrefs();
+      renderCourseList();
+    });
+    row.appendChild(sel);
+    row.appendChild(note);
+    row.appendChild(del);
+    courseList.appendChild(row);
+  });
+  document.getElementById('courseAddBtn').style.display = guestPrefs.courses.length >= 10 ? 'none' : '';
+}
+
+function syncGuestPills(){
+  document.querySelectorAll('.guest-pill-group[data-group]').forEach(group => {
+    const key = group.dataset.group;
+    group.querySelectorAll('.pill').forEach(pill => pill.classList.toggle('selected', pill.dataset.value === guestPrefs[key]));
+  });
+  guestCountEl.textContent = guestPrefs.guests;
+  const hint = document.getElementById('guestPrepHint');
+  if (hint) hint.textContent = t('guest_prep_hint_' + guestPrefs.prepTime);
+}
+
+function renderGuestPage(){
+  guestNotesInput.value = guestPrefs.guestNotes || '';
+  renderCourseList();
+  syncGuestPills();
+  renderGuestMenu();
+}
+
+document.getElementById('guestMinus').addEventListener('click', () => {
+  guestPrefs.guests = Math.max(2, guestPrefs.guests - 1); persistGuestPrefs(); syncGuestPills();
+});
+document.getElementById('guestPlus').addEventListener('click', () => {
+  guestPrefs.guests = Math.min(40, guestPrefs.guests + 1); persistGuestPrefs(); syncGuestPills();
+});
+document.getElementById('courseAddBtn').addEventListener('click', () => {
+  guestPrefs.courses.push({ type: 'main', note: '' }); persistGuestPrefs(); renderCourseList();
+});
+guestNotesInput.addEventListener('input', () => { guestPrefs.guestNotes = guestNotesInput.value; persistGuestPrefs(); });
+document.querySelectorAll('.guest-pill-group').forEach(group => {
+  const key = group.dataset.group;
+  group.querySelectorAll('.pill').forEach(pill => pill.addEventListener('click', () => {
+    guestPrefs[key] = pill.dataset.value; persistGuestPrefs(); syncGuestPills();
+  }));
+});
+
+function buildGuestMenuPrompt(){
+  const n = guestPrefs.guests;
+  const pool = pantryItems.map(i => i.quantity ? `${i.name} (${i.quantity})` : i.name);
+  const dishes = guestPrefs.courses.map((cse, i) => `${i + 1}. ${cse.type}${cse.note && cse.note.trim() ? ` — the host's wish: "${cse.note.trim()}"` : ''}`).join('\n');
+  const occasion = {
+    casual: 'Occasion: a relaxed dinner with friends or family — generous, homely, easy to share.',
+    special: 'Occasion: a special occasion — dishes should look and feel a bit impressive, with nice presentation, while staying doable for a home cook.',
+    crowd: 'Occasion: a big gathering — prefer dishes that scale well, can be served buffet-style or from big trays, and hold well at room temperature.'
+  }[guestPrefs.occasion] || '';
+  const time = {
+    '3h': 'Time available: about 3 hours on the day, total, before guests arrive. Choose dishes that fit comfortably in that window; everything happens on the day.',
+    '5h': 'Time available: about 5 hours on the day. Everything happens on the day; overlap oven, stovetop and cold dishes.',
+    '10h': 'Time available: about 10 hours on the day, so slow-cooked or more involved dishes are fine.',
+    '1d': 'Time available: the evening before plus the day of the event. Move anything that can be made ahead (desserts, marinades, doughs, cold starters, sauces) to the evening before.',
+    '2d': 'Time available: two days before plus the day of the event. Spread the work: shop and make long-lead items (doughs, desserts that need setting, marinades, stocks) two days before, the bulk of the prep the day before, and only finishing and serving on the day.'
+  }[guestPrefs.prepTime] || '';
+  const guestNotes = (guestPrefs.guestNotes || '').trim();
+  const missingRule = guestPrefs.allowMissing === 'strict'
+    ? 'Use ONLY the pantry pool below plus basic staples — every missing_ingredients array must be empty.'
+    : 'A shopping trip is expected: list everything each dish needs beyond the pool under its missing_ingredients, sized for the whole party.';
+  return `You are planning a home menu for ${n} people (including the host).
+Dishes to create, in this order (one recipe each; respect the host's wishes exactly, e.g. "lemony" or "with yogurt"):
+${dishes}
+${occasion}
+${time}
+Dietary requirement for everything: ${prefs.diet} (a hard constraint).${allergiesLine()}${guestNotes ? `\nGuests' restrictions: ${guestNotes}. Make sure every guest has enough to eat — if a restriction can't fit every dish, at least the main dish and one other dish must be suitable, and say so in the description.` : ''}
+Pantry pool (use what fits, not a checklist): ${pool.length ? pool.join(', ') : '(empty)'}.
+${missingRule}
+The dishes must work together as one menu: balance richness, textures and colors, don't repeat the main ingredient across dishes, and keep oven use realistic (one home oven). Every ingredient amount is for all ${n} people, in realistic home quantities. "servings" is "${n}". Calories and macros are per one serving (estimates, not verified nutrition data).
+Also create a host timeline that fits the time available: ordered blocks from the earliest prep to serving (e.g. "2 days before", "The day before — evening", "3 hours before guests arrive", "1 hour before", "When guests arrive", "Serving"), each with concrete tasks referring to dishes by name, plus a few short serving tips (plating, what to put out first, what to keep warm).
+Respond with ONLY valid JSON, no markdown fences, no extra text. Every string value must be plain text on a single line:
+{
+  "menu_title": "short appealing name for the menu",
+  "recipes": [
+    {
+      "course": "soup | starter | salad | main | side | dessert | drink",
+      "title": "string",
+      "description": "one or two sentences",
+      "total_time": "string",
+      "difficulty": "Easy | Medium | Hard",
+      "servings": "string",
+      "calories_per_serving": number,
+      "protein_g": number,
+      "carbs_g": number,
+      "fat_g": number,
+      "ingredients_used": [{"item": "string", "amount": "string"}],
+      "missing_ingredients": [{"item": "string", "amount": "string"}],
+      "steps": ["string", ...]
+    }
+  ],
+  "timeline": [{ "when": "string", "tasks": ["string", ...] }],
+  "serving_tips": ["string", ...]
+}
+Return exactly ${guestPrefs.courses.length} recipes in the order given. Keep "course" and "difficulty" exactly as the English values shown.${aiLanguageLine()}`;
+}
+
+async function generateGuestMenu(){
+  clearError(guestErrorBox);
+  generateGuestBtn.disabled = true;
+  try {
+    const budget = Math.min(16000, 3000 + guestPrefs.courses.length * 1400);
+    const raw = await callClaude([{ role: 'user', content: buildGuestMenuPrompt() }], budget);
+    const parsed = parseJsonLoose(raw);
+    const list = Array.isArray(parsed.recipes) ? parsed.recipes : [];
+    list.forEach((r, i) => { if (!r.course && guestPrefs.courses[i]) r.course = guestPrefs.courses[i].type; });
+    guestMenu = list;
+    guestTimeline = Array.isArray(parsed.timeline) ? parsed.timeline : [];
+    guestServingTips = Array.isArray(parsed.serving_tips) ? parsed.serving_tips : [];
+    guestMenuTitle = parsed.menu_title || '';
+    guestSaved = false;
+    expandedGuestIndex = null;
+    renderGuestMenu();
+  } catch (err){
+    console.error(err);
+    showError(guestErrorBox, t('err_generate_guest'));
+  } finally {
+    generateGuestBtn.disabled = false;
+  }
+}
+
+generateGuestBtn.addEventListener('click', async () => {
+  showLoadingOverlay(t('loading_guest'));
+  await generateGuestMenu();
+  if (guestMenu.length) hideLoadingOverlay();
+  else showLoadingError(guestErrorBox.textContent || t('err_generate_guest'));
+});
+
+function guestDishLabel(recipe){ return courseLabel(recipe.course || 'main'); }
+
+function renderGuestTimeline(){
+  const box = document.getElementById('guestTimelineCard');
+  box.innerHTML = '';
+  if (!guestTimeline.length && !guestServingTips.length) return;
+  const details = document.createElement('details');
+  details.className = 'plan-prep';
+  details.open = true;
+  const blocks = guestTimeline.map(b => `
+    <div class="plan-prep-session">
+      <p class="plan-prep-head">${escapeHtml(b.when || '')}</p>
+      <ul class="plan-prep-tips">${(b.tasks || []).map(x => `<li>${escapeHtml(x)}</li>`).join('')}</ul>
+    </div>`).join('');
+  const tips = guestServingTips.length ? `
+    <div class="plan-prep-session">
+      <p class="plan-prep-subhead">${t('serving_tips')}</p>
+      <ul class="plan-prep-tips">${guestServingTips.map(x => `<li>${escapeHtml(x)}</li>`).join('')}</ul>
+    </div>` : '';
+  details.innerHTML = `<summary class="plan-prepsummary"><span>${t('host_timeline')}</span><span class="plan-prefs-chevron">⌄</span></summary>${blocks}${tips}`;
+  box.appendChild(details);
+}
+
+function renderGuestMenu(){
+  const resultBox = document.getElementById('guestResult');
+  resultBox.style.display = guestMenu.length ? 'block' : 'none';
+  document.getElementById('guestMenuTitle').textContent = guestMenuTitle
+    ? `${guestMenuTitle} · ${t('people_count').replace('{n}', guestMenu[0] ? (guestMenu[0].servings || guestPrefs.guests) : guestPrefs.guests)}`
+    : '';
+  guestSaveBtn.textContent = guestSaved ? t('saved_check') : t('guest_save');
+  guestSaveBtn.disabled = guestSaved;
+  document.getElementById('guestAddAllBtn').disabled = false;
+  document.getElementById('guestAddAllBtn').textContent = t('add_all_to_list');
+  guestOptions.innerHTML = '';
+
+  guestMenu.forEach((recipe, i) => {
+    const isExpanded = expandedGuestIndex === i;
+    const editKey = 'guest-' + i;
+    const isEditing = editingRecipeKey === editKey;
+    const label = guestDishLabel(recipe);
+    const bubble = document.createElement('div');
+    bubble.className = 'bubble' + (isExpanded ? ' expanded' : '');
+    const usedHtml = (recipe.ingredients_used || []).map(u => `<li>${formatIngredient(u)}</li>`).join('');
+    const missingList = recipe.missing_ingredients || [];
+    const missingHtml = missingList.map(m => `<li class="missing">${formatIngredient(m)}<span class="tag">${t('missing_tag')}</span></li>`).join('');
+    const stepsHtml = (recipe.steps || []).map(s => `<li>${s}</li>`).join('');
+    const kcal = recipe.calories_per_serving ? Math.round(recipe.calories_per_serving) + ' kcal' : '— kcal';
+    const macros = macrosLine(recipe);
+    const alreadySaved = savedRecipes.some(s => s.title === recipe.title);
+    const bodyHtml = isEditing ? buildEditFormHtml(recipe) : `
+      <p class="recipe-blurb">${recipe.description || ''}</p>
+      <div class="recipe-body">
+        <div class="recipe-col"><h3>${t('ingredients_label')}</h3><ul class="ing-list">${usedHtml}${missingHtml}</ul></div>
+        <div class="recipe-col"><h3>${t('method_label')}</h3><ol class="steps">${stepsHtml}</ol></div>
+      </div>
+      ${macros ? `<p class="macros-line">${macros} ${t('per_serving_text')}</p>` : ''}
+      <p class="kcal-note">${t('kcal_note')}</p>
+      <div class="bubble-actions">
+        <button class="bubble-cook-btn">${t('cook_mode')}</button>
+        <button class="bubble-edit-btn">${t('edit')}</button>
+        <button class="bubble-print-btn">${t('print')}</button>
+        <button class="bubble-save-btn${alreadySaved ? ' saved' : ''}" ${alreadySaved ? 'disabled' : ''}>${alreadySaved ? t('saved_check') : t('save_recipe')}</button>
+        ${missingList.length ? `<button class="bubble-list-btn">${addMissingLabel(missingList.length)}</button>` : ''}
+      </div>`;
+    bubble.innerHTML = `
+      <div class="bubble-head">
+        <div class="bubble-head-main">
+          <div class="bubble-head-left">
+            <div class="bubble-name">${label} — ${recipe.title || t('untitled')}</div>
+            <div class="bubble-stats">
+              <span class="badge badge-course">${label}</span>
+              <span class="badge ${difficultyBadgeClass(recipe.difficulty)}">${difficultyLabel(recipe.difficulty)}</span>
+              <span class="badge badge-kcal">${kcal} ${t('per_serving')}</span>
+              <span class="badge badge-kcal">${recipe.total_time || '—'}</span>
+            </div>
+          </div>
+          <span class="bubble-chevron">⌄</span>
+        </div>
+      </div>
+      <div class="bubble-detail"><div class="bubble-detail-inner">${bodyHtml}</div></div>`;
+
+    bubble.querySelector('.bubble-head-main').addEventListener('click', () => {
+      expandedGuestIndex = isExpanded ? null : i;
+      renderGuestMenu();
+    });
+    if (isEditing){
+      bubble.querySelector('.edit-cancel-btn').addEventListener('click', (e) => { e.stopPropagation(); editingRecipeKey = null; renderGuestMenu(); });
+      bubble.querySelector('.edit-save-btn').addEventListener('click', (e) => {
+        e.stopPropagation(); applyEditForm(bubble, recipe); editingRecipeKey = null; guestSaved = false; renderGuestMenu();
+      });
+      guestOptions.appendChild(bubble);
+      return;
+    }
+    bubble.querySelector('.bubble-cook-btn').addEventListener('click', (e) => { e.stopPropagation(); openCookMode(recipe); });
+    bubble.querySelector('.bubble-edit-btn').addEventListener('click', (e) => { e.stopPropagation(); editingRecipeKey = editKey; expandedGuestIndex = i; renderGuestMenu(); });
+    bubble.querySelector('.bubble-print-btn').addEventListener('click', (e) => { e.stopPropagation(); printRecipe(recipe, label); });
+    const saveBtn = bubble.querySelector('.bubble-save-btn');
+    if (saveBtn && !alreadySaved){
+      saveBtn.addEventListener('click', async (e) => {
+        e.stopPropagation(); saveBtn.disabled = true; saveBtn.textContent = t('saving_dots');
+        await saveRecipe(recipe); saveBtn.textContent = t('saved_check'); saveBtn.classList.add('saved');
+      });
+    }
+    const listBtn = bubble.querySelector('.bubble-list-btn');
+    if (listBtn){
+      listBtn.addEventListener('click', async (e) => {
+        e.stopPropagation(); listBtn.disabled = true; listBtn.textContent = t('adding_dots');
+        await addToShoppingList(missingList, recipe.title || t('untitled'));
+        listBtn.textContent = t('added_check'); listBtn.classList.add('added');
+      });
+    }
+    guestOptions.appendChild(bubble);
+  });
+  renderGuestTimeline();
+}
+
+document.getElementById('guestAddAllBtn').addEventListener('click', async () => {
+  const btn = document.getElementById('guestAddAllBtn');
+  btn.disabled = true; btn.textContent = t('adding_dots');
+  for (const r of guestMenu){
+    if ((r.missing_ingredients || []).length) await addToShoppingList(r.missing_ingredients, guestMenuTitle || r.title || t('untitled'));
+  }
+  btn.textContent = t('added_check');
+});
+document.getElementById('guestClearBtn').addEventListener('click', () => {
+  guestMenu = []; guestTimeline = []; guestServingTips = []; guestMenuTitle = ''; guestSaved = false; expandedGuestIndex = null;
+  renderGuestMenu();
+});
+document.getElementById('guestPrintBtn').addEventListener('click', () => {
+  const tl = guestTimeline.map(b => `<p class="print-section-title">${escapeHtml(b.when || '')}</p><ul>${(b.tasks || []).map(x => `<li>${escapeHtml(x)}</li>`).join('')}</ul>`).join('');
+  printArea.innerHTML = `
+    <div class="print-recipe">
+      <h1 class="print-title">${escapeHtml(guestMenuTitle || t('cell_guest_name'))}</h1>
+      <p class="print-meta">${t('people_count').replace('{n}', guestPrefs.guests)}</p>
+      <ol>${guestMenu.map(r => `<li>${escapeHtml(guestDishLabel(r))}: ${escapeHtml(r.title || '')}</li>`).join('')}</ol>
+      ${tl ? `<p class="print-section-title">${t('host_timeline')}</p>${tl}` : ''}
+    </div>` + guestMenu.map(r => recipePrintHtml(r, guestDishLabel(r))).join('');
+  window.print();
+});
+
+guestSaveBtn.addEventListener('click', async () => {
+  if (!guestMenu.length || guestSaved) return;
+  guestSaveBtn.disabled = true; guestSaveBtn.textContent = t('saving_dots');
+  const { data, error } = await supabaseClient.from('guest_menus').insert({
+    title: guestMenuTitle || null,
+    guests: guestPrefs.guests,
+    dishes: JSON.parse(JSON.stringify(guestMenu)),
+    timeline: { blocks: guestTimeline, tips: guestServingTips }
+  }).select().single();
+  if (error){
+    console.error('Failed to save guest menu:', error);
+    guestSaveBtn.disabled = false; guestSaveBtn.textContent = t('guest_save');
+    return;
+  }
+  savedGuestMenus.push(dbToGuestMenu(data));
+  guestSaved = true;
+  renderGuestMenu();
+  renderSavedGuestMenus();
+});
+
+function dbToGuestMenu(row){
+  const tl = row.timeline || {};
+  return {
+    id: row.id, title: row.title || '', guests: row.guests, dishes: row.dishes || [],
+    timeline: Array.isArray(tl) ? tl : (tl.blocks || []), tips: Array.isArray(tl) ? [] : (tl.tips || []),
+    savedAt: row.created_at ? formatDayLabel(row.created_at.slice(0, 10)) : ''
+  };
+}
+
+async function loadSavedGuestMenusFromDb(){
+  const { data, error } = await supabaseClient.from('guest_menus').select('*').order('created_at', { ascending: true });
+  if (error){ console.error('Failed to load guest menus:', error); return; }
+  savedGuestMenus = (data || []).map(dbToGuestMenu);
+  renderSavedGuestMenus();
+}
+
+function renderSavedGuestMenus(){
+  const box = document.getElementById('savedGuestsOptions');
+  document.getElementById('savedGuestsEmpty').style.display = savedGuestMenus.length ? 'none' : 'flex';
+  box.innerHTML = '';
+  savedGuestMenus.slice().reverse().forEach(menu => {
+    const isOpen = expandedSavedGuestId === menu.id;
+    const bubble = document.createElement('div');
+    bubble.className = 'bubble' + (isOpen ? ' expanded' : '');
+    bubble.innerHTML = `
+      <div class="bubble-head"><div class="bubble-head-main">
+        <div class="bubble-head-left">
+          <div class="bubble-name">${escapeHtml(menu.title || t('cell_guest_name'))}</div>
+          <div class="bubble-stats">
+            <span class="badge badge-kcal">${t('people_count').replace('{n}', menu.guests || '')}</span>
+            <span class="badge badge-kcal">${t('saved_on')} ${menu.savedAt}</span>
+          </div>
+        </div>
+        <span class="bubble-chevron">⌄</span>
+      </div></div>
+      <div class="bubble-detail"><div class="bubble-detail-inner">
+        <ul class="ing-list">${menu.dishes.map(r => `<li>${escapeHtml(guestDishLabel(r))}: ${escapeHtml(r.title || '')}</li>`).join('')}</ul>
+        <div class="bubble-actions">
+          <button class="btn btn-solid saved-guest-load">${t('guest_open')}</button>
+          <button class="bubble-remove-btn saved-guest-delete">${t('guest_delete')}</button>
+        </div>
+      </div></div>`;
+    bubble.querySelector('.bubble-head-main').addEventListener('click', () => {
+      expandedSavedGuestId = isOpen ? null : menu.id; renderSavedGuestMenus();
+    });
+    bubble.querySelector('.saved-guest-load').addEventListener('click', (e) => {
+      e.stopPropagation();
+      guestMenu = JSON.parse(JSON.stringify(menu.dishes));
+      guestTimeline = JSON.parse(JSON.stringify(menu.timeline));
+      guestServingTips = JSON.parse(JSON.stringify(menu.tips));
+      guestMenuTitle = menu.title;
+      if (menu.guests) guestPrefs.guests = menu.guests;
+      guestSaved = true;
+      expandedGuestIndex = null;
+      goToPage('guest');
+    });
+    bubble.querySelector('.saved-guest-delete').addEventListener('click', (e) => {
+      e.stopPropagation();
+      showConfirm(t('confirm_delete_guest').replace('{title}', menu.title || t('cell_guest_name')), async () => {
+        const { error } = await supabaseClient.from('guest_menus').delete().eq('id', menu.id);
+        if (error){ console.error('Failed to delete guest menu:', error); return; }
+        savedGuestMenus = savedGuestMenus.filter(m => m.id !== menu.id);
+        renderSavedGuestMenus();
+      });
+    });
+    box.appendChild(bubble);
+  });
+}
+
+renderGuestPage();
+
+/* ============ FIRST-RUN WALKTHROUGH (setup + tour) ============ */
+const onboardSetup = document.getElementById('onboardSetup');
+const tourLayer = document.getElementById('tourLayer');
+const tourSpot = document.getElementById('tourSpot');
+const tourCard = document.getElementById('tourCard');
+let onboardingShown = false;
+let tourIndex = 0;
+const onboardChoice = { servings: '2', diet: 'no restrictions' };
+
+const TOUR_STEPS = [
+  { target: '.home-cell[data-page="pantry"]', key: 'tour_pantry' },
+  { target: '#surpriseMeBtn', key: 'tour_surprise' },
+  { target: '.home-cell[data-page="recipes"]', key: 'tour_recipes' },
+  { target: '.home-cell[data-page="plan"]', key: 'tour_prep' },
+  { target: '.home-cell[data-page="guest"]', key: 'tour_guest' },
+  { target: '#hamburgerBtn', key: 'tour_profile' }
+];
+
+function syncOnboardPills(){
+  document.querySelectorAll('.onboard-pill-group[data-group]').forEach(group => {
+    const key = group.dataset.group;
+    group.querySelectorAll('.pill').forEach(p => p.classList.toggle('selected', p.dataset.value === onboardChoice[key]));
+  });
+  document.querySelectorAll('#onboardLang .pill').forEach(p => p.classList.toggle('selected', p.dataset.lang === currentLanguage));
+}
+
+function startOnboarding(){
+  if (onboardingShown) return;
+  onboardingShown = true;
+  onboardChoice.servings = prefs.servings || '2';
+  onboardChoice.diet = prefs.diet || 'no restrictions';
+  document.getElementById('onboardAllergies').value = prefs.allergies || '';
+  syncOnboardPills();
+  onboardSetup.classList.add('open');
+}
+
+document.querySelectorAll('.onboard-pill-group').forEach(group => {
+  const key = group.dataset.group;
+  group.querySelectorAll('.pill').forEach(pill => pill.addEventListener('click', () => {
+    onboardChoice[key] = pill.dataset.value; syncOnboardPills();
+  }));
+});
+document.querySelectorAll('#onboardLang .pill').forEach(pill => pill.addEventListener('click', async () => {
+  await setLanguage(pill.dataset.lang);
+  syncOnboardPills();
+}));
+
+async function markOnboarded(){
+  if (!currentUserId) return;
+  const { error } = await supabaseClient.from('profiles').update({ onboarded: true }).eq('user_id', currentUserId);
+  if (error) console.error('Failed to mark onboarding done:', error);
+}
+
+async function finishSetup(save){
+  onboardSetup.classList.remove('open');
+  if (save){
+    prefs.servings = onboardChoice.servings;
+    prefs.diet = onboardChoice.diet;
+    prefs.allergies = document.getElementById('onboardAllergies').value.trim();
+    document.getElementById('allergiesInput').value = prefs.allergies;
+    syncPrefPills();
+    seedRecipePrefsFromDefaults();
+    await updateProfileField('servings', prefs.servings);
+    await updateProfileField('diet', prefs.diet);
+    await updateProfileField('allergies', prefs.allergies || null);
+  }
+  markOnboarded();
+  startTour();
+}
+document.getElementById('onboardStartBtn').addEventListener('click', () => finishSetup(true));
+document.getElementById('onboardLaterBtn').addEventListener('click', () => finishSetup(false));
+
+function startTour(){
+  closeSidebar();
+  goToPage('home');
+  tourIndex = 0;
+  tourLayer.classList.add('open');
+  showTourStep();
+}
+
+function endTour(){
+  tourLayer.classList.remove('open');
+  window.scrollTo(0, 0);
+}
+
+function showTourStep(){
+  const step = TOUR_STEPS[tourIndex];
+  const el = document.querySelector(step.target);
+  document.getElementById('tourTitle').textContent = t(step.key + '_title');
+  document.getElementById('tourText').textContent = t(step.key + '_text');
+  document.getElementById('tourDots').innerHTML = TOUR_STEPS.map((_, i) => `<span class="tour-dot${i === tourIndex ? ' on' : ''}"></span>`).join('');
+  document.getElementById('tourBackBtn').style.visibility = tourIndex === 0 ? 'hidden' : 'visible';
+  document.getElementById('tourNextBtn').textContent = tourIndex === TOUR_STEPS.length - 1 ? t('tour_done') : t('tour_next');
+  if (el && el.scrollIntoView) el.scrollIntoView({ block: 'center', behavior: 'instant' });
+  positionTour();
+}
+
+function positionTour(){
+  if (!tourLayer.classList.contains('open')) return;
+  const el = document.querySelector(TOUR_STEPS[tourIndex].target);
+  if (!el) return;
+  const r = el.getBoundingClientRect();
+  const pad = 6;
+  tourSpot.style.top = (r.top - pad) + 'px';
+  tourSpot.style.left = (r.left - pad) + 'px';
+  tourSpot.style.width = (r.width + pad * 2) + 'px';
+  tourSpot.style.height = (r.height + pad * 2) + 'px';
+  const vh = window.innerHeight || 800;
+  const cardH = tourCard.offsetHeight || 170;
+  if (r.bottom + 16 + cardH < vh){
+    tourCard.style.top = (r.bottom + 16) + 'px';
+  } else {
+    tourCard.style.top = Math.max(16, r.top - 16 - cardH) + 'px';
+  }
+}
+window.addEventListener('resize', positionTour);
+window.addEventListener('scroll', positionTour, { passive: true });
+
+document.getElementById('tourNextBtn').addEventListener('click', () => {
+  if (tourIndex >= TOUR_STEPS.length - 1){ endTour(); return; }
+  tourIndex++; showTourStep();
+});
+document.getElementById('tourBackBtn').addEventListener('click', () => {
+  if (tourIndex > 0){ tourIndex--; showTourStep(); }
+});
+document.getElementById('tourSkipBtn').addEventListener('click', endTour);
+document.getElementById('tourReplayBtn').addEventListener('click', startTour);
 
 /* ============ STARTUP: language remembered in this browser ============ */
 if (currentLanguage !== 'en'){
