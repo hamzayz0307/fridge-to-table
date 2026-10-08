@@ -19,6 +19,7 @@ Pantry-based recipe and meal-planning web app. Owner: Hamza (works in Turkish �
 
 ## Auth
 - Email/password, Google (Supabase Google provider), and password reset (`resetPasswordForEmail` → `PASSWORD_RECOVERY` event → new-password card). Redirects go to the current page URL, so the Vercel production and preview URLs must be in Supabase → Authentication → URL Configuration → Redirect URLs.
+- **Open reminder for the owner:** the Google Auth Platform app is still in *Testing* (not published), so only Google accounts added as test users can sign in with Google. Remind Hamza to publish it (Audience → Publish app) before sharing the app more widely.
 
 ## Product decisions
 - **Sidebar/Profile = universal settings** (diet, allergies, servings, goal, language). They are the defaults everywhere.
