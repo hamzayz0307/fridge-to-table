@@ -25,10 +25,11 @@ Pantry-based recipe and meal-planning web app. Owner: Hamza (works in Turkish �
 - New accounts get a setup card + spotlight tour once (`profiles.onboarded`).
 - Navigation: floating bottom bar with 4 tabs — Today (home), Kitchen (pantry), Plan (meal prep + guest menu via a top switch), List (shopping list) — plus a round Profile button. Profile is a full page holding the universal settings, saved recipes and meal history. Recipes, saved and history are sub-pages with a back button.
 
-## Visual style (redesign in progress)
+## Visual style
 - Page is a soft sage tint (`--bg`) with white cards (`--surface`); each section gets a color wash at the top (`body[data-page]` → `--wash`: home tomato, kitchen green, plan blue, list mustard, profile plum); home has faint kitchen line doodles behind the greeting. Elements inside white cards use `--bg-soft`.
 - Stage 1 done: light cards, near-black primary buttons and selected pills, colored round icons per category (`--ic-*`), Newsreader (display/serif) + Instrument Sans (UI). No all-caps labels.
-- Stage 2: carry the style through Kitchen, Plan and List pages. Stage 3: dark theme (Light / Dark / System in Profile).
+- Stage 2 done: Kitchen, Plan, List, recipe cards and cook mode in the same style.
+- Stage 3 done: dark theme. Profile → Appearance: Light / Dark / System, stored per device in localStorage `ftt_theme` (no DB column); an inline script in `<head>` sets `html[data-theme]` before first paint. Dark values override the `:root` tokens under `:root[data-theme="dark"]`. Use tokens (`--surface`, `--ink`, `--on-ink` for text on ink-filled controls, `--ok-*`/`--warn-*`/`--bad-*` for status tints) instead of hard-coded colors so both themes keep working.
 
 ## Working conventions
 - Keep element `id`s and classes stable; JS depends on them.
