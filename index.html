@@ -2,17 +2,20 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
 <title>Fridge-to-Table</title>
 <style>
-  @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@500;600;700;800&family=Inter:wght@400;500;600;700&display=swap');
+  @import url('https://fonts.googleapis.com/css2?family=Newsreader:opsz,wght@6..72,500;6..72,600;6..72,700&family=Instrument+Sans:wght@400;500;600;700&display=swap');
 
   :root{
-    --bg: #F5F7F0;
-    --bg-soft: #ECEFE4;
-    --surface: #FFFFFF;
-    --ink: #1E241D;
-    --ink-soft: #767F6E;
+    --font-ui: 'Instrument Sans', system-ui, -apple-system, sans-serif;
+    --font-display: 'Newsreader', Georgia, 'Times New Roman', serif;
+    --bg: #FFFFFF;
+    --bg-soft: #ECEEE9;
+    --surface: #F3F4F1;
+    --surface-raised: #FFFFFF;
+    --ink: #15171A;
+    --ink-soft: #6C7069;
     --cream: #1E241D;
     --cream-dim: #8A9280;
     --tomato: #FF5A3C;
@@ -21,10 +24,17 @@
     --herb-deep: #1F8A50;
     --mustard: #FFAE1F;
     --mustard-deep: #D98D06;
-    --line-dark: #E1E5D6;
-    --line-light: #EDF0E6;
-    --shadow-card: 0 4px 18px rgba(40, 60, 30, 0.08);
-    --shadow-soft: 0 2px 10px rgba(40, 60, 30, 0.06);
+    --line-dark: #DDE0D9;
+    --line-light: #E8EAE5;
+    --shadow-card: none;
+    --shadow-soft: none;
+    --shadow-float: 0 10px 30px rgba(21, 23, 26, 0.10), 0 2px 6px rgba(21, 23, 26, 0.05);
+    --ic-herb: #2E9E5B;
+    --ic-sky: #3A86D6;
+    --ic-tomato: #E5482D;
+    --ic-mustard: #E3A21A;
+    --ic-teal: #1FA3B0;
+    --ic-plum: #8B5CD2;
   }
 
   *{ box-sizing: border-box; }
@@ -32,9 +42,8 @@
 
   body{
     background: var(--bg);
-    background-image: radial-gradient(ellipse at top left, #FFFFFF 0%, var(--bg) 60%);
     color: var(--ink);
-    font-family: 'Inter', sans-serif;
+    font-family: var(--font-ui);
     line-height: 1.5;
     min-height: 100vh;
   }
@@ -74,7 +83,7 @@
   .icon-btn:hover{ color: var(--tomato); box-shadow: 0 4px 14px rgba(255, 90, 60, 0.22); }
 
   .wordmark{
-    font-family: 'Poppins', sans-serif;
+    font-family: var(--font-ui);
     font-weight: 700;
     font-size: 21px;
     color: var(--ink);
@@ -96,8 +105,8 @@
 
   @keyframes fadeUp{ from{ opacity: 0; transform: translateY(6px); } to{ opacity: 1; transform: translateY(0); } }
 
-  .eyebrow{ font-family: 'Poppins', sans-serif; font-weight: 600; font-size: 12px; letter-spacing: 0.04em; text-transform: uppercase; color: var(--tomato); margin: 0 0 8px; }
-  .section-label{ font-family: 'Poppins', sans-serif; font-weight: 600; font-size: 12px; letter-spacing: 0.04em; text-transform: uppercase; color: var(--mustard-deep); margin: 30px 0 14px; }
+  .eyebrow{ font-family: var(--font-ui); font-weight: 600; font-size: 12px; letter-spacing: 0.04em; text-transform: uppercase; color: var(--tomato); margin: 0 0 8px; }
+  .section-label{ font-family: var(--font-ui); font-weight: 600; font-size: 12px; letter-spacing: 0.04em; text-transform: uppercase; color: var(--mustard-deep); margin: 30px 0 14px; }
 
   /* ---- Home: function grid ---- */
   .surprise-btn{
@@ -119,7 +128,7 @@
   .surprise-btn:hover{ transform: translateY(-2px); }
   .surprise-btn-icon{ color: var(--mustard); flex-shrink: 0; }
   .surprise-btn-text{ flex: 1; display: flex; flex-direction: column; gap: 3px; min-width: 0; }
-  .surprise-btn-title{ font-family: 'Poppins', sans-serif; font-weight: 700; font-size: 16px; }
+  .surprise-btn-title{ font-family: var(--font-ui); font-weight: 700; font-size: 16px; }
   .surprise-btn-desc{ font-size: 12.5px; color: rgba(255,255,255,0.7); line-height: 1.3; }
   .surprise-btn-arrow{ font-size: 20px; color: var(--tomato); flex-shrink: 0; }
 
@@ -161,11 +170,11 @@
   .icon-mustard{ background: #FFF1D2; color: var(--mustard-deep); }
   .icon-herb{ background: #DCF5E6; color: var(--herb-deep); }
 
-  .home-cell-name{ font-family: 'Poppins', sans-serif; font-weight: 600; font-size: 16.5px; color: var(--ink); }
+  .home-cell-name{ font-family: var(--font-ui); font-weight: 600; font-size: 16.5px; color: var(--ink); }
   .home-cell-desc{ font-size: 12.5px; color: var(--ink-soft); line-height: 1.35; }
 
   .home-cell-badge{
-    font-family: 'Poppins', sans-serif;
+    font-family: var(--font-ui);
     font-weight: 600;
     font-size: 12px;
     color: var(--herb-deep);
@@ -203,7 +212,7 @@
   .sidebar.open{ transform: translateX(0); }
 
   .sidebar-header{ display: flex; align-items: center; justify-content: space-between; margin-bottom: 20px; }
-  .sidebar-title{ font-family: 'Poppins', sans-serif; font-weight: 600; font-size: 18px; color: var(--ink); }
+  .sidebar-title{ font-family: var(--font-ui); font-weight: 600; font-size: 18px; color: var(--ink); }
 
   .sidebar-avatar{
     width: 56px; height: 56px;
@@ -250,7 +259,7 @@
   @keyframes loadingSpin{ to{ transform: rotate(360deg); } }
 
   .loading-text{
-    font-family: 'Poppins', sans-serif;
+    font-family: var(--font-ui);
     font-weight: 600;
     font-size: 15px;
     color: var(--ink);
@@ -296,7 +305,7 @@
     box-shadow: var(--shadow-card);
   }
   .confirm-text{
-    font-family: 'Poppins', sans-serif;
+    font-family: var(--font-ui);
     font-weight: 600;
     font-size: 15px;
     color: var(--ink);
@@ -346,7 +355,7 @@
 
   .search-input{
     width: 100%;
-    font-family: 'Inter', sans-serif;
+    font-family: var(--font-ui);
     font-size: 14.5px;
     padding: 11px 16px;
     border: 1.5px solid var(--line-light);
@@ -360,7 +369,7 @@
   .search-input:focus{ outline: none; border-color: var(--tomato); }
 
   .date-input{
-    font-family: 'Inter', sans-serif;
+    font-family: var(--font-ui);
     font-size: 14.5px;
     padding: 10px 14px;
     border: 1.5px solid var(--line-light);
@@ -385,7 +394,7 @@
     display: flex; align-items: center; justify-content: space-between;
     list-style: none; cursor: pointer;
     padding: 14px 0;
-    font-family: 'Poppins', sans-serif; font-weight: 600; font-size: 14px; color: var(--ink);
+    font-family: var(--font-ui); font-weight: 600; font-size: 14px; color: var(--ink);
   }
   .plan-prefs-summary::-webkit-details-marker{ display: none; }
   .plan-prefs-chevron{ color: var(--ink-soft); transition: transform 0.2s ease; }
@@ -439,8 +448,8 @@
   .plan-cal-cell.selected .plan-cal-weekday, .plan-cal-cell.selected .plan-cal-daynum{ color: white; }
   .plan-cal-cell.today:not(.selected){ border-color: var(--tomato); }
   .plan-cal-cell.cooked{ background: #DCF5E6; border-color: var(--herb); }
-  .plan-cal-weekday{ font-family: 'Poppins', sans-serif; font-weight: 500; font-size: 10.5px; color: var(--ink-soft); text-transform: uppercase; }
-  .plan-cal-daynum{ font-family: 'Poppins', sans-serif; font-weight: 700; font-size: 17px; color: var(--ink); }
+  .plan-cal-weekday{ font-family: var(--font-ui); font-weight: 500; font-size: 10.5px; color: var(--ink-soft); text-transform: uppercase; }
+  .plan-cal-daynum{ font-family: var(--font-ui); font-weight: 700; font-size: 17px; color: var(--ink); }
   .plan-cal-check{ position: absolute; top: -6px; right: -6px; background: var(--herb); color: white; width: 16px; height: 16px; border-radius: 50%; font-size: 10px; display: flex; align-items: center; justify-content: center; }
 
   /* ---- Meal History month calendar ---- */
@@ -453,16 +462,16 @@
   }
   .history-cal-header{ display: flex; align-items: center; justify-content: space-between; margin-bottom: 12px; }
   .history-cal-nav{ width: 30px; height: 30px; font-size: 16px; }
-  .history-cal-month{ font-family: 'Poppins', sans-serif; font-weight: 600; font-size: 14.5px; color: var(--ink); }
+  .history-cal-month{ font-family: var(--font-ui); font-weight: 600; font-size: 14.5px; color: var(--ink); }
   .history-cal-grid{ display: grid; grid-template-columns: repeat(7, 1fr); gap: 4px; }
-  .history-cal-weekday{ text-align: center; font-family: 'Poppins', sans-serif; font-weight: 600; font-size: 11px; color: var(--ink-soft); padding-bottom: 4px; }
+  .history-cal-weekday{ text-align: center; font-family: var(--font-ui); font-weight: 600; font-size: 11px; color: var(--ink-soft); padding-bottom: 4px; }
   .history-cal-cell{
     aspect-ratio: 1;
     display: flex; align-items: center; justify-content: center;
     border: none;
     background: none;
     border-radius: 10px;
-    font-family: 'Inter', sans-serif;
+    font-family: var(--font-ui);
     font-size: 13px;
     color: var(--ink);
     cursor: pointer;
@@ -493,8 +502,8 @@
     padding: 12px 16px;
     margin-bottom: 18px;
   }
-  .day-totals-label{ font-family: 'Poppins', sans-serif; font-weight: 600; font-size: 12px; letter-spacing: 0.02em; text-transform: uppercase; color: var(--mustard-deep); width: 100%; }
-  .day-totals-value{ font-family: 'Poppins', sans-serif; font-weight: 600; font-size: 14px; color: var(--ink); }
+  .day-totals-label{ font-family: var(--font-ui); font-weight: 600; font-size: 12px; letter-spacing: 0.02em; text-transform: uppercase; color: var(--mustard-deep); width: 100%; }
+  .day-totals-value{ font-family: var(--font-ui); font-weight: 600; font-size: 14px; color: var(--ink); }
   .day-totals-value span{ font-weight: 400; color: var(--ink-soft); }
   .day-totals-note{ font-size: 11.5px; color: var(--ink-soft); font-style: italic; width: 100%; margin-top: 2px; }
 
@@ -519,7 +528,7 @@
     margin-bottom: 18px;
   }
   .cook-mode-title{
-    font-family: 'Poppins', sans-serif;
+    font-family: var(--font-ui);
     font-weight: 700;
     font-size: 19px;
     color: var(--ink);
@@ -529,11 +538,11 @@
   .cook-mode-progress{ display: flex; align-items: center; gap: 10px; margin-bottom: 20px; }
   .cook-mode-progress-bar{ flex: 1; height: 6px; border-radius: 999px; background: var(--bg-soft); overflow: hidden; }
   .cook-mode-progress-fill{ height: 100%; background: var(--tomato); border-radius: 999px; transition: width 0.25s ease; }
-  .cook-mode-progress-text{ font-family: 'Poppins', sans-serif; font-weight: 500; font-size: 12.5px; color: var(--ink-soft); white-space: nowrap; }
+  .cook-mode-progress-text{ font-family: var(--font-ui); font-weight: 500; font-size: 12.5px; color: var(--ink-soft); white-space: nowrap; }
 
   .cook-mode-ingredients-toggle{
     align-self: flex-start;
-    font-family: 'Poppins', sans-serif;
+    font-family: var(--font-ui);
     font-weight: 500;
     font-size: 13px;
     color: var(--tomato-deep);
@@ -565,13 +574,13 @@
     padding: 20px 4px;
   }
   .cook-mode-step-number{
-    font-family: 'Poppins', sans-serif;
+    font-family: var(--font-ui);
     font-weight: 700;
     font-size: 15px;
     color: var(--tomato);
   }
   .cook-mode-step-text{
-    font-family: 'Poppins', sans-serif;
+    font-family: var(--font-ui);
     font-weight: 600;
     font-size: 24px;
     line-height: 1.4;
@@ -587,7 +596,7 @@
     margin-top: 6px;
   }
   .cook-mode-timer-display{
-    font-family: 'Poppins', sans-serif;
+    font-family: var(--font-ui);
     font-weight: 700;
     font-size: 22px;
     color: var(--herb-deep);
@@ -604,7 +613,7 @@
 
   .cook-mode-complete-icon{ font-size: 44px; }
   .cook-mode-complete-title{
-    font-family: 'Poppins', sans-serif;
+    font-family: var(--font-ui);
     font-weight: 700;
     font-size: 26px;
     color: var(--ink);
@@ -633,7 +642,7 @@
     color: var(--mustard-deep);
     margin-bottom: 4px;
   }
-  .empty-title{ font-family: 'Poppins', sans-serif; font-weight: 600; font-size: 18px; margin: 0; color: var(--ink); }
+  .empty-title{ font-family: var(--font-ui); font-weight: 600; font-size: 18px; margin: 0; color: var(--ink); }
   .empty-desc{ font-size: 14px; color: var(--ink-soft); margin: 0; max-width: 42ch; }
 
   /* ---- Shopping list ---- */
@@ -667,7 +676,7 @@
 
   .list-item-body{ flex: 1; min-width: 0; display: flex; flex-direction: column; }
   .list-item-name{ font-size: 15px; color: var(--ink); }
-  .list-item-source{ font-family: 'Poppins', sans-serif; font-weight: 500; font-size: 11px; color: var(--mustard-deep); margin-top: 2px; }
+  .list-item-source{ font-family: var(--font-ui); font-weight: 500; font-size: 11px; color: var(--mustard-deep); margin-top: 2px; }
 
   .list-remove{
     border: none; background: none; color: var(--ink-soft);
@@ -677,7 +686,7 @@
 
   .bubble-list-btn{
     margin-top: 16px;
-    font-family: 'Poppins', sans-serif;
+    font-family: var(--font-ui);
     font-size: 13px;
     font-weight: 600;
     padding: 8px 14px;
@@ -695,7 +704,7 @@
   .bubble-actions{ display: flex; flex-wrap: wrap; gap: 10px; align-items: center; margin-top: 16px; }
 
   .bubble-save-btn{
-    font-family: 'Poppins', sans-serif;
+    font-family: var(--font-ui);
     font-size: 13px;
     font-weight: 600;
     padding: 8px 14px;
@@ -711,7 +720,7 @@
   .bubble-save-btn:disabled{ opacity: 0.85; cursor: default; }
 
   .bubble-cooked-btn{
-    font-family: 'Poppins', sans-serif;
+    font-family: var(--font-ui);
     font-size: 13px;
     font-weight: 600;
     padding: 8px 14px;
@@ -727,7 +736,7 @@
   .bubble-cooked-btn:disabled{ opacity: 0.85; cursor: default; }
 
   .bubble-cook-btn{
-    font-family: 'Poppins', sans-serif;
+    font-family: var(--font-ui);
     font-size: 13px;
     font-weight: 600;
     padding: 8px 14px;
@@ -741,7 +750,7 @@
   .bubble-cook-btn:hover{ background: var(--tomato-deep); }
 
   .bubble-edit-btn, .bubble-print-btn{
-    font-family: 'Poppins', sans-serif;
+    font-family: var(--font-ui);
     font-size: 13px;
     font-weight: 600;
     padding: 8px 14px;
@@ -774,7 +783,7 @@
   .rate-btn.rate-down.active{ background: #FFE4DC; border-color: var(--tomato); color: var(--tomato-deep); }
 
   .bubble-remove-btn{
-    font-family: 'Poppins', sans-serif;
+    font-family: var(--font-ui);
     font-size: 12.5px;
     font-weight: 500;
     color: var(--tomato-deep);
@@ -793,7 +802,7 @@
     top: -5px; right: -8px;
     background: var(--tomato);
     color: white;
-    font-family: 'Poppins', sans-serif;
+    font-family: var(--font-ui);
     font-weight: 600;
     font-size: 10px;
     line-height: 1;
@@ -805,7 +814,7 @@
   }
 
   h1.screen-title{
-    font-family: 'Poppins', sans-serif;
+    font-family: var(--font-ui);
     font-weight: 700;
     font-size: 30px;
     line-height: 1.15;
@@ -845,7 +854,7 @@
     border: none;
     border-radius: 999px;
     padding: 13px 22px 13px 16px;
-    font-family: 'Poppins', sans-serif;
+    font-family: var(--font-ui);
     font-size: 15px;
     font-weight: 600;
     cursor: pointer;
@@ -871,14 +880,14 @@
     cursor: pointer;
     display: flex; align-items: center; justify-content: center;
   }
-  .remove-photo{ font-family: 'Poppins', sans-serif; font-weight: 500; font-size: 12px; color: var(--tomato-deep); background: none; border: none; cursor: pointer; padding: 0; text-decoration: underline; }
+  .remove-photo{ font-family: var(--font-ui); font-weight: 500; font-size: 12px; color: var(--tomato-deep); background: none; border: none; cursor: pointer; padding: 0; text-decoration: underline; }
 
-  .divider-word{ display: flex; align-items: center; gap: 12px; margin: 20px 0 16px; color: var(--ink-soft); font-family: 'Poppins', sans-serif; font-weight: 500; font-size: 12px; }
+  .divider-word{ display: flex; align-items: center; gap: 12px; margin: 20px 0 16px; color: var(--ink-soft); font-family: var(--font-ui); font-weight: 500; font-size: 12px; }
   .divider-word::before, .divider-word::after{ content: ""; flex: 1; height: 1px; background: var(--line-dark); }
 
   textarea{
     width: 100%;
-    font-family: 'Inter', sans-serif;
+    font-family: var(--font-ui);
     font-size: 15px;
     padding: 13px 15px;
     border: 1.5px solid var(--line-dark);
@@ -893,7 +902,7 @@
   .row{ display: flex; gap: 10px; align-items: center; flex-wrap: wrap; margin-top: 12px; }
 
   .btn{
-    font-family: 'Poppins', sans-serif;
+    font-family: var(--font-ui);
     font-size: 14px;
     font-weight: 600;
     padding: 11px 18px;
@@ -916,7 +925,7 @@
   .btn-ghost{ border-color: var(--line-dark); color: var(--ink-soft); }
   .btn-ghost:hover{ background: var(--bg-soft); color: var(--ink); }
 
-  .status-text{ font-family: 'Poppins', sans-serif; font-weight: 500; font-size: 13px; color: var(--mustard-deep); }
+  .status-text{ font-family: var(--font-ui); font-weight: 500; font-size: 13px; color: var(--mustard-deep); }
 
   /* ---- Ingredient chips ---- */
   .chips{ display: flex; flex-wrap: wrap; gap: 8px; margin-top: 20px; }
@@ -960,14 +969,14 @@
     text-align: left;
   }
   .chip-category-name{
-    font-family: 'Poppins', sans-serif;
+    font-family: var(--font-ui);
     font-weight: 600;
     font-size: 13px;
     letter-spacing: 0.02em;
     color: var(--ink);
   }
   .chip-category-count{
-    font-family: 'Poppins', sans-serif;
+    font-family: var(--font-ui);
     font-weight: 500;
     font-size: 11.5px;
     color: var(--ink-soft);
@@ -1007,7 +1016,7 @@
 
   .allergies-input{
     width: 100%;
-    font-family: 'Inter', sans-serif; font-size: 14px;
+    font-family: var(--font-ui); font-size: 14px;
     padding: 10px 12px;
     border: 1.5px solid var(--line-light);
     border-radius: 12px;
@@ -1028,7 +1037,7 @@
   .onboard-overlay{ z-index: 48; }
   .onboard-card{ max-width: 380px; max-height: calc(100vh - 48px); overflow-y: auto; }
   .onboard-card .pref-label{ margin: 16px 0 8px; }
-  .onboard-title{ font-family: 'Poppins', sans-serif; font-weight: 700; font-size: 22px; margin: 0 0 6px; color: var(--ink); }
+  .onboard-title{ font-family: var(--font-ui); font-weight: 700; font-size: 22px; margin: 0 0 6px; color: var(--ink); }
   .onboard-sub{ font-size: 14px; color: var(--ink-soft); margin: 0 0 4px; line-height: 1.45; }
   .onboard-actions{ display: flex; justify-content: space-between; align-items: center; gap: 12px; margin-top: 22px; }
   .tour-layer{ position: fixed; inset: 0; z-index: 49; display: none; }
@@ -1042,7 +1051,7 @@
     position: fixed; left: 16px; right: 16px; max-width: 360px; margin: 0 auto;
     background: var(--surface); border-radius: 18px; padding: 18px 18px 14px; box-shadow: var(--shadow-card);
   }
-  .tour-step-title{ font-family: 'Poppins', sans-serif; font-weight: 700; font-size: 16px; margin: 0 0 6px; color: var(--ink); }
+  .tour-step-title{ font-family: var(--font-ui); font-weight: 700; font-size: 16px; margin: 0 0 6px; color: var(--ink); }
   .tour-step-text{ font-size: 14px; color: var(--ink-soft); margin: 0 0 14px; line-height: 1.45; }
   .tour-foot{ display: flex; align-items: center; justify-content: space-between; gap: 10px; flex-wrap: wrap; }
   .tour-dots{ display: flex; gap: 5px; }
@@ -1056,11 +1065,11 @@
   .stepper{ display: inline-flex; align-items: center; gap: 14px; background: var(--surface); border-radius: 999px; padding: 6px; box-shadow: var(--shadow-soft); }
   .stepper-btn{ width: 38px; height: 38px; border-radius: 50%; border: none; background: var(--bg-soft); font-size: 20px; color: var(--ink); cursor: pointer; }
   .stepper-btn:hover{ background: var(--line-light); }
-  .stepper-value{ font-family: 'Poppins', sans-serif; font-weight: 700; font-size: 18px; min-width: 28px; text-align: center; }
+  .stepper-value{ font-family: var(--font-ui); font-weight: 700; font-size: 18px; min-width: 28px; text-align: center; }
   .course-list{ display: flex; flex-direction: column; gap: 8px; }
   .course-row{ display: flex; gap: 8px; align-items: center; }
   .course-type, .course-note{
-    font-family: 'Inter', sans-serif; font-size: 14px; padding: 9px 10px;
+    font-family: var(--font-ui); font-size: 14px; padding: 9px 10px;
     border: 1.5px solid var(--line-light); border-radius: 12px; background: var(--surface); color: var(--ink);
   }
   .course-type{ flex: 0 0 38%; min-width: 0; }
@@ -1069,7 +1078,7 @@
   .course-del{ border: none; background: none; font-size: 20px; color: var(--ink-soft); cursor: pointer; padding: 4px 6px; }
   .course-del:disabled{ opacity: 0.3; cursor: default; }
   .course-add{ margin-top: 10px; display: inline-block; }
-  .guest-menu-title{ font-family: 'Poppins', sans-serif; font-weight: 700; font-size: 19px; margin: 28px 0 6px; color: var(--ink); }
+  .guest-menu-title{ font-family: var(--font-ui); font-weight: 700; font-size: 19px; margin: 28px 0 6px; color: var(--ink); }
   .badge-course{ background: #FFE4DC; color: var(--tomato-deep); }
   .plan-actions{ display: flex; flex-direction: column; gap: 10px; margin-top: 20px; }
   .plan-actions-main{ width: 100%; justify-content: center; }
@@ -1077,29 +1086,29 @@
   .plan-actions-secondary .btn{ justify-content: center; padding-left: 8px; padding-right: 8px; font-size: 13px; }
   #planPrepCard .plan-prep{ margin-top: 18px; }
   .plan-mode-toggle{ background: var(--bg-soft); border-radius: 999px; padding: 4px; display: flex; gap: 4px; margin-top: 4px; }
-  .plan-mode-toggle .pill{ flex: 1; border: none; background: transparent; font-family: 'Poppins', sans-serif; font-weight: 600; font-size: 14px; padding: 10px 12px; color: var(--ink-soft); }
+  .plan-mode-toggle .pill{ flex: 1; border: none; background: transparent; font-family: var(--font-ui); font-weight: 600; font-size: 14px; padding: 10px 12px; color: var(--ink-soft); }
   .plan-mode-toggle .pill.selected{ background: var(--surface); color: var(--ink); box-shadow: var(--shadow-soft); }
   .plan-mode-toggle .pill.selected:hover{ background: var(--surface); }
   .plan-mode-hint{ margin-top: 10px; }
   .plan-cal-dishes{ display: flex; gap: 2px; margin-top: 2px; }
-  .plan-cal-dish{ font-family: 'Poppins', sans-serif; font-weight: 700; font-size: 10px; width: 16px; height: 16px; border-radius: 5px; display: inline-flex; align-items: center; justify-content: center; color: white; }
+  .plan-cal-dish{ font-family: var(--font-ui); font-weight: 700; font-size: 10px; width: 16px; height: 16px; border-radius: 5px; display: inline-flex; align-items: center; justify-content: center; color: white; }
   .dish-A{ --dish: var(--tomato); } .dish-B{ --dish: var(--herb); } .dish-C{ --dish: var(--mustard); }
   .plan-cal-dish{ background: var(--dish); }
   .badge-prep{ background: var(--dish); color: white; }
   .plan-cal-cell.selected .plan-cal-dish{ outline: 1.5px solid white; }
-  .plan-cal-prep{ font-family: 'Poppins', sans-serif; font-size: 9px; font-weight: 600; color: var(--tomato-deep); text-transform: uppercase; letter-spacing: 0.03em; }
+  .plan-cal-prep{ font-family: var(--font-ui); font-size: 9px; font-weight: 600; color: var(--tomato-deep); text-transform: uppercase; letter-spacing: 0.03em; }
   .plan-prep{ background: var(--surface); border-radius: 16px; box-shadow: var(--shadow-card); padding: 0 18px; margin: 4px 0 18px; border-left: 4px solid var(--tomato); }
-  .plan-prepsummary{ display: flex; align-items: center; justify-content: space-between; list-style: none; cursor: pointer; padding: 15px 0; font-family: 'Poppins', sans-serif; font-weight: 700; font-size: 15px; color: var(--ink); }
+  .plan-prepsummary{ display: flex; align-items: center; justify-content: space-between; list-style: none; cursor: pointer; padding: 15px 0; font-family: var(--font-ui); font-weight: 700; font-size: 15px; color: var(--ink); }
   .plan-prepsummary::-webkit-details-marker{ display: none; }
   .plan-prep[open] .plan-prefs-chevron{ transform: rotate(180deg); }
   .plan-prep-session{ border-top: 1px solid var(--line-light); padding: 14px 0 16px; }
-  .plan-prep-head{ font-family: 'Poppins', sans-serif; font-weight: 600; font-size: 14.5px; margin: 0; color: var(--ink); }
+  .plan-prep-head{ font-family: var(--font-ui); font-weight: 600; font-size: 14.5px; margin: 0; color: var(--ink); }
   .plan-prep-meta{ font-size: 12.5px; color: var(--ink-soft); margin: 2px 0 8px; }
-  .plan-prep-subhead{ font-family: 'Poppins', sans-serif; font-weight: 600; font-size: 11.5px; text-transform: uppercase; letter-spacing: 0.03em; color: var(--herb-deep); margin: 10px 0 6px; }
+  .plan-prep-subhead{ font-family: var(--font-ui); font-weight: 600; font-size: 11.5px; text-transform: uppercase; letter-spacing: 0.03em; color: var(--herb-deep); margin: 10px 0 6px; }
   .plan-prep-tips{ margin: 0 0 12px; padding-left: 18px; font-size: 14px; color: var(--ink); }
 
   /* ---- Compact pantry list ---- */
-  .chip-compact{ cursor: pointer; font-family: 'Inter', sans-serif; padding: 7px 12px; }
+  .chip-compact{ cursor: pointer; font-family: var(--font-ui); padding: 7px 12px; }
   .chip-compact.chip-open{ box-shadow: 0 0 0 1.5px var(--tomato), var(--shadow-soft); }
   .usesoon-header .chip-category-name{ color: var(--tomato-deep); }
   .usesoon-header-icon{ color: var(--tomato); display: inline-flex; }
@@ -1114,10 +1123,10 @@
     gap: 10px;
   }
   .pantry-edit-row{ display: flex; align-items: center; gap: 10px; }
-  .pantry-edit-label{ font-family: 'Poppins', sans-serif; font-weight: 600; font-size: 12px; color: var(--ink-soft); width: 72px; flex-shrink: 0; }
+  .pantry-edit-label{ font-family: var(--font-ui); font-weight: 600; font-size: 12px; color: var(--ink-soft); width: 72px; flex-shrink: 0; }
   .pantry-edit-input{
     flex: 1; min-width: 0;
-    font-family: 'Inter', sans-serif; font-size: 14px;
+    font-family: var(--font-ui); font-size: 14px;
     padding: 7px 10px;
     border: 1.5px solid var(--line-light);
     border-radius: 10px;
@@ -1128,20 +1137,20 @@
   .pantry-edit-actions{ display: flex; justify-content: space-between; align-items: center; gap: 10px; }
   .pantry-edit-soon{
     display: inline-flex; align-items: center; gap: 6px;
-    font-family: 'Poppins', sans-serif; font-weight: 500; font-size: 12.5px;
+    font-family: var(--font-ui); font-weight: 500; font-size: 12.5px;
     padding: 6px 12px; border-radius: 999px;
     border: 1.5px solid var(--line-dark); background: transparent; color: var(--ink-soft); cursor: pointer;
   }
   .pantry-edit-soon.active{ border-color: var(--tomato); background: #FFE4DC; color: var(--tomato-deep); }
   .pantry-edit-remove{
-    font-family: 'Poppins', sans-serif; font-weight: 500; font-size: 12.5px;
+    font-family: var(--font-ui); font-weight: 500; font-size: 12.5px;
     background: none; border: none; color: var(--tomato-deep); cursor: pointer; padding: 6px 4px;
   }
   .pantry-edit-remove:hover{ text-decoration: underline; }
 
   .chip-qty{
     width: 52px;
-    font-family: 'Inter', sans-serif;
+    font-family: var(--font-ui);
     font-size: 12px;
     padding: 2px 6px;
     border: 1px dashed var(--line-dark);
@@ -1189,7 +1198,7 @@
   }
 
   .text-link{
-    font-family: 'Poppins', sans-serif;
+    font-family: var(--font-ui);
     font-weight: 500;
     font-size: 12.5px;
     color: var(--tomato-deep);
@@ -1204,7 +1213,7 @@
   .add-chip-row{ display:flex; gap:8px; margin-top: 14px; }
   .add-chip-row input{
     flex: 1;
-    font-family: 'Inter', sans-serif;
+    font-family: var(--font-ui);
     font-size: 14px;
     padding: 10px 14px;
     border: 1.5px dashed var(--line-dark);
@@ -1219,10 +1228,10 @@
 
   /* ---- Preferences (screen 2) ---- */
   .pref-block{ margin-bottom: 26px; }
-  .pref-label{ font-family: 'Poppins', sans-serif; font-weight: 600; font-size: 12px; letter-spacing: 0.03em; text-transform: uppercase; color: var(--mustard-deep); margin-bottom: 10px; }
+  .pref-label{ font-family: var(--font-ui); font-weight: 600; font-size: 12px; letter-spacing: 0.03em; text-transform: uppercase; color: var(--mustard-deep); margin-bottom: 10px; }
   .pill-group, .view-toggle{ display: flex; flex-wrap: wrap; gap: 8px; }
   .pill{
-    font-family: 'Inter', sans-serif;
+    font-family: var(--font-ui);
     font-weight: 500;
     font-size: 14px;
     padding: 9px 16px;
@@ -1300,7 +1309,7 @@
 
   .bubble-head-left{ display: flex; flex-direction: column; gap: 6px; min-width: 0; }
   .bubble-name{
-    font-family: 'Poppins', sans-serif;
+    font-family: var(--font-ui);
     font-weight: 600;
     font-size: 17px;
     color: var(--ink);
@@ -1309,7 +1318,7 @@
   .bubble-stats{ display: flex; gap: 8px; flex-wrap: wrap; }
 
   .badge{
-    font-family: 'Poppins', sans-serif;
+    font-family: var(--font-ui);
     font-weight: 500;
     font-size: 11.5px;
     padding: 3px 9px;
@@ -1340,24 +1349,24 @@
 
   .recipe-blurb{ font-size: 15px; color: var(--ink-soft); margin: 16px 0 20px; max-width: 56ch; }
 
-  .macros-line{ font-family: 'Poppins', sans-serif; font-weight: 500; font-size: 13px; color: var(--herb-deep); margin: 14px 0 0; }
+  .macros-line{ font-family: var(--font-ui); font-weight: 500; font-size: 13px; color: var(--herb-deep); margin: 14px 0 0; }
   .kcal-note{ font-size: 12px; color: var(--ink-soft); margin: 10px 0 0; font-style: italic; }
 
   .recipe-body{ display: grid; grid-template-columns: 170px 1fr; gap: 26px; }
 
-  .recipe-col h3{ font-family: 'Poppins', sans-serif; font-weight: 600; font-size: 11.5px; letter-spacing: 0.03em; text-transform: uppercase; color: var(--herb-deep); margin: 0 0 12px; }
+  .recipe-col h3{ font-family: var(--font-ui); font-weight: 600; font-size: 11.5px; letter-spacing: 0.03em; text-transform: uppercase; color: var(--herb-deep); margin: 0 0 12px; }
 
   .ing-list{ list-style: none; padding: 0; margin: 0; }
   .ing-list li{ padding: 7px 0; border-bottom: 1px dashed var(--line-light); font-size: 14px; display: flex; align-items: baseline; gap: 6px; }
   .ing-list li::before{ content: "•"; color: var(--herb); }
   .ing-list li.missing::before{ content: "+"; color: var(--tomato); font-weight: 700; }
   .ing-list li.missing{ color: var(--tomato-deep); }
-  .ing-list li.missing .tag{ font-size: 10.5px; font-family: 'Poppins', sans-serif; font-weight: 500; background: #FFE4DC; padding: 1px 6px; border-radius: 4px; margin-left: 4px; }
+  .ing-list li.missing .tag{ font-size: 10.5px; font-family: var(--font-ui); font-weight: 500; background: #FFE4DC; padding: 1px 6px; border-radius: 4px; margin-left: 4px; }
 
   .steps{ padding: 0; margin: 0; list-style: none; counter-reset: step; }
   .steps li{ counter-increment: step; display: flex; gap: 14px; padding: 13px 0; border-bottom: 1px dashed var(--line-light); font-size: 15px; }
   .steps li:last-child{ border-bottom: none; }
-  .steps li::before{ content: counter(step); font-family: 'Poppins', sans-serif; font-weight: 700; font-size: 18px; color: var(--tomato); flex-shrink: 0; width: 24px; }
+  .steps li::before{ content: counter(step); font-family: var(--font-ui); font-weight: 700; font-size: 18px; color: var(--tomato); flex-shrink: 0; width: 24px; }
 
   #error-box{ display:none; background: #FFE9E4; border: 1.5px solid var(--tomato); color: var(--tomato-deep); padding: 12px 14px; border-radius: 14px; font-size: 14px; margin-top: 16px; }
   #error-box-2{ display:none; background: #FFE9E4; border: 1.5px solid var(--tomato); color: var(--tomato-deep); padding: 12px 14px; border-radius: 14px; font-size: 14px; margin-top: 16px; }
@@ -1377,13 +1386,13 @@
   .edit-section{ padding: 16px 0; border-bottom: 1px solid var(--line-light); display: flex; flex-direction: column; gap: 4px; }
   .edit-section:first-child{ padding-top: 0; }
   .edit-section:last-of-type{ border-bottom: none; }
-  .edit-section-title{ font-family: 'Poppins', sans-serif; font-weight: 600; font-size: 12px; letter-spacing: 0.03em; text-transform: uppercase; color: var(--mustard-deep); margin: 0 0 8px; }
-  .edit-label{ font-family: 'Poppins', sans-serif; font-weight: 600; font-size: 12px; letter-spacing: 0.02em; color: var(--ink); margin: 12px 0 6px; }
+  .edit-section-title{ font-family: var(--font-ui); font-weight: 600; font-size: 12px; letter-spacing: 0.03em; text-transform: uppercase; color: var(--mustard-deep); margin: 0 0 8px; }
+  .edit-label{ font-family: var(--font-ui); font-weight: 600; font-size: 12px; letter-spacing: 0.02em; color: var(--ink); margin: 12px 0 6px; }
   .edit-label:first-child{ margin-top: 0; }
-  .edit-hint{ font-family: 'Inter', sans-serif; font-weight: 400; font-style: italic; color: var(--ink-soft); text-transform: none; letter-spacing: normal; font-size: 11.5px; }
+  .edit-hint{ font-family: var(--font-ui); font-weight: 400; font-style: italic; color: var(--ink-soft); text-transform: none; letter-spacing: normal; font-size: 11.5px; }
   .edit-input, .edit-textarea{
     width: 100%;
-    font-family: 'Inter', sans-serif;
+    font-family: var(--font-ui);
     font-size: 14.5px;
     line-height: 1.5;
     padding: 10px 14px;
@@ -1402,9 +1411,9 @@
 
   /* ---- Print ---- */
   #printArea{ display: none; }
-  .print-title{ font-family: 'Poppins', sans-serif; font-weight: 700; font-size: 22px; margin: 0 0 6px; }
+  .print-title{ font-family: var(--font-ui); font-weight: 700; font-size: 22px; margin: 0 0 6px; }
   .print-meta{ font-size: 13px; color: #444; margin: 0 0 14px; }
-  .print-section-title{ font-family: 'Poppins', sans-serif; font-weight: 600; font-size: 14px; margin: 18px 0 8px; text-transform: uppercase; letter-spacing: 0.03em; }
+  .print-section-title{ font-family: var(--font-ui); font-weight: 600; font-size: 14px; margin: 18px 0 8px; text-transform: uppercase; letter-spacing: 0.03em; }
   .print-list{ margin: 0; padding-left: 20px; }
   .print-list li{ margin-bottom: 4px; }
   .print-day{ margin-bottom: 26px; padding-bottom: 18px; border-bottom: 1px solid #ccc; }
@@ -1413,6 +1422,140 @@
     body *{ visibility: hidden; }
     #printArea, #printArea *{ visibility: visible; }
     #printArea{ display: block; position: absolute; top: 0; left: 0; width: 100%; padding: 20px; }
+  }
+
+  /* =====================================================================
+     Redesign — stage 1: navigation, home, global look
+     ===================================================================== */
+  body{ -webkit-font-smoothing: antialiased; }
+  .app{ padding: 0 20px; }
+  .tab-content{ padding-top: 26px; padding-bottom: calc(118px + env(safe-area-inset-bottom)); }
+  .app.has-back .tab-content{ padding-top: 4px; }
+  .top-bar{ display: none; padding: 14px 0 10px; }
+  .app.has-back .top-bar{ display: flex; }
+  .top-bar .wordmark, #hamburgerBtn, .sidebar, .sidebar-overlay{ display: none !important; }
+  .icon-btn{ background: var(--surface); }
+  .icon-btn:hover{ color: var(--ink); background: var(--bg-soft); box-shadow: none; }
+
+  /* type */
+  .eyebrow{ display: none; }
+  h1.screen-title{ font-family: var(--font-display); font-weight: 600; font-size: 34px; max-width: 22ch; line-height: 1.08; letter-spacing: -0.015em; margin: 0 0 10px; }
+  .screen-sub{ font-size: 15.5px; line-height: 1.5; }
+  .section-label, .pref-label{
+    font-family: var(--font-ui); font-weight: 600; font-size: 14px; letter-spacing: 0; text-transform: none;
+    color: var(--ink);
+  }
+  .section-label::first-letter, .pref-label::first-letter{ text-transform: uppercase; }
+  .bubble-name, .empty-title, .onboard-title, .tour-step-title, .guest-menu-title, .cook-mode-complete-title{
+    font-family: var(--font-display); font-weight: 600; letter-spacing: -0.01em;
+  }
+  .bubble-name{ font-size: 19px; line-height: 1.22; }
+  .empty-title{ font-size: 21px; }
+
+  /* surfaces */
+  .bubble, .capture-card, .empty-card, #pantryChips, .plan-prefs, .plan-prep{ border-radius: 22px; }
+  .empty-card{ border: none; }
+  .confirm-card, .tour-card, .auth-card, .loading-card, .onboard-card{ background: var(--surface-raised); box-shadow: var(--shadow-float); }
+  .app input:not([type=checkbox]):not([type=file]):not([type=date]), .app textarea, .app select,
+  .onboard-card input, .onboard-card textarea{
+    background: var(--surface-raised); border: 1.5px solid var(--line-dark); box-shadow: none;
+  }
+  .app input:focus, .app textarea:focus, .app select:focus{ border-color: var(--ink); outline: none; }
+
+  /* controls */
+  .btn{ font-weight: 600; border-color: var(--ink); }
+  .btn-solid{ background: var(--ink); border-color: var(--ink); color: #fff; }
+  .btn-solid:hover{ background: #2C3034; border-color: #2C3034; color: #fff; }
+  .btn-solid:disabled:hover{ background: var(--ink); }
+  .btn-ghost{ border-color: var(--line-dark); color: var(--ink); background: transparent; }
+  .btn-ghost:hover{ background: var(--surface); }
+  .pill{ background: var(--surface); border-color: transparent; color: var(--ink); }
+  .pill:hover{ border-color: var(--line-dark); color: var(--ink); }
+  .pill.selected, .pill.selected:hover{ background: var(--ink); border-color: var(--ink); color: #fff; }
+  .text-link{ color: var(--ink); font-weight: 600; font-size: 13.5px; text-decoration: underline; text-underline-offset: 3px; text-decoration-color: var(--line-dark); }
+  .text-link:hover{ text-decoration-color: currentColor; }
+  :focus-visible{ outline: 2px solid var(--ink); outline-offset: 2px; }
+
+  /* shared pieces: round icons, row cards, tiles */
+  .round-icon{ width: 40px; height: 40px; border-radius: 50%; display: inline-flex; align-items: center; justify-content: center; color: #fff; flex-shrink: 0; }
+  .ic-herb{ background: var(--ic-herb); } .ic-sky{ background: var(--ic-sky); } .ic-tomato{ background: var(--ic-tomato); }
+  .ic-mustard{ background: var(--ic-mustard); } .ic-teal{ background: var(--ic-teal); } .ic-plum{ background: var(--ic-plum); }
+  .ic-ink{ background: var(--ink); }
+  .row-list{ display: flex; flex-direction: column; gap: 12px; }
+  .row-card{
+    display: flex; align-items: center; gap: 14px; width: 100%;
+    background: var(--surface); border: none; border-radius: 24px; padding: 20px 18px;
+    text-align: left; color: var(--ink); cursor: pointer; font: inherit;
+    transition: background 0.15s ease, transform 0.15s ease;
+  }
+  .row-card:hover{ background: var(--bg-soft); }
+  .row-card:active{ transform: scale(0.99); }
+  .row-text{ flex: 1; min-width: 0; display: flex; flex-direction: column; gap: 2px; }
+  .row-title{ font-family: var(--font-display); font-weight: 600; font-size: 19px; line-height: 1.2; letter-spacing: -0.01em; }
+  .row-sub{ font-size: 13.5px; color: var(--ink-soft); }
+  .row-end{ color: var(--ink-soft); display: inline-flex; flex-shrink: 0; }
+  .row-end-accent{ color: var(--ic-mustard); }
+  .row-badge{ font-weight: 600; font-size: 12px; background: var(--surface-raised); color: var(--ink); border-radius: 999px; padding: 3px 10px; }
+
+  /* home */
+  .home-head{ margin: 6px 0 22px; }
+  .home-greeting{ font-family: var(--font-display); font-weight: 600; font-size: 38px; line-height: 1.05; letter-spacing: -0.02em; margin: 0 0 8px; }
+  .home-summary{ margin: 0; font-size: 15.5px; color: var(--ink-soft); }
+  .home-summary b{ color: var(--ink); font-weight: 600; }
+  .home-section-head{ display: flex; align-items: baseline; justify-content: space-between; margin: 32px 0 14px; }
+  .home-section-title{ font-family: var(--font-display); font-weight: 600; font-size: 23px; letter-spacing: -0.01em; margin: 0; }
+  .home-see-all{ text-decoration: none; color: var(--ink-soft); }
+  .tile-grid{ display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+  .tile{
+    display: flex; flex-direction: column; align-items: flex-start; gap: 4px;
+    background: var(--surface); border: none; border-radius: 24px; padding: 18px 16px 18px;
+    min-height: 148px; text-align: left; color: var(--ink); cursor: pointer; font: inherit;
+    transition: background 0.15s ease;
+  }
+  .tile:hover{ background: var(--bg-soft); }
+  .tile .round-icon{ width: 34px; height: 34px; margin-bottom: auto; }
+  .tile .round-icon svg{ width: 18px; height: 18px; }
+  .tile-title{ font-family: var(--font-display); font-weight: 600; font-size: 18px; line-height: 1.2; margin-top: 22px; overflow-wrap: anywhere; }
+  .tile-sub{ font-size: 13px; color: var(--ink-soft); }
+
+  /* plan switch (week / guests) */
+  .plan-switch{ display: flex; gap: 4px; background: var(--surface); border-radius: 999px; padding: 4px; margin-bottom: 22px; }
+  .plan-switch-btn{ flex: 1; border: none; background: transparent; border-radius: 999px; padding: 10px 12px; font: 600 14px var(--font-ui); color: var(--ink-soft); cursor: pointer; }
+  .plan-switch-btn.selected{ background: var(--surface-raised); color: var(--ink); box-shadow: 0 1px 3px rgba(21,23,26,.08); }
+
+  /* profile page */
+  .profile-name-row{ display: flex; align-items: center; gap: 12px; background: var(--surface); border-radius: 24px; padding: 14px 16px; margin: 18px 0 12px; cursor: text; }
+  #tabProfile .profile-name-input{ flex: 1; min-width: 0; border: none; background: transparent; font-family: var(--font-display); font-weight: 600; font-size: 20px; color: var(--ink); padding: 4px 0; }
+  #tabProfile .profile-name-input:focus{ border: none; }
+  .profile-name-input::placeholder{ color: var(--ink-soft); font-weight: 500; }
+  .profile-section-title{ font-family: var(--font-display); font-weight: 600; font-size: 23px; margin: 34px 0 6px; }
+  .profile-sub{ font-size: 14px; margin-bottom: 22px; }
+  .profile-footer{ border-top: 1px solid var(--line-light); padding-top: 22px; margin-top: 10px; }
+  .onboard-name{ width: 100%; }
+
+  /* bottom navigation */
+  .bottom-nav{
+    position: fixed; left: 0; right: 0; bottom: calc(12px + env(safe-area-inset-bottom));
+    z-index: 25; display: flex; align-items: center; gap: 10px;
+    width: min(620px, 100%); margin: 0 auto; padding: 0 16px; pointer-events: none;
+  }
+  #appRoot[style*="display:none"] ~ .bottom-nav{ display: none; }
+  .nav-pill, .nav-profile{ pointer-events: auto; background: rgba(255,255,255,0.94); backdrop-filter: blur(14px); -webkit-backdrop-filter: blur(14px); box-shadow: var(--shadow-float); border: 1px solid var(--line-light); }
+  .nav-pill{ flex: 1; display: flex; justify-content: space-around; border-radius: 999px; padding: 6px; }
+  .nav-item{
+    flex: 1; display: flex; flex-direction: column; align-items: center; gap: 2px;
+    border: none; background: none; cursor: pointer; padding: 4px 2px; border-radius: 999px;
+    color: var(--ink-soft); font: 600 11px var(--font-ui);
+  }
+  .nav-icon{ position: relative; width: 38px; height: 30px; border-radius: 999px; display: flex; align-items: center; justify-content: center; transition: background 0.15s ease, color 0.15s ease; }
+  .nav-item.active{ color: var(--ink); }
+  .nav-item.active .nav-icon{ background: var(--ink); color: #fff; }
+  .nav-badge{ position: absolute; top: -3px; right: -4px; min-width: 17px; height: 17px; padding: 0 4px; border-radius: 999px; background: var(--ic-tomato); color: #fff; font: 700 10px/17px var(--font-ui); text-align: center; border: 2px solid #fff; }
+  .nav-profile{ width: 60px; height: 60px; border-radius: 50%; display: flex; align-items: center; justify-content: center; color: var(--ink); cursor: pointer; flex-shrink: 0; }
+  .nav-profile.active{ background: var(--ink); color: #fff; border-color: var(--ink); }
+
+  @media (prefers-reduced-motion: reduce){
+    *{ animation-duration: 0.01ms !important; transition-duration: 0.01ms !important; }
   }
 </style>
 <script src="https://unpkg.com/@supabase/supabase-js@2"></script>
@@ -1449,9 +1592,8 @@
       <button class="icon-btn" id="backBtn" style="display:none;" aria-label="Back">
         <svg width="20" height="20" viewBox="0 0 24 24" fill="none"><path d="M15 5l-7 7 7 7" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>
       </button>
-      <div class="wordmark">Fridge<span>-to-</span>Table</div>
     </div>
-    <button class="icon-btn" id="hamburgerBtn" aria-label="Open menu">
+    <button class="icon-btn" id="hamburgerBtn" aria-label="Open menu" hidden>
       <svg width="20" height="20" viewBox="0 0 24 24" fill="none"><line x1="4" y1="7" x2="20" y2="7" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/><line x1="4" y1="12" x2="20" y2="12" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/><line x1="4" y1="17" x2="20" y2="17" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg>
     </button>
   </div>
@@ -1460,86 +1602,45 @@
 
   <!-- ============ PAGE: HOME ============ -->
   <section class="tab-page active" id="tabHome">
-    <p class="eyebrow" data-i18n="home_eyebrow">home</p>
-    <h1 class="screen-title" data-i18n="home_title">Good evening. What are we cooking?</h1>
-    <p class="screen-sub" data-i18n="home_sub">Pick a function to get started.</p>
+    <header class="home-head">
+      <h1 class="home-greeting" id="homeGreeting">Good evening</h1>
+      <p class="home-summary" id="homeSummary"></p>
+    </header>
 
-    <button class="surprise-btn" id="surpriseMeBtn">
-      <span class="surprise-btn-icon">
-        <svg width="22" height="22" viewBox="0 0 24 24" fill="none"><rect x="4" y="4" width="16" height="16" rx="4" stroke="currentColor" stroke-width="1.7"/><circle cx="8.5" cy="8.5" r="1.2" fill="currentColor"/><circle cx="15.5" cy="8.5" r="1.2" fill="currentColor"/><circle cx="8.5" cy="15.5" r="1.2" fill="currentColor"/><circle cx="15.5" cy="15.5" r="1.2" fill="currentColor"/><circle cx="12" cy="12" r="1.2" fill="currentColor"/></svg>
-      </span>
-      <span class="surprise-btn-text">
-        <span class="surprise-btn-title" data-i18n="surprise_title">Surprise me</span>
-        <span class="surprise-btn-desc" data-i18n="surprise_desc">One instant meal idea from your pantry, no questions asked</span>
-      </span>
-      <span class="surprise-btn-arrow">→</span>
-    </button>
-
-    <div class="home-grid">
-      <button class="home-cell" data-page="recipes">
-        <span class="home-cell-icon icon-tomato">
-          <svg width="24" height="24" viewBox="0 0 24 24" fill="none"><path d="M7 3v7a2 2 0 0 0 4 0V3M9 10v11" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"/><path d="M16 3c-1.3 0-2.5 1.6-2.5 5s1.2 5 2.5 5v8" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"/></svg>
+    <div class="row-list">
+      <button class="row-card" id="homeCookCard" data-go="recipes">
+        <span class="round-icon ic-tomato"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 11h14v5.5A3.5 3.5 0 0 1 15.5 20h-7A3.5 3.5 0 0 1 5 16.5Z"/><path d="M3 11h18"/><path d="M9.5 7.5c0-1.1.9-1.5.9-2.6M13.5 7.5c0-1.1.9-1.5.9-2.6"/></svg></span>
+        <span class="row-text">
+          <span class="row-title" data-i18n="home_cook_title">What should I cook?</span>
+          <span class="row-sub" data-i18n="home_cook_sub">A recipe from what you have</span>
         </span>
-        <span class="home-cell-name" data-i18n="cell_recipes_name">Recipes</span>
-        <span class="home-cell-desc" data-i18n="cell_recipes_desc">Turn your ingredients into a meal</span>
+        <span class="row-end"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m9 6 6 6-6 6"/></svg></span>
       </button>
 
-      <button class="home-cell" data-page="pantry">
-        <span class="home-cell-icon icon-mustard">
-          <svg width="24" height="24" viewBox="0 0 24 24" fill="none"><rect x="5" y="3" width="14" height="18" rx="2" stroke="currentColor" stroke-width="1.7"/><line x1="5" y1="10" x2="19" y2="10" stroke="currentColor" stroke-width="1.7"/><line x1="8" y1="6" x2="8" y2="7.5" stroke="currentColor" stroke-width="1.7"/><line x1="8" y1="13" x2="8" y2="14.5" stroke="currentColor" stroke-width="1.7"/></svg>
+      <button class="row-card" id="surpriseMeBtn">
+        <span class="round-icon ic-mustard"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="4" y="4" width="16" height="16" rx="4"/><circle cx="9" cy="9" r=".6" fill="currentColor"/><circle cx="15" cy="15" r=".6" fill="currentColor"/><circle cx="15" cy="9" r=".6" fill="currentColor"/><circle cx="9" cy="15" r=".6" fill="currentColor"/></svg></span>
+        <span class="row-text">
+          <span class="row-title" data-i18n="surprise_title">Surprise me</span>
+          <span class="row-sub" data-i18n="home_surprise_sub">One idea, no questions asked</span>
         </span>
-        <span class="home-cell-name" data-i18n="cell_pantry_name">Pantry</span>
-        <span class="home-cell-desc" data-i18n="cell_pantry_desc">What's in stock right now</span>
+        <span class="row-end row-end-accent"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 4v4M12 16v4M4 12h4M16 12h4M6.5 6.5l2.5 2.5M15 15l2.5 2.5M6.5 17.5 9 15M15 9l2.5-2.5"/></svg></span>
       </button>
 
-      <button class="home-cell" data-page="list">
-        <div class="home-cell-top-row">
-          <span class="home-cell-icon icon-herb">
-            <svg width="24" height="24" viewBox="0 0 24 24" fill="none"><rect x="4" y="4" width="16" height="16" rx="2" stroke="currentColor" stroke-width="1.7"/><path d="M8 10l1.6 1.6L13 8" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"/><line x1="8" y1="15" x2="16" y2="15" stroke="currentColor" stroke-width="1.7"/></svg>
-          </span>
-          <span class="home-cell-badge" id="listCellBadge" style="display:none;">0</span>
-        </div>
-        <span class="home-cell-name" data-i18n="cell_list_name">Shopping list</span>
-        <span class="home-cell-desc" data-i18n="cell_list_desc">Auto-built from your recipes</span>
-      </button>
-
-      <button class="home-cell" data-page="saved">
-        <div class="home-cell-top-row">
-          <span class="home-cell-icon icon-tomato">
-            <svg width="24" height="24" viewBox="0 0 24 24" fill="none"><path d="M6 4h12a1 1 0 0 1 1 1v15l-7-4-7 4V5a1 1 0 0 1 1-1Z" stroke="currentColor" stroke-width="1.7" stroke-linejoin="round"/></svg>
-          </span>
-          <span class="home-cell-badge" id="savedCellBadge" style="display:none;">0</span>
-        </div>
-        <span class="home-cell-name" data-i18n="cell_saved_name">Saved recipes</span>
-        <span class="home-cell-desc" data-i18n="cell_saved_desc">Dinners you've kept</span>
-      </button>
-
-      <button class="home-cell" data-page="history">
-        <span class="home-cell-icon icon-herb">
-          <svg width="24" height="24" viewBox="0 0 24 24" fill="none"><circle cx="12" cy="12" r="8.5" stroke="currentColor" stroke-width="1.7"/><path d="M12 7.5V12l3 2" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      <button class="row-card" id="homeTodayCard" style="display:none;">
+        <span class="round-icon ic-herb"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 11h16a8 8 0 0 1-16 0Z"/><path d="M9 7c0-1.2 1-1.6 1-2.8M13 7c0-1.2 1-1.6 1-2.8"/></svg></span>
+        <span class="row-text">
+          <span class="row-title" id="homeTodayTitle"></span>
+          <span class="row-sub" id="homeTodaySub"></span>
         </span>
-        <span class="home-cell-name" data-i18n="cell_history_name">Meal history</span>
-        <span class="home-cell-desc" data-i18n="cell_history_desc">What you've actually cooked</span>
-      </button>
-
-      <button class="home-cell" data-page="plan">
-        <span class="home-cell-icon icon-mustard">
-          <svg width="24" height="24" viewBox="0 0 24 24" fill="none"><rect x="4" y="4.5" width="16" height="15.5" rx="2" stroke="currentColor" stroke-width="1.7"/><line x1="4" y1="9" x2="20" y2="9" stroke="currentColor" stroke-width="1.7"/><line x1="8" y1="3" x2="8" y2="6" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"/><line x1="16" y1="3" x2="16" y2="6" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"/><path d="M8.5 13.5l1.6 1.6 3.4-3.6" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"/></svg>
-        </span>
-        <span class="home-cell-name" data-i18n="cell_plan_name">Meal prep</span>
-        <span class="home-cell-desc" data-i18n="cell_plan_desc">Cook once, eat all week</span>
-      </button>
-
-      <button class="home-cell home-cell-wide" data-page="guest">
-        <span class="home-cell-icon icon-tomato">
-          <svg width="24" height="24" viewBox="0 0 24 24" fill="none"><path d="M4 15h16M5 15a7 7 0 0 1 14 0" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"/><path d="M12 8V6.5M10.5 6.5h3" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"/><path d="M3 18h18" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"/></svg>
-        </span>
-        <span class="home-cell-text">
-          <span class="home-cell-name" data-i18n="cell_guest_name">Guest menu</span>
-          <span class="home-cell-desc" data-i18n="cell_guest_desc">A full menu for your guests, with a host timeline</span>
-        </span>
+        <span class="row-end"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m9 6 6 6-6 6"/></svg></span>
       </button>
     </div>
+
+    <div class="home-section-head">
+      <h2 class="home-section-title" id="homeTilesTitle"></h2>
+      <button class="text-link home-see-all" id="homeSeeAll" data-go="pantry" data-i18n="see_all">See all</button>
+    </div>
+    <div class="tile-grid" id="homeTiles"></div>
   </section>
 
   <!-- ============ PAGE: RECIPES ============ -->
@@ -1705,7 +1806,7 @@
   <!-- ============ TAB: PANTRY ============ -->
   <section class="tab-page" id="tabPantry">
     <p class="eyebrow" data-i18n="pantry_eyebrow">pantry</p>
-    <h1 class="screen-title" data-i18n="pantry_title">Your pantry</h1>
+    <h1 class="screen-title" data-i18n="pantry_title">Your kitchen</h1>
     <p class="screen-sub" data-i18n="pantry_sub">Keep this in sync with what's actually in your kitchen. Tap an item to change its amount or category, or mark it as "use soon" — those get starred automatically next time you cook.</p>
 
     <p class="section-label" data-i18n="in_stock_label">in stock</p>
@@ -1858,6 +1959,10 @@
 
   <!-- ============ TAB: MEAL PLAN ============ -->
   <section class="tab-page" id="tabPlan">
+    <div class="plan-switch">
+      <button class="plan-switch-btn" data-go="plan" data-i18n="switch_week">My week</button>
+      <button class="plan-switch-btn" data-go="guest" data-i18n="switch_guests">Guests</button>
+    </div>
     <p class="eyebrow" data-i18n="plan_eyebrow">meal prep</p>
     <h1 class="screen-title" data-i18n="plan_title">Prep your week</h1>
     <p class="screen-sub" data-i18n="plan_sub">Cook once and eat all week — or switch to a daily plan. Uses your pantry and profile.</p>
@@ -1991,6 +2096,10 @@
 
   <!-- ============ TAB: GUEST MENU ============ -->
   <section class="tab-page" id="tabGuest">
+    <div class="plan-switch">
+      <button class="plan-switch-btn" data-go="plan" data-i18n="switch_week">My week</button>
+      <button class="plan-switch-btn" data-go="guest" data-i18n="switch_guests">Guests</button>
+    </div>
     <p class="eyebrow" data-i18n="guest_eyebrow">guest menu</p>
     <h1 class="screen-title" data-i18n="guest_title">Plan a menu for guests</h1>
     <p class="screen-sub" data-i18n="guest_sub">Tell us how many people are coming and what you'd like on the table. Uses your pantry; anything extra goes to your shopping list.</p>
@@ -2065,22 +2174,30 @@
     </div>
   </section>
 
-  </main>
+  <!-- ============ TAB: PROFILE ============ -->
+  <section class="tab-page" id="tabProfile">
+    <h1 class="screen-title" data-i18n="profile_title">Profile</h1>
+    <label class="profile-name-row">
+      <span class="round-icon ic-ink"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="8.5" r="3.5"/><path d="M5 20c1.2-3.6 4-5.5 7-5.5s5.8 1.9 7 5.5"/></svg></span>
+      <input type="text" id="displayNameInput" class="profile-name-input" maxlength="40" data-i18n-placeholder="name_placeholder" placeholder="Your name">
+    </label>
 
-  <div class="sidebar-overlay" id="sidebarOverlay"></div>
-  <aside class="sidebar" id="sidebar">
-    <div class="sidebar-header">
-      <span class="sidebar-title" data-i18n="profile_title">Profile</span>
-      <button class="icon-btn" id="sidebarClose" aria-label="Close menu">
-        <svg width="18" height="18" viewBox="0 0 24 24" fill="none"><line x1="5" y1="5" x2="19" y2="19" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/><line x1="19" y1="5" x2="5" y2="19" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg>
+    <div class="row-list">
+      <button class="row-card" data-go="saved">
+        <span class="round-icon ic-mustard"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 4h12v16l-6-3.5L6 20Z"/></svg></span>
+        <span class="row-text"><span class="row-title" data-i18n="cell_saved_name">Saved recipes</span><span class="row-sub" data-i18n="cell_saved_desc">Dinners you've kept</span></span>
+        <span class="row-badge" id="savedCellBadge" style="display:none;">0</span>
+        <span class="row-end"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m9 6 6 6-6 6"/></svg></span>
+      </button>
+      <button class="row-card" data-go="history">
+        <span class="round-icon ic-sky"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="8"/><path d="M12 8v4l2.5 2"/></svg></span>
+        <span class="row-text"><span class="row-title" data-i18n="cell_history_name">Meal history</span><span class="row-sub" data-i18n="cell_history_desc">What you've actually cooked</span></span>
+        <span class="row-end"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m9 6 6 6-6 6"/></svg></span>
       </button>
     </div>
 
-    <div class="sidebar-avatar">
-      <svg width="26" height="26" viewBox="0 0 24 24" fill="none"><circle cx="12" cy="8.5" r="3.4" stroke="currentColor" stroke-width="1.6"/><path d="M5 20c1.2-3.8 4.2-5.8 7-5.8s5.8 2 7 5.8" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/></svg>
-    </div>
-
-    <p class="screen-sub" style="margin: 14px 0 6px; font-size: 13.5px;" data-i18n="profile_sub">These apply automatically in Recipes, Meal Plan, and Surprise Me — change them here once instead of every time.</p>
+    <h2 class="profile-section-title" data-i18n="profile_settings">Your settings</h2>
+    <p class="screen-sub profile-sub" data-i18n="profile_sub">These apply automatically in Recipes, Meal Plan, and Surprise Me — change them here once instead of every time.</p>
 
     <div class="pref-block">
       <p class="pref-label" data-i18n="pref_language">language</p>
@@ -2138,9 +2255,31 @@
       </div>
     </div>
 
-    <div class="pref-block" style="border-top: 1px solid var(--line-light); padding-top: 20px; margin-top: 8px;">
+    <div class="pref-block profile-footer">
       <button class="text-link tour-replay" id="tourReplayBtn" data-i18n="tour_replay">Show the tour again</button>
       <button class="btn btn-ghost" id="signOutBtn" style="width:100%; justify-content:center;" data-i18n="sign_out">Sign out</button>
+    </div>
+  </section>
+
+  </main>
+
+  <nav class="bottom-nav" id="bottomNav" aria-label="Main">
+    <div class="nav-pill">
+      <button class="nav-item" data-nav="home"><span class="nav-icon"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 10.5 12 4l8 6.5V19a1 1 0 0 1-1 1h-4.5v-5.5h-5V20H5a1 1 0 0 1-1-1Z"/></svg></span><span class="nav-label" data-i18n="nav_home">Today</span></button>
+      <button class="nav-item" data-nav="pantry"><span class="nav-icon"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="6" y="3" width="12" height="18" rx="2.5"/><path d="M6 10h12M9.5 6v1.5M9.5 13v2"/></svg></span><span class="nav-label" data-i18n="nav_pantry">Kitchen</span></button>
+      <button class="nav-item" data-nav="plan"><span class="nav-icon"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="4" y="5" width="16" height="15" rx="2.5"/><path d="M4 10h16M8.5 3v4M15.5 3v4"/></svg></span><span class="nav-label" data-i18n="nav_plan">Plan</span></button>
+      <button class="nav-item" data-nav="list"><span class="nav-icon"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9 7h11M9 12h11M9 17h11"/><path d="m3.5 7 1 1 2-2M3.5 12l1 1 2-2M3.5 17l1 1 2-2"/></svg><span class="nav-badge" id="listCellBadge" style="display:none;">0</span></span><span class="nav-label" data-i18n="nav_list">List</span></button>
+    </div>
+    <button class="nav-profile" data-nav="profile" aria-label="Profile"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="8.5" r="3.5"/><path d="M5 20c1.2-3.6 4-5.5 7-5.5s5.8 1.9 7 5.5"/></svg></button>
+  </nav>
+
+  <div class="sidebar-overlay" id="sidebarOverlay"></div>
+  <aside class="sidebar" id="sidebar">
+    <div class="sidebar-header">
+      <span class="sidebar-title" data-i18n="profile_title">Profile</span>
+      <button class="icon-btn" id="sidebarClose" aria-label="Close menu">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none"><line x1="5" y1="5" x2="19" y2="19" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/><line x1="19" y1="5" x2="5" y2="19" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg>
+      </button>
     </div>
   </aside>
 
@@ -2217,6 +2356,9 @@
     <div class="confirm-card onboard-card">
       <p class="onboard-title" data-i18n="onboard_title">Welcome! 👋</p>
       <p class="onboard-sub" data-i18n="onboard_sub">A few quick things so every suggestion fits you. You can change them later in your Profile.</p>
+
+      <p class="pref-label" data-i18n="onboard_name">what should we call you?</p>
+      <input type="text" class="allergies-input onboard-name" id="onboardName" maxlength="40" data-i18n-placeholder="name_placeholder" placeholder="Your name">
 
       <p class="pref-label" data-i18n="pref_language">language</p>
       <div class="view-toggle onboard-lang" id="onboardLang">
@@ -2339,7 +2481,7 @@ const translations = {
     try_another: "Try another idea",
 
     pantry_eyebrow: "pantry",
-    pantry_title: "Your pantry",
+    pantry_title: "Your kitchen",
     pantry_sub: "Keep this in sync with what's actually in your kitchen. Tap an item to change its amount or category, or mark it as \"use soon\" — those get starred automatically next time you cook.",
     pantry_empty: "Nothing tracked yet — scan a photo, type a few items, or add them one by one.",
     add_items_label: "add items",
@@ -2575,18 +2717,50 @@ const translations = {
     tour_next: "Next",
     tour_done: "Got it!",
     tour_replay: "Show the tour again",
-    tour_pantry_title: "Your pantry",
+    tour_pantry_title: "Your kitchen",
     tour_pantry_text: "Snap a photo of your fridge or shelves and your ingredients are added automatically. You can also type them.",
     tour_surprise_title: "Surprise me",
     tour_surprise_text: "Not sure what to cook? One tap gives you a recipe from what you already have.",
-    tour_recipes_title: "Recipes",
-    tour_recipes_text: "Pick ingredients and preferences like time, flavor and difficulty to get a tailored suggestion.",
-    tour_prep_title: "Meal prep",
-    tour_prep_text: "Cook a few dishes once and eat all week, with a prep-day game plan. A daily plan is here too.",
+    tour_recipes_title: "What should I cook?",
+    tour_recipes_text: "Start here: pick ingredients and preferences like time, flavor and difficulty to get a tailored recipe.",
+    tour_prep_title: "Plan",
+    tour_prep_text: "Meal prep a whole week in one session, or plan a menu for guests with a timeline for the host.",
     tour_guest_title: "Guest menu",
     tour_guest_text: "Having people over? Get a full menu scaled to your guests, plus a timeline for the host.",
     tour_profile_title: "Your profile",
-    tour_profile_text: "Diet, allergies, servings and language live here and apply everywhere. You can replay this tour from here too.",
+    tour_profile_text: "Your diet, allergies, servings and language live here and apply everywhere. Saved recipes and meal history are here too.",
+    nav_home: "Today",
+    nav_pantry: "Kitchen",
+    nav_plan: "Plan",
+    nav_list: "List",
+    switch_week: "My week",
+    switch_guests: "Guests",
+    greet_morning: "Good morning",
+    greet_day: "Good afternoon",
+    greet_evening: "Good evening",
+    home_sum_empty: "Your kitchen is empty. Add a few things to get ideas.",
+    home_sum_soon: "<b>{n} ingredients</b> to use soon.",
+    home_sum_soon_one: "<b>1 ingredient</b> to use soon.",
+    home_sum_stock: "<b>{n} ingredients</b> in your kitchen.",
+    home_sum_stock_one: "<b>1 ingredient</b> in your kitchen.",
+    home_cook_title: "What should I cook?",
+    home_cook_sub: "A recipe from what you have",
+    home_surprise_sub: "One idea, no questions asked",
+    home_today_title: "Today: {dish}",
+    home_today_prep: "From your meal prep, ready to reheat",
+    home_today_daily: "From your saved plan",
+    home_soon_title: "Use soon",
+    home_shortcuts: "Shortcuts",
+    see_all: "See all",
+    short_scan: "Add from a photo",
+    short_scan_sub: "Snap your fridge or shelves",
+    short_guest_sub: "A menu for your guests",
+    profile_settings: "Your settings",
+    name_placeholder: "Your name",
+    onboard_name: "what should we call you?",
+    tour_list_title: "Shopping list",
+    tour_list_text: "What you need to buy, with amounts. Tick things off in the store, then move them to your kitchen in one tap.",
+    servings_word: "servings",
     add_missing_one: "+ Add 1 missing item to list",
     add_missing_many: "+ Add {n} missing items to list",
     ingredients_label: "ingredients",
@@ -2648,7 +2822,7 @@ const translations = {
     try_another: "Başka bir fikir dene",
 
     pantry_eyebrow: "pantry",
-    pantry_title: "Pantry'n",
+    pantry_title: "Mutfağın",
     pantry_sub: "Bunu mutfağında gerçekten olanla senkron tut. Miktarını veya kategorisini değiştirmek ya da \"yakında kullan\" olarak işaretlemek için bir öğeye dokun — işaretliler bir dahaki sefere otomatik olarak yıldızlanır.",
     pantry_empty: "Henüz bir şey eklenmedi — fotoğraf tara, birkaç öğe yaz, ya da tek tek ekle.",
     add_items_label: "öğe ekle",
@@ -2884,18 +3058,50 @@ const translations = {
     tour_next: "İleri",
     tour_done: "Anladım!",
     tour_replay: "Turu tekrar göster",
-    tour_pantry_title: "Pantry'n",
+    tour_pantry_title: "Mutfağın",
     tour_pantry_text: "Buzdolabının veya rafların fotoğrafını çek, malzemeler otomatik eklensin. İstersen yazarak da ekleyebilirsin.",
     tour_surprise_title: "Beni şaşırt",
     tour_surprise_text: "Ne pişireceğini bilemedin mi? Tek dokunuşla elindekilerden bir tarif.",
-    tour_recipes_title: "Tarifler",
-    tour_recipes_text: "Malzemeleri ve süre, lezzet, zorluk gibi tercihleri seç; sana özel bir öneri al.",
-    tour_prep_title: "Meal prep",
-    tour_prep_text: "Birkaç yemeği tek seferde pişir, bütün hafta ye; hazırlık günü planıyla birlikte. Günlük plan da burada.",
+    tour_recipes_title: "Ne pişirsem?",
+    tour_recipes_text: "Buradan başla: malzemeleri ve süre, lezzet, zorluk gibi tercihleri seç, sana özel bir tarif al.",
+    tour_prep_title: "Planla",
+    tour_prep_text: "Bütün haftayı tek seferde hazırla (meal prep) ya da misafirlerin için zaman çizelgeli bir menü planla.",
     tour_guest_title: "Misafir menüsü",
     tour_guest_text: "Misafirin mi var? Kişi sayısına göre ölçeklenmiş eksiksiz bir menü ve ev sahibi için zaman çizelgesi.",
     tour_profile_title: "Profilin",
-    tour_profile_text: "Diyet, alerjiler, porsiyon ve dil burada; her yerde geçerli. Bu turu da buradan tekrar izleyebilirsin.",
+    tour_profile_text: "Diyetin, alerjilerin, porsiyon ve dil burada; her yerde geçerli. Kayıtlı tariflerin ve yemek geçmişin de burada.",
+    nav_home: "Bugün",
+    nav_pantry: "Mutfak",
+    nav_plan: "Planla",
+    nav_list: "Liste",
+    switch_week: "Haftam",
+    switch_guests: "Misafir",
+    greet_morning: "Günaydın",
+    greet_day: "İyi günler",
+    greet_evening: "İyi akşamlar",
+    home_sum_empty: "Mutfağın boş. Birkaç şey ekle, fikirler gelsin.",
+    home_sum_soon: "<b>{n} malzemen</b> yakında bitiyor.",
+    home_sum_soon_one: "<b>1 malzemen</b> yakında bitiyor.",
+    home_sum_stock: "Mutfağında <b>{n} malzeme</b> var.",
+    home_sum_stock_one: "Mutfağında <b>1 malzeme</b> var.",
+    home_cook_title: "Ne pişirsem?",
+    home_cook_sub: "Elindekilerden bir tarif",
+    home_surprise_sub: "Tek fikir, hiç soru yok",
+    home_today_title: "Bugün: {dish}",
+    home_today_prep: "Meal prep'inden, ısıtıp yemeye hazır",
+    home_today_daily: "Kayıtlı planından",
+    home_soon_title: "Yakında kullan",
+    home_shortcuts: "Kısayollar",
+    see_all: "Tümü",
+    short_scan: "Fotoğrafla ekle",
+    short_scan_sub: "Dolabının fotoğrafını çek",
+    short_guest_sub: "Misafirlerin için bir menü",
+    profile_settings: "Ayarların",
+    name_placeholder: "Adın",
+    onboard_name: "sana nasıl hitap edelim?",
+    tour_list_title: "Alışveriş listesi",
+    tour_list_text: "Alman gerekenler, miktarlarıyla. Markette işaretle, sonra tek dokunuşla mutfağına aktar.",
+    servings_word: "kişilik",
     add_missing_one: "+ 1 eksik malzemeyi listeye ekle",
     add_missing_many: "+ {n} eksik malzemeyi listeye ekle",
     ingredients_label: "malzemeler",
@@ -2991,6 +3197,7 @@ function applyTranslations(){
   document.documentElement.lang = currentLanguage;
   applyBrand();
   try { localStorage.setItem('ftt_lang', currentLanguage); } catch (e) {}
+  try { renderHome(); } catch (e) {}
   document.documentElement.style.setProperty('--changed-label', JSON.stringify(t('changed_badge')));
   // These stores are declared further down; guard in case this ever runs earlier.
   try { syncRecipePills(); syncPlanPills(); } catch (e) {}
@@ -3001,11 +3208,8 @@ function applyTranslations(){
   }
 }
 
-async function setLanguage(lang){
-  currentLanguage = lang;
-  document.querySelectorAll('#languageToggle .pill').forEach(p => {
-    p.classList.toggle('selected', p.dataset.lang === lang);
-  });
+// Re-draw every list so dynamic text (badges, labels) follows the current language.
+function refreshLanguageViews(){
   applyTranslations();
   if (typeof renderPantry === 'function' && typeof pantryItems !== 'undefined') renderPantry();
   if (typeof renderShoppingList === 'function') renderShoppingList();
@@ -3014,6 +3218,14 @@ async function setLanguage(lang){
   if (typeof renderMealPlan === 'function' && typeof mealPlan !== 'undefined' && mealPlan.length) renderMealPlan();
   if (typeof renderSavedPlans === 'function') renderSavedPlans();
   try { renderGuestPage(); renderSavedGuestMenus(); } catch (e) {}
+}
+
+async function setLanguage(lang){
+  currentLanguage = lang;
+  document.querySelectorAll('#languageToggle .pill').forEach(p => {
+    p.classList.toggle('selected', p.dataset.lang === lang);
+  });
+  refreshLanguageViews();
   if (currentUserId){
     const { error } = await supabaseClient.from('profiles').update({ language: lang, updated_at: new Date().toISOString() }).eq('user_id', currentUserId);
     if (error) console.error('Failed to update language:', error);
@@ -3148,14 +3360,32 @@ const tabPages = {
   saved: document.getElementById('tabSaved'),
   history: document.getElementById('tabHistory'),
   plan: document.getElementById('tabPlan'),
-  guest: document.getElementById('tabGuest')
+  guest: document.getElementById('tabGuest'),
+  profile: document.getElementById('tabProfile')
 };
 const backBtn = document.getElementById('backBtn');
 
+// Which bottom-nav item lights up for each page, and where "back" goes for sub-pages.
+const NAV_FOR_PAGE = { home: 'home', recipes: 'home', pantry: 'pantry', plan: 'plan', guest: 'plan', list: 'list', profile: 'profile', saved: 'profile', history: 'profile' };
+const BACK_TARGET = { recipes: 'home', saved: 'profile', history: 'profile' };
+let currentPage = 'home';
+
 function goToPage(name){
+  currentPage = name;
   Object.entries(tabPages).forEach(([key, el]) => el.classList.toggle('active', key === name));
-  backBtn.style.display = name === 'home' ? 'none' : 'flex';
+  const hasBack = !!BACK_TARGET[name];
+  backBtn.style.display = hasBack ? 'flex' : 'none';
+  document.getElementById('appRoot').classList.toggle('has-back', hasBack);
+  const navKey = NAV_FOR_PAGE[name];
+  document.querySelectorAll('[data-nav]').forEach(b => {
+    const on = b.dataset.nav === navKey;
+    b.classList.toggle('active', on);
+    if (on) b.setAttribute('aria-current', 'page'); else b.removeAttribute('aria-current');
+  });
+  document.querySelectorAll('.plan-switch-btn').forEach(b => b.classList.toggle('selected', b.dataset.go === name));
   window.scrollTo(0, 0);
+
+  if (name === 'home') renderHome();
 
   if (name === 'recipes') resetRecipesFlow();
   if (name === 'pantry') resetPantryCapture();
@@ -3202,7 +3432,9 @@ function resetPlanFlow(){
 }
 
 document.querySelectorAll('.home-cell').forEach(cell => cell.addEventListener('click', () => goToPage(cell.dataset.page)));
-backBtn.addEventListener('click', () => goToPage('home'));
+backBtn.addEventListener('click', () => goToPage(BACK_TARGET[currentPage] || 'home'));
+document.querySelectorAll('[data-nav]').forEach(b => b.addEventListener('click', () => goToPage(b.dataset.nav)));
+document.querySelectorAll('[data-go]').forEach(el => el.addEventListener('click', () => goToPage(el.dataset.go)));
 
 const loadingOverlay = document.getElementById('loadingOverlay');
 const loadingSpinnerWrap = document.getElementById('loadingSpinnerWrap');
@@ -3354,7 +3586,7 @@ const sidebarOverlay = document.getElementById('sidebarOverlay');
 const hamburgerBtn = document.getElementById('hamburgerBtn');
 const sidebarClose = document.getElementById('sidebarClose');
 
-function openSidebar(){ sidebar.classList.add('open'); sidebarOverlay.classList.add('open'); }
+function openSidebar(){ goToPage('profile'); }
 function closeSidebar(){ sidebar.classList.remove('open'); sidebarOverlay.classList.remove('open'); }
 
 hamburgerBtn.addEventListener('click', openSidebar);
@@ -3888,7 +4120,7 @@ function renderSavedRecipes(){
           <div class="bubble-name">${recipe.title || t('untitled')}</div>
           <div class="bubble-stats">
             <span class="badge ${difficultyBadgeClass(recipe.difficulty)}">${difficultyLabel(recipe.difficulty)}</span>
-            <span class="badge badge-kcal">${kcal} / serving</span>
+            <span class="badge badge-kcal">${kcal} ${t('per_serving')}</span>
             <span class="badge badge-kcal">${recipe.total_time || '—'}</span>
           </div>
         </div>
@@ -4034,6 +4266,7 @@ async function loadSavedPlansFromDb(){
 
   savedPlans = (data || []).map(dbToSavedPlan);
   renderSavedPlans();
+  try { renderHome(); } catch (e) {}
 }
 
 function planDateRangeLabel(plan){
@@ -4072,7 +4305,7 @@ function renderSavedPlans(){
               <div class="bubble-name">${slotLabel} — ${recipe.title || t('untitled')}</div>
               <div class="bubble-stats">
                 <span class="badge ${difficultyBadgeClass(recipe.difficulty)}">${difficultyLabel(recipe.difficulty)}</span>
-                <span class="badge badge-kcal">${kcal} / serving</span>
+                <span class="badge badge-kcal">${kcal} ${t('per_serving')}</span>
               </div>
             </div>
             <span class="bubble-chevron">⌄</span>
@@ -4391,7 +4624,7 @@ function renderMealHistory(){
           <div class="bubble-stats">
             <span class="badge badge-kcal">${t('cooked_on')} ${recipe.cookedOn}</span>
             <span class="badge ${difficultyBadgeClass(recipe.difficulty)}">${difficultyLabel(recipe.difficulty)}</span>
-            <span class="badge badge-kcal">${kcal} / serving</span>
+            <span class="badge badge-kcal">${kcal} ${t('per_serving')}</span>
           </div>
         </div>
         <span class="bubble-chevron">⌄</span>
@@ -5469,6 +5702,7 @@ function buildPantryEditPanel(item){
 }
 
 function renderPantry(){
+  try { renderHome(); } catch (e) {}
   renderChipsInto(pantryChipsEl, pantryItems, false);
   renderChipsInto(chipsEl, pantryItems, true);
   renderChipsInto(planChipsEl, pantryItems, true);
@@ -5783,7 +6017,8 @@ const PROFILE_KEY_TO_COLUMN = {
   goal: 'goal',
   allowMissing: 'allow_missing',
   servings: 'servings',
-  allergies: 'allergies'
+  allergies: 'allergies',
+  displayName: 'display_name'
 };
 
 async function loadProfileFromDb(){
@@ -5812,6 +6047,9 @@ function applyProfileRow(row){
   if (row.diet != null) prefs.diet = row.diet;
   if (row.goal != null) prefs.goal = row.goal;
   prefs.allergies = row.allergies || '';
+  prefs.displayName = row.display_name || '';
+  const nameEl = document.getElementById('displayNameInput');
+  if (nameEl) nameEl.value = prefs.displayName;
   const allergiesEl = document.getElementById('allergiesInput');
   if (allergiesEl) allergiesEl.value = prefs.allergies;
   if (row.allow_missing != null) prefs.allowMissing = row.allow_missing;
@@ -5819,13 +6057,14 @@ function applyProfileRow(row){
   syncPrefPills();
   seedRecipePrefsFromDefaults();
   applyPlanPrefsFromRow(row);
+  try { renderHome(); } catch (e) {}
   if (row.onboarded === false) setTimeout(startOnboarding, 300);
   if (row.language && row.language !== currentLanguage){
     currentLanguage = row.language;
     document.querySelectorAll('#languageToggle .pill').forEach(p => {
       p.classList.toggle('selected', p.dataset.lang === row.language);
     });
-    applyTranslations();
+    refreshLanguageViews();
   }
 }
 
@@ -6278,7 +6517,7 @@ function recipePrintHtml(recipe, label){
   return `
     <div class="print-day">
       <p class="print-title">${label ? escapeHtml(label) + ' — ' : ''}${escapeHtml(recipe.title || t('untitled'))}</p>
-      <p class="print-meta">${escapeHtml(recipe.difficulty || '')} · ${escapeHtml(recipe.total_time || '')} · ${escapeHtml(recipe.servings || '')} servings${recipe.calories_per_serving ? ' · ' + Math.round(recipe.calories_per_serving) + ' kcal/serving' : ''}${macros ? ' · ' + escapeHtml(macros) : ''}</p>
+      <p class="print-meta">${escapeHtml(difficultyLabel(recipe.difficulty))} · ${escapeHtml(recipe.total_time || '')} · ${escapeHtml(recipe.servings || '')} ${t('servings_word')}${recipe.calories_per_serving ? ' · ' + Math.round(recipe.calories_per_serving) + ' kcal ' + t('per_serving') : ''}${macros ? ' · ' + escapeHtml(macros) : ''}</p>
       <p>${escapeHtml(recipe.description || '')}</p>
       <p class="print-section-title">${t('ingredients_label')}</p>
       <ul class="print-list">${usedHtml}${missingHtml}</ul>
@@ -6345,7 +6584,7 @@ function renderRecipeOptions(){
           <div class="bubble-name">${recipe.title || t('untitled')}</div>
           <div class="bubble-stats">
             <span class="badge ${difficultyBadgeClass(recipe.difficulty)}">${difficultyLabel(recipe.difficulty)}</span>
-            <span class="badge badge-kcal">${kcal} / serving</span>
+            <span class="badge badge-kcal">${kcal} ${t('per_serving')}</span>
             <span class="badge badge-kcal">${recipe.total_time || '—'}</span>
           </div>
         </div>
@@ -6958,12 +7197,12 @@ let tourIndex = 0;
 const onboardChoice = { servings: '2', diet: 'no restrictions' };
 
 const TOUR_STEPS = [
-  { target: '.home-cell[data-page="pantry"]', key: 'tour_pantry' },
+  { target: '#homeCookCard', key: 'tour_recipes' },
   { target: '#surpriseMeBtn', key: 'tour_surprise' },
-  { target: '.home-cell[data-page="recipes"]', key: 'tour_recipes' },
-  { target: '.home-cell[data-page="plan"]', key: 'tour_prep' },
-  { target: '.home-cell[data-page="guest"]', key: 'tour_guest' },
-  { target: '#hamburgerBtn', key: 'tour_profile' }
+  { target: '[data-nav="pantry"]', key: 'tour_pantry' },
+  { target: '[data-nav="plan"]', key: 'tour_prep' },
+  { target: '[data-nav="list"]', key: 'tour_list' },
+  { target: '.nav-profile', key: 'tour_profile' }
 ];
 
 function syncOnboardPills(){
@@ -6980,6 +7219,7 @@ function startOnboarding(){
   onboardChoice.servings = prefs.servings || '2';
   onboardChoice.diet = prefs.diet || 'no restrictions';
   document.getElementById('onboardAllergies').value = prefs.allergies || '';
+  document.getElementById('onboardName').value = prefs.displayName || '';
   syncOnboardPills();
   onboardSetup.classList.add('open');
 }
@@ -7013,6 +7253,10 @@ async function finishSetup(save){
     await updateProfileField('servings', prefs.servings);
     await updateProfileField('diet', prefs.diet);
     await updateProfileField('allergies', prefs.allergies || null);
+    prefs.displayName = document.getElementById('onboardName').value.trim();
+    document.getElementById('displayNameInput').value = prefs.displayName;
+    await updateProfileField('displayName', prefs.displayName || null);
+    renderHome();
   }
   markOnboarded();
   startTour();
@@ -7075,6 +7319,135 @@ document.getElementById('tourBackBtn').addEventListener('click', () => {
 });
 document.getElementById('tourSkipBtn').addEventListener('click', endTour);
 document.getElementById('tourReplayBtn').addEventListener('click', startTour);
+
+/* ============ HOME ("Today") ============ */
+const CAT_GLYPH = {
+  'Produce': '<path d="M6 18c0-7 5-12 12-12 0 7-5 12-12 12Z"/><path d="m6 18 6-6"/>',
+  'Dairy & Eggs': '<path d="M12 4c3 4 5 6.6 5 9.2a5 5 0 0 1-10 0C7 10.6 9 8 12 4Z"/>',
+  'Meat & Seafood': '<path d="M7.5 7c3-2.6 9.5-2 10.8 2.4 1.3 4.4-2.4 9.1-7.4 8.8-4.4-.3-6.2-3.2-5.6-6 .3-1.9 1-3.6 2.2-5.2Z"/><circle cx="14" cy="10.5" r="1.7"/>',
+  'Grains & Pantry': '<path d="M12 20V9"/><path d="M12 9c-2-.8-3-2.6-3-4.8 2 0 3 1.4 3 2.9 0-1.5 1-2.9 3-2.9 0 2.2-1 4-3 4.8Z"/><path d="M12 14c-2-.6-3-2-3-4M12 14c2-.6 3-2 3-4"/>',
+  'Frozen': '<path d="M12 3v18M4.2 7.5l15.6 9M4.2 16.5l15.6-9"/>',
+  'Other': '<circle cx="7" cy="12" r=".8" fill="currentColor"/><circle cx="12" cy="12" r=".8" fill="currentColor"/><circle cx="17" cy="12" r=".8" fill="currentColor"/>'
+};
+const CAT_TONE = { 'Produce': 'ic-herb', 'Dairy & Eggs': 'ic-sky', 'Meat & Seafood': 'ic-tomato', 'Grains & Pantry': 'ic-mustard', 'Frozen': 'ic-teal', 'Other': 'ic-plum' };
+const svgWrap = inner => `<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">${inner}</svg>`;
+const SHORTCUT_GLYPH = {
+  camera: '<path d="M4 8.5h3l1.5-2h7l1.5 2h3v10H4Z"/><circle cx="12" cy="13" r="3.2"/>',
+  guests: '<path d="M4 15h16M5.5 15a6.5 6.5 0 0 1 13 0"/><path d="M12 8.5V7M3 18h18"/>',
+  book: '<path d="M6 4h12v16l-6-3.5L6 20Z"/>',
+  clock: '<circle cx="12" cy="12" r="8"/><path d="M12 8v4l2.5 2"/>'
+};
+
+function greetingKey(){
+  const h = new Date().getHours();
+  if (h >= 5 && h < 12) return 'greet_morning';
+  if (h >= 12 && h < 18) return 'greet_day';
+  return 'greet_evening';
+}
+
+function daysBetweenIso(a, b){
+  return Math.round((new Date(b + 'T00:00:00') - new Date(a + 'T00:00:00')) / 86400000);
+}
+
+// Meals from a saved plan that fall on today (meal prep: dishes whose eating days include today).
+function todaysPlannedMeals(){
+  if (typeof savedPlans === 'undefined') return null;
+  const today = todayIso();
+  for (const plan of savedPlans.slice().reverse()){
+    if (!plan.startDate) continue;
+    const d = daysBetweenIso(plan.startDate, today) + 1;
+    if (d < 1) continue;
+    const hits = (plan.days || []).filter(r => Array.isArray(r.eat_days) && r.eat_days.length ? r.eat_days.includes(d) : (r.day || 0) === d);
+    if (hits.length) return { plan, hits, isPrep: hits.some(r => Array.isArray(r.eat_days) && r.eat_days.length) };
+  }
+  return null;
+}
+
+function renderHome(){
+  const greetEl = document.getElementById('homeGreeting');
+  if (!greetEl) return;
+  const name = (prefs.displayName || '').trim();
+  greetEl.textContent = name ? `${t(greetingKey())}, ${name}` : t(greetingKey());
+
+  const items = (typeof pantryItems !== 'undefined') ? pantryItems : [];
+  const soon = items.filter(i => i.useSoon);
+  const sum = document.getElementById('homeSummary');
+  if (!items.length) sum.innerHTML = t('home_sum_empty');
+  else if (soon.length) sum.innerHTML = t(soon.length === 1 ? 'home_sum_soon_one' : 'home_sum_soon').replace('{n}', soon.length);
+  else sum.innerHTML = t(items.length === 1 ? 'home_sum_stock_one' : 'home_sum_stock').replace('{n}', items.length);
+
+  // today's meal from a saved plan
+  const todayCard = document.getElementById('homeTodayCard');
+  const today = todaysPlannedMeals();
+  if (today){
+    todayCard.style.display = '';
+    document.getElementById('homeTodayTitle').textContent = t('home_today_title').replace('{dish}', today.hits.map(r => r.title || t('untitled')).join(' + '));
+    document.getElementById('homeTodaySub').textContent = t(today.isPrep ? 'home_today_prep' : 'home_today_daily');
+    todayCard.onclick = () => {
+      goToPage('saved');
+      const plansPill = document.querySelector('#savedViewToggle [data-view="plans"]');
+      if (plansPill) plansPill.click();
+      expandedSavedPlanId = today.plan.id;
+      renderSavedPlans();
+    };
+  } else {
+    todayCard.style.display = 'none';
+  }
+
+  // tiles: things to use soon, or shortcuts when nothing is flagged
+  const grid = document.getElementById('homeTiles');
+  const titleEl = document.getElementById('homeTilesTitle');
+  const seeAll = document.getElementById('homeSeeAll');
+  grid.innerHTML = '';
+  if (soon.length){
+    titleEl.textContent = t('home_soon_title');
+    seeAll.style.display = '';
+    soon.slice(0, 4).forEach(item => {
+      const cat = item.category || 'Other';
+      const tile = document.createElement('button');
+      tile.className = 'tile';
+      tile.innerHTML = `
+        <span class="round-icon ${CAT_TONE[cat] || 'ic-plum'}">${svgWrap(CAT_GLYPH[cat] || CAT_GLYPH.Other)}</span>
+        <span class="tile-title"></span>
+        <span class="tile-sub"></span>`;
+      tile.querySelector('.tile-title').textContent = item.name;
+      tile.querySelector('.tile-sub').textContent = item.quantity || categoryLabel(cat);
+      tile.addEventListener('click', () => {
+        goToPage('pantry');
+        pantryOpenGroups.add(USE_SOON_GROUP);
+        renderPantry();
+      });
+      grid.appendChild(tile);
+    });
+  } else {
+    titleEl.textContent = t('home_shortcuts');
+    seeAll.style.display = 'none';
+    [
+      { go: 'pantry', tone: 'ic-herb', glyph: 'camera', title: 'short_scan', sub: 'short_scan_sub' },
+      { go: 'guest', tone: 'ic-tomato', glyph: 'guests', title: 'cell_guest_name', sub: 'short_guest_sub' },
+      { go: 'saved', tone: 'ic-mustard', glyph: 'book', title: 'cell_saved_name', sub: 'cell_saved_desc' },
+      { go: 'history', tone: 'ic-sky', glyph: 'clock', title: 'cell_history_name', sub: 'cell_history_desc' }
+    ].forEach(s => {
+      const tile = document.createElement('button');
+      tile.className = 'tile';
+      tile.innerHTML = `
+        <span class="round-icon ${s.tone}">${svgWrap(SHORTCUT_GLYPH[s.glyph])}</span>
+        <span class="tile-title">${t(s.title)}</span>
+        <span class="tile-sub">${t(s.sub)}</span>`;
+      tile.addEventListener('click', () => goToPage(s.go));
+      grid.appendChild(tile);
+    });
+  }
+}
+
+// display name (Profile page)
+document.getElementById('displayNameInput').addEventListener('change', (e) => {
+  prefs.displayName = e.target.value.trim();
+  updateProfileField('displayName', prefs.displayName || null);
+  renderHome();
+});
+
+goToPage('home');
 
 /* ============ STARTUP: language remembered in this browser ============ */
 if (currentLanguage !== 'en'){

@@ -14,7 +14,7 @@ Pantry-based recipe and meal-planning web app. Owner: Hamza (works in Turkish �
 - Database changes: write the SQL and give it to the owner to run in the Supabase SQL Editor (no direct DB access).
 
 ## Database tables
-`pantry_items` (name, category, use_soon, quantity) · `saved_recipes` · `meal_history` (cooked_on) · `meal_plans` (start_date, days jsonb, prep jsonb) · `shopping_list` (name, amount, checked, source) · `profiles` (user_id PK; language, diet, goal, allow_missing, servings, allergies, plan_prefs jsonb, onboarded) · `guest_menus` (title, guests, dishes jsonb, timeline jsonb).
+`pantry_items` (name, category, use_soon, quantity) · `saved_recipes` · `meal_history` (cooked_on) · `meal_plans` (start_date, days jsonb, prep jsonb) · `shopping_list` (name, amount, checked, source) · `profiles` (user_id PK; language, diet, goal, allow_missing, servings, allergies, plan_prefs jsonb, onboarded, display_name) · `guest_menus` (title, guests, dishes jsonb, timeline jsonb).
 
 ## Product decisions
 - **Sidebar/Profile = universal settings** (diet, allergies, servings, goal, language). They are the defaults everywhere.
@@ -23,6 +23,11 @@ Pantry-based recipe and meal-planning web app. Owner: Hamza (works in Turkish �
 - **Guest menu**: courses with notes, guest count, occasion, prep time (3h/5h/10h/1d/2d), host timeline.
 - Everything is bilingual (English/Turkish): UI strings in the `translations` object (`t(key)`), option pills in `pillLabels`; AI is told to answer in the selected language. Brand: "Fridge-to-Table" / "Dolaptan Sofraya".
 - New accounts get a setup card + spotlight tour once (`profiles.onboarded`).
+- Navigation: floating bottom bar with 4 tabs — Today (home), Kitchen (pantry), Plan (meal prep + guest menu via a top switch), List (shopping list) — plus a round Profile button. Profile is a full page holding the universal settings, saved recipes and meal history. Recipes, saved and history are sub-pages with a back button.
+
+## Visual style (redesign in progress)
+- Stage 1 done: white page, light grey cards (`--surface`), near-black primary buttons and selected pills, colored round icons per category (`--ic-*`), Newsreader (display/serif) + Instrument Sans (UI). No all-caps labels.
+- Stage 2: carry the style through Kitchen, Plan and List pages. Stage 3: dark theme (Light / Dark / System in Profile).
 
 ## Working conventions
 - Keep element `id`s and classes stable; JS depends on them.
