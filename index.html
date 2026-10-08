@@ -1455,6 +1455,10 @@
   /* surfaces */
   .bubble, .capture-card, .empty-card, #pantryChips, .plan-prefs, .plan-prep{ border-radius: 22px; }
   .empty-card{ border: none; }
+  .empty-action{ margin-top: 8px; }
+  .pill-count{ margin-left: 6px; font-size: 12px; opacity: .6; font-variant-numeric: tabular-nums; }
+  .pill-count:empty{ display: none; }
+  .plan-stock-head{ margin-top: 28px; }
   .confirm-card, .tour-card, .auth-card, .loading-card, .onboard-card{ background: var(--surface-raised); box-shadow: var(--shadow-float); }
   .app input:not([type=checkbox]):not([type=file]):not([type=date]), .app textarea, .app select,
   .onboard-card input, .onboard-card textarea{
@@ -1892,9 +1896,9 @@
     <p class="screen-sub" data-i18n="saved_sub">Dinners you've kept, with a spot to say how they turned out.</p>
 
     <div class="view-toggle" id="savedViewToggle" style="margin-bottom: 18px;">
-      <button class="pill selected" data-view="recipes" data-i18n="view_recipes">Recipes</button>
-      <button class="pill" data-view="plans" data-i18n="view_plans">Meal plans</button>
-      <button class="pill" data-view="guests" data-i18n="view_guests">Guest menus</button>
+      <button class="pill selected" data-view="recipes"><span data-i18n="view_recipes">Recipes</span><span class="pill-count" id="savedCountRecipes"></span></button>
+      <button class="pill" data-view="plans"><span data-i18n="view_plans">Meal plans</span><span class="pill-count" id="savedCountPlans"></span></button>
+      <button class="pill" data-view="guests"><span data-i18n="view_guests">Guest menus</span><span class="pill-count" id="savedCountGuests"></span></button>
     </div>
 
     <div id="savedRecipesView">
@@ -1907,6 +1911,7 @@
         </div>
         <h2 class="empty-title" data-i18n="saved_empty_title">Nothing saved yet</h2>
         <p class="empty-desc" data-i18n="saved_empty_desc">When a recipe in the Recipes tab looks good, hit "Save" and it'll show up here.</p>
+        <button class="btn btn-solid empty-action" data-go="recipes" data-i18n="empty_go_recipes">Find a recipe</button>
       </div>
 
       <div class="recipe-options" id="savedOptions"></div>
@@ -1919,6 +1924,7 @@
         </div>
         <h2 class="empty-title" data-i18n="saved_plans_empty_title">No saved plans yet</h2>
         <p class="empty-desc" data-i18n="saved_plans_empty_desc">In the Meal Plan tab, hit "Save plan" to keep a whole week here for later.</p>
+        <button class="btn btn-solid empty-action" data-go="plan" data-i18n="empty_go_plan">Plan my week</button>
       </div>
 
       <div class="recipe-options" id="savedPlansOptions"></div>
@@ -1928,6 +1934,7 @@
       <div id="savedGuestsEmpty" class="empty-card">
         <h2 class="empty-title" data-i18n="saved_guests_empty_title">No saved guest menus yet</h2>
         <p class="empty-desc" data-i18n="saved_guests_empty_desc">Create a menu on the Guest menu page and hit "Save menu".</p>
+        <button class="btn btn-solid empty-action" data-go="guest" data-i18n="empty_go_guest">Plan a guest menu</button>
       </div>
       <div class="recipe-options" id="savedGuestsOptions"></div>
     </div>
@@ -1967,16 +1974,6 @@
     <h1 class="screen-title" data-i18n="plan_title">Prep your week</h1>
     <p class="screen-sub" data-i18n="plan_sub">Cook once and eat all week — or switch to a daily plan. Uses your pantry and profile.</p>
 
-    <div class="row" style="justify-content: space-between; margin-top: 0;">
-      <p class="section-label" style="margin: 0;" data-i18n="in_stock_label">in stock</p>
-      <div class="row" style="margin-top: 0;">
-        <button class="text-link" id="planSelectAllBtn" data-i18n="select_all">Select all</button>
-        <span class="text-link-divider">·</span>
-        <button class="text-link" id="planSelectNoneBtn" data-i18n="select_none">Select none</button>
-      </div>
-    </div>
-    <div class="chips" id="planChips"></div>
-    <p class="empty-desc" id="planEmptyHint" style="margin-top:14px;" data-i18n="pantry_empty_plan">Your pantry is empty — add items in the Pantry tab first.</p>
 
     <div class="pill-group plan-pill-group plan-mode-toggle" data-group="mode">
       <button class="pill" data-value="prep">Meal prep</button>
@@ -2060,6 +2057,17 @@
         </div>
       </div>
     </details>
+
+    <div class="row plan-stock-head" style="justify-content: space-between;">
+      <p class="section-label" style="margin: 0;" data-i18n="in_stock_label">in stock</p>
+      <div class="row" style="margin-top: 0;">
+        <button class="text-link" id="planSelectAllBtn" data-i18n="select_all">Select all</button>
+        <span class="text-link-divider">·</span>
+        <button class="text-link" id="planSelectNoneBtn" data-i18n="select_none">Select none</button>
+      </div>
+    </div>
+    <div class="chips" id="planChips"></div>
+    <p class="empty-desc" id="planEmptyHint" style="margin-top:14px;" data-i18n="pantry_empty_plan">Your pantry is empty — add items in the Pantry tab first.</p>
 
     <p class="plan-size-note" id="planSizeNote" style="display:none;"></p>
 
@@ -2512,9 +2520,12 @@ const translations = {
     search_saved_placeholder: "Search saved recipes...",
     saved_no_results: "No saved recipes match your search.",
     saved_empty_title: "Nothing saved yet",
-    saved_empty_desc: "When a recipe in the Recipes tab looks good, hit \"Save\" and it'll show up here.",
+    saved_empty_desc: "When a recipe looks good, tap \"Save recipe\" and it'll show up here.",
+    empty_go_recipes: "Find a recipe",
+    empty_go_plan: "Plan my week",
+    empty_go_guest: "Plan a guest menu",
     saved_plans_empty_title: "No saved plans yet",
-    saved_plans_empty_desc: "In the Meal Plan tab, hit \"Save plan\" to keep a whole week here for later.",
+    saved_plans_empty_desc: "In the Plan tab, hit \"Save plan\" to keep a whole week here for later.",
 
     history_eyebrow: "history",
     history_title: "Meal history",
@@ -2853,9 +2864,12 @@ const translations = {
     search_saved_placeholder: "Kayıtlı tariflerde ara...",
     saved_no_results: "Aramanla eşleşen kayıtlı tarif yok.",
     saved_empty_title: "Henüz bir şey kaydedilmedi",
-    saved_empty_desc: "Tarifler sekmesinde beğendiğin bir tarif olduğunda \"Save\"e bas, burada görünsün.",
+    saved_empty_desc: "Beğendiğin bir tarifte \"Tarifi kaydet\"e dokun, burada görünsün.",
+    empty_go_recipes: "Tarif bul",
+    empty_go_plan: "Haftamı planla",
+    empty_go_guest: "Misafir menüsü hazırla",
     saved_plans_empty_title: "Henüz kayıtlı plan yok",
-    saved_plans_empty_desc: "Yemek Planı sekmesinde \"Save plan\"a basarak bütün bir haftayı burada saklayabilirsin.",
+    saved_plans_empty_desc: "Planla sekmesinde \"Planı kaydet\"e basarak bütün bir haftayı burada saklayabilirsin.",
 
     history_eyebrow: "geçmiş",
     history_title: "Yemek geçmişi",
@@ -3386,6 +3400,7 @@ function goToPage(name){
   window.scrollTo(0, 0);
 
   if (name === 'home') renderHome();
+  if (name === 'saved') setSavedView(pickSavedView());
 
   if (name === 'recipes') resetRecipesFlow();
   if (name === 'pantry') resetPantryCapture();
@@ -4059,6 +4074,8 @@ async function saveRecipe(recipe){
 
 function renderSavedRecipes(){
   savedEmpty.style.display = savedRecipes.length ? 'none' : 'flex';
+  savedSearchInput.style.display = savedRecipes.length ? '' : 'none';
+  updateSavedCounts();
   savedCellBadge.style.display = savedRecipes.length ? 'inline-block' : 'none';
   savedCellBadge.textContent = savedRecipes.length > 99 ? '99+' : String(savedRecipes.length);
 
@@ -4224,15 +4241,30 @@ renderSavedRecipes();
 const savedRecipesView = document.getElementById('savedRecipesView');
 const savedPlansView = document.getElementById('savedPlansView');
 
+function setSavedView(view){
+  document.querySelectorAll('#savedViewToggle .pill').forEach(p => p.classList.toggle('selected', p.dataset.view === view));
+  savedRecipesView.style.display = view === 'recipes' ? 'block' : 'none';
+  savedPlansView.style.display = view === 'plans' ? 'block' : 'none';
+  document.getElementById('savedGuestsView').style.display = view === 'guests' ? 'block' : 'none';
+}
+
+// Open the saved page on the first list that actually has something in it.
+function pickSavedView(){
+  if (savedRecipes.length) return 'recipes';
+  if (savedPlans.length) return 'plans';
+  if (savedGuestMenus.length) return 'guests';
+  return 'recipes';
+}
+
+function updateSavedCounts(){
+  const set = (id, n) => { const el = document.getElementById(id); if (el) el.textContent = n ? String(n) : ''; };
+  set('savedCountRecipes', savedRecipes.length);
+  try { set('savedCountPlans', savedPlans.length); } catch (e) {}
+  try { set('savedCountGuests', savedGuestMenus.length); } catch (e) {}
+}
+
 document.querySelectorAll('#savedViewToggle .pill').forEach(pill => {
-  pill.addEventListener('click', () => {
-    document.querySelectorAll('#savedViewToggle .pill').forEach(p => p.classList.remove('selected'));
-    pill.classList.add('selected');
-    const view = pill.dataset.view;
-    savedRecipesView.style.display = view === 'recipes' ? 'block' : 'none';
-    savedPlansView.style.display = view === 'plans' ? 'block' : 'none';
-    document.getElementById('savedGuestsView').style.display = view === 'guests' ? 'block' : 'none';
-  });
+  pill.addEventListener('click', () => setSavedView(pill.dataset.view));
 });
 
 /* ============ SAVED MEAL PLANS ============ */
@@ -4278,6 +4310,7 @@ function planDateRangeLabel(plan){
 
 function renderSavedPlans(){
   savedPlansEmpty.style.display = savedPlans.length ? 'none' : 'flex';
+  updateSavedCounts();
 
   savedPlansOptions.innerHTML = '';
   savedPlans.slice().reverse().forEach((plan) => {
@@ -7135,6 +7168,7 @@ async function loadSavedGuestMenusFromDb(){
 function renderSavedGuestMenus(){
   const box = document.getElementById('savedGuestsOptions');
   document.getElementById('savedGuestsEmpty').style.display = savedGuestMenus.length ? 'none' : 'flex';
+  updateSavedCounts();
   box.innerHTML = '';
   savedGuestMenus.slice().reverse().forEach(menu => {
     const isOpen = expandedSavedGuestId === menu.id;
@@ -7385,8 +7419,7 @@ function renderHome(){
     document.getElementById('homeTodaySub').textContent = t(today.isPrep ? 'home_today_prep' : 'home_today_daily');
     todayCard.onclick = () => {
       goToPage('saved');
-      const plansPill = document.querySelector('#savedViewToggle [data-view="plans"]');
-      if (plansPill) plansPill.click();
+      setSavedView('plans');
       expandedSavedPlanId = today.plan.id;
       renderSavedPlans();
     };
