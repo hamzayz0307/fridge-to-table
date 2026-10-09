@@ -1805,6 +1805,34 @@
   .auth-privacy{ margin-top: 16px; }
   .offline-note{ margin: 14px 0 0; padding: 12px 14px; border-radius: 16px; background: var(--warn-bg); color: var(--warn-ink); font-size: 13.5px; line-height: 1.45; }
 
+  /* shopping list by aisle */
+  .list-view-toggle{ margin-top: 18px; display: flex; gap: 8px; }
+  .shopping-list .list-group-head{ display: flex; align-items: center; gap: 10px; padding: 14px 4px 2px; list-style: none; }
+  .shopping-list .list-group-head:first-child{ padding-top: 2px; }
+  .list-group-head .cat-icon{ width: 28px; height: 28px; }
+  .list-group-head .cat-icon svg{ width: 15px; height: 15px; }
+  .list-group-name{ font-weight: 600; font-size: 14.5px; color: var(--ink); }
+  .list-group-count{ font-size: 12px; color: var(--ink-soft); background: rgba(127,127,127,.14); border-radius: 999px; padding: 1px 8px; }
+  .list-item-name-tap{ cursor: pointer; }
+  .list-cat-select{ margin-top: 8px; max-width: 220px; padding: 7px 10px; border-radius: 12px; font: inherit; font-size: 14px; }
+
+  /* expiry dates */
+  .chip-exp{ font-size: 11.5px; font-weight: 600; color: var(--warn-ink); background: var(--warn-bg); border-radius: 999px; padding: 1px 7px; margin-left: 2px; white-space: nowrap; }
+  .chip-exp.urgent{ color: var(--bad-ink); background: var(--bad-bg); }
+  .pantry-edit-date{ max-width: 170px; }
+  .pantry-edit-exp-hint{ font-size: 12.5px; color: var(--ink-soft); white-space: nowrap; }
+  .tile-sub-urgent{ color: var(--bad-ink); font-weight: 600; }
+
+  #pantryChips .pantry-edit{ box-sizing: border-box; width: 100%; min-width: 0; background: var(--bg-soft); box-shadow: none; }
+  #pantryChips .pantry-edit-input{ flex: 1 1 auto; min-width: 0; width: auto; box-sizing: border-box; background: var(--surface); }
+  #pantryChips .pantry-edit-date{ flex: 0 1 170px; }
+
+  /* share */
+  .bubble-share-btn{ font: 600 13.5px var(--font-ui); padding: 10px 16px; margin: 0; border-radius: 999px; border: none; background: var(--bg-soft); color: var(--ink); cursor: pointer; display: inline-flex; align-items: center; gap: 6px; }
+  .bubble-share-btn:hover{ background: var(--soft-hover); }
+  .bubble-share-btn.flash{ background: var(--ok-bg); color: var(--ok-ink); }
+  #shareLinkInput{ width: 100%; font-size: 13.5px; }
+
   /* bottom navigation */
   .bottom-nav{
     position: fixed; left: 0; right: 0; bottom: calc(12px + env(safe-area-inset-bottom));
@@ -2150,6 +2178,10 @@
       <p class="empty-desc" data-i18n="list_empty_desc">Open a recipe in the Recipes tab and add its missing ingredients, or type your own above.</p>
     </div>
 
+    <div class="view-toggle list-view-toggle" id="listViewToggle" style="display:none;">
+      <button class="pill selected" data-list-view="aisle" data-i18n="list_by_aisle">By aisle</button>
+      <button class="pill" data-list-view="added" data-i18n="list_by_added">As added</button>
+    </div>
     <p class="offline-note" id="listOfflineNote" style="display:none;" data-i18n="list_offline">You're offline. This is your list as last saved; items you tick will be saved when you're back online.</p>
     <ul class="shopping-list" id="shoppingListEl"></ul>
 
@@ -2748,6 +2780,18 @@
     </div>
   </div>
 
+  <div class="confirm-overlay" id="shareOverlay">
+    <div class="confirm-card account-card">
+      <h2 class="account-title" data-i18n="share_title">Share this recipe</h2>
+      <p class="account-sub" data-i18n="share_sub">Anyone with this link can see the recipe.</p>
+      <input type="text" class="edit-input" id="shareLinkInput" readonly>
+      <div class="confirm-actions">
+        <button class="btn btn-ghost" id="shareCloseBtn" data-i18n="close">Close</button>
+        <button class="btn btn-solid" id="shareCopyBtn" data-i18n="share_copy">Copy link</button>
+      </div>
+    </div>
+  </div>
+
   <div class="confirm-overlay" id="feedbackOverlay">
     <div class="confirm-card account-card">
       <h2 class="account-title" data-i18n="feedback_title">Send feedback</h2>
@@ -2835,6 +2879,22 @@ const translations = {
     install_ios_other: "On iPhone this works from Safari. Open this page in Safari, tap Share, then \"Add to Home Screen\".",
     install_other: "Open your browser menu (⋮) and choose \"Install app\" or \"Add to Home screen\".",
     list_offline: "You're offline. This is your list as last saved; items you tick will be saved when you're back online.",
+    list_by_aisle: "By aisle",
+    list_by_added: "As added",
+    list_in_basket: "In the basket",
+    list_change_aisle: "Tap to change the aisle",
+    exp_label: "Use by",
+    exp_past: "Past date",
+    exp_today: "Today",
+    exp_tomorrow: "Tomorrow",
+    exp_days: "{n} days",
+    share: "Share",
+    share_text: "A recipe for you: {title}",
+    share_copied: "Link copied",
+    share_failed: "Couldn't share",
+    share_title: "Share this recipe",
+    share_sub: "Anyone with this link can see the recipe.",
+    share_copy: "Copy link",
     auth_signin_tab: "Sign in",
     auth_signup_tab: "Create account",
     auth_email_label: "Email",
@@ -3221,6 +3281,22 @@ const translations = {
     install_ios_other: "iPhone'da bu Safari'den yapılıyor. Bu sayfayı Safari'de aç, Paylaş'a dokun, sonra \"Ana Ekrana Ekle\"yi seç.",
     install_other: "Tarayıcı menüsünü (⋮) aç ve \"Uygulamayı yükle\" ya da \"Ana ekrana ekle\"yi seç.",
     list_offline: "İnternet yok. Listen son kaydedilen haliyle gösteriliyor; işaretlediklerin bağlantı gelince kaydedilecek.",
+    list_by_aisle: "Reyonlara göre",
+    list_by_added: "Eklenme sırası",
+    list_in_basket: "Sepette",
+    list_change_aisle: "Reyonu değiştirmek için dokun",
+    exp_label: "Son tarih",
+    exp_past: "Tarihi geçti",
+    exp_today: "Bugün",
+    exp_tomorrow: "Yarın",
+    exp_days: "{n} gün",
+    share: "Paylaş",
+    share_text: "Sana bir tarif: {title}",
+    share_copied: "Link kopyalandı",
+    share_failed: "Paylaşılamadı",
+    share_title: "Tarifi paylaş",
+    share_sub: "Bu linke sahip olan herkes tarifi görebilir.",
+    share_copy: "Linki kopyala",
     auth_signin_tab: "Giriş yap",
     auth_signup_tab: "Hesap oluştur",
     auth_email_label: "E-posta",
@@ -3675,6 +3751,7 @@ function refreshLanguageViews(){
   if (typeof renderPantry === 'function' && typeof pantryItems !== 'undefined') renderPantry();
   if (typeof renderShoppingList === 'function') renderShoppingList();
   if (typeof renderSavedRecipes === 'function') renderSavedRecipes();
+  try { if (recipes.length) renderRecipeOptions(); } catch (e) {}
   if (typeof renderMealHistory === 'function') renderMealHistory();
   if (typeof renderMealPlan === 'function' && typeof mealPlan !== 'undefined' && mealPlan.length) renderMealPlan();
   if (typeof renderSavedPlans === 'function') renderSavedPlans();
@@ -4404,7 +4481,7 @@ const listManualAddBtn = document.getElementById('listManualAddBtn');
 const listNavBadge = document.getElementById('listCellBadge');
 
 function dbToShoppingItem(row){
-  return { id: row.id, name: row.name, amount: row.amount || '', checked: !!row.checked, source: row.source || 'manual' };
+  return { id: row.id, name: row.name, amount: row.amount || '', checked: !!row.checked, source: row.source || 'manual', category: row.category || null };
 }
 
 /* The list is also kept on the device so it opens in a shop with no signal.
@@ -4475,7 +4552,7 @@ async function addToShoppingList(entries, source){
     const exists = shoppingList.some(item => item.name.toLowerCase() === clean.toLowerCase())
       || toInsert.some(item => item.name.toLowerCase() === clean.toLowerCase());
     if (exists) return;
-    toInsert.push({ name: clean, amount: amount || null, checked: false, source: source || 'manual' });
+    toInsert.push({ name: clean, amount: amount || null, checked: false, source: source || 'manual', category: guessCategory(clean) });
   });
 
   if (!toInsert.length) return;
@@ -4490,8 +4567,37 @@ async function addToShoppingList(entries, source){
   renderShoppingList();
 }
 
+// Aisles in the order you usually walk a Turkish supermarket.
+const LIST_AISLE_ORDER = ['Produce', 'Meat & Seafood', 'Dairy & Eggs', 'Grains & Pantry', 'Frozen', 'Other'];
+let listViewMode = (() => { try { return localStorage.getItem('ftt_list_view') || 'aisle'; } catch (e) { return 'aisle'; } })();
+let editingListItemId = null;
+function listItemCategory(item){
+  const c = item.category || guessCategory(item.name);
+  return CATEGORY_ORDER.includes(c) ? c : 'Other';
+}
+function listGroupHead(cat, count){
+  const li = document.createElement('li');
+  li.className = 'list-group-head';
+  const label = cat ? categoryLabel(cat) : t('list_in_basket');
+  li.innerHTML = (cat ? catIconHtml(cat) : '') + '<span class="list-group-name"></span><span class="list-group-count"></span>';
+  li.querySelector('.list-group-name').textContent = label;
+  li.querySelector('.list-group-count').textContent = String(count);
+  return li;
+}
+function syncListViewToggle(){
+  document.querySelectorAll('#listViewToggle .pill').forEach(p => p.classList.toggle('selected', p.dataset.listView === listViewMode));
+}
+document.querySelectorAll('#listViewToggle .pill').forEach(p => p.addEventListener('click', () => {
+  listViewMode = p.dataset.listView;
+  try { localStorage.setItem('ftt_list_view', listViewMode); } catch (e) {}
+  renderShoppingList();
+}));
+
 function renderShoppingList(){
   writeListCache('items', shoppingList);
+  const toggle = document.getElementById('listViewToggle');
+  if (toggle) toggle.style.display = shoppingList.length ? '' : 'none';
+  syncListViewToggle();
   shoppingListEl.innerHTML = '';
   const sorted = shoppingList.slice().sort((a, b) => (a.checked === b.checked) ? 0 : (a.checked ? 1 : -1));
 
@@ -4502,7 +4608,7 @@ function renderShoppingList(){
   const moveBtn = document.getElementById('moveBoughtToPantryBtn');
   if (moveBtn) moveBtn.textContent = t('move_bought_to_pantry').replace('{n}', boughtCount);
 
-  sorted.forEach(item => {
+  const renderItem = (item) => {
     const li = document.createElement('li');
     li.className = 'list-item' + (item.checked ? ' checked' : '');
 
@@ -4529,6 +4635,35 @@ function renderShoppingList(){
     nameEl.className = 'list-item-name';
     nameEl.textContent = item.amount ? `${item.name} · ${item.amount}` : item.name;
     body.appendChild(nameEl);
+    if (listViewMode === 'aisle' && !item.checked){
+      nameEl.classList.add('list-item-name-tap');
+      nameEl.setAttribute('role', 'button');
+      nameEl.setAttribute('tabindex', '0');
+      nameEl.setAttribute('title', t('list_change_aisle'));
+      const toggleEdit = () => { editingListItemId = editingListItemId === item.id ? null : item.id; renderShoppingList(); };
+      nameEl.addEventListener('click', toggleEdit);
+      nameEl.addEventListener('keydown', (e) => { if (e.key === 'Enter' || e.key === ' '){ e.preventDefault(); toggleEdit(); } });
+    }
+    if (editingListItemId === item.id && !item.checked){
+      const sel = document.createElement('select');
+      sel.className = 'list-cat-select';
+      sel.setAttribute('aria-label', t('list_change_aisle'));
+      LIST_AISLE_ORDER.forEach(cat => {
+        const o = document.createElement('option');
+        o.value = cat; o.textContent = categoryLabel(cat);
+        if (cat === listItemCategory(item)) o.selected = true;
+        sel.appendChild(o);
+      });
+      sel.addEventListener('change', async () => {
+        const prev = item.category;
+        item.category = sel.value;
+        editingListItemId = null;
+        renderShoppingList();
+        const { error } = await supabaseClient.from('shopping_list').update({ category: sel.value }).eq('id', item.id);
+        if (error){ console.error('Failed to update aisle:', error); item.category = prev; renderShoppingList(); }
+      });
+      body.appendChild(sel);
+    }
     if (item.source && item.source !== 'manual'){
       const sourceEl = document.createElement('span');
       sourceEl.className = 'list-item-source';
@@ -4554,7 +4689,24 @@ function renderShoppingList(){
     li.appendChild(body);
     li.appendChild(removeBtn);
     shoppingListEl.appendChild(li);
-  });
+  };
+
+  if (listViewMode === 'aisle'){
+    const open = shoppingList.filter(i => !i.checked);
+    const done = shoppingList.filter(i => i.checked);
+    LIST_AISLE_ORDER.forEach(cat => {
+      const group = open.filter(i => listItemCategory(i) === cat);
+      if (!group.length) return;
+      shoppingListEl.appendChild(listGroupHead(cat, group.length));
+      group.forEach(renderItem);
+    });
+    if (done.length){
+      shoppingListEl.appendChild(listGroupHead(null, done.length));
+      done.forEach(renderItem);
+    }
+  } else {
+    sorted.forEach(renderItem);
+  }
 
   const uncheckedCount = shoppingList.filter(i => !i.checked).length;
   if (uncheckedCount > 0){
@@ -4592,7 +4744,7 @@ moveBoughtToPantryBtn.addEventListener('click', async () => {
         await supabaseClient.from('pantry_items').update({ quantity: item.amount }).eq('id', existing.id);
       }
     } else {
-      await addPantryItem(item.name, null, item.amount);
+      await addPantryItem(item.name, item.category || null, item.amount);
     }
   }
   const ids = bought.map(i => i.id);
@@ -4763,6 +4915,7 @@ function renderSavedRecipes(){
             <button class="bubble-cook-btn">${t('cook_mode')}</button>
             <button class="bubble-edit-btn">${t('edit')}</button>
             <button class="bubble-print-btn">${t('print')}</button>
+            <button class="bubble-share-btn">${t('share')}</button>
             <div class="rating-row">
               <span class="rating-label">${t('how_was_it')}</span>
               <button class="rate-btn rate-up${recipe.rating === 'up' ? ' active' : ''}" aria-label="rate up">
@@ -4841,6 +4994,7 @@ function renderSavedRecipes(){
       expandedSavedId = recipe.id;
       renderSavedRecipes();
     });
+    bindShareBtn(bubble, recipe);
     bubble.querySelector('.bubble-print-btn').addEventListener('click', (e) => {
       e.stopPropagation();
       printRecipe(recipe);
@@ -5325,6 +5479,7 @@ function renderMealHistory(){
           <div class="bubble-actions">
             <button class="bubble-cook-btn">${t('cook_mode')}</button>
             <button class="bubble-print-btn">${t('print')}</button>
+            <button class="bubble-share-btn">${t('share')}</button>
             <button class="bubble-remove-btn">${t('remove_from_history')}</button>
           </div>
         </div>
@@ -5341,6 +5496,7 @@ function renderMealHistory(){
       openCookMode(recipe);
     });
 
+    bindShareBtn(bubble, recipe);
     bubble.querySelector('.bubble-print-btn').addEventListener('click', (e) => {
       e.stopPropagation();
       printRecipe(recipe);
@@ -5730,6 +5886,7 @@ function renderMealPlan(){
             <button class="bubble-cook-btn">${t('cook_mode')}</button>
             <button class="bubble-edit-btn">${t('edit')}</button>
             <button class="bubble-print-btn">${t('print')}</button>
+            <button class="bubble-share-btn">${t('share')}</button>
             ${saveBtnHtml}
             <button class="bubble-cooked-btn${recipe.cooked ? ' cooked' : ''}" ${recipe.cooked ? 'disabled' : ''}>${recipe.cooked ? t('cooked_check') : t('i_made_this')}</button>
             ${addBtnHtml}
@@ -5812,6 +5969,7 @@ function renderMealPlan(){
       expandedPlanIndex = i;
       renderMealPlan();
     });
+    bindShareBtn(bubble, recipe);
     bubble.querySelector('.bubble-print-btn').addEventListener('click', (e) => {
       e.stopPropagation();
       printRecipe(recipe, slotLabel);
@@ -5985,11 +6143,28 @@ const CATEGORY_KEYWORDS = {
   'Frozen': ['frozen', 'ice cream', 'popsicle', 'sorbet', 'freezer']
 };
 
+// Turkish names take suffixes ("domatesi", "tavuklu"), so these match the start of a word.
+// Very short ones (et, ton, un, but) only match the whole word.
+const CATEGORY_KEYWORDS_TR = {
+  'Produce': ['domates', 'salatalık', 'hıyar', 'biber', 'soğan', 'sarımsak', 'patates', 'havuç', 'ıspanak', 'ıspanağ', 'marul', 'maydanoz', 'dereotu', 'nane', 'roka', 'tere', 'semizotu', 'limon', 'portakal', 'mandalina', 'greyfurt', 'elma', 'armut', 'muz', 'üzüm', 'çilek', 'çileğ', 'kiraz', 'vişne', 'şeftali', 'kayısı', 'erik', 'karpuz', 'kavun', 'patlıcan', 'kabak', 'kabağ', 'brokoli', 'karnabahar', 'lahana', 'pırasa', 'kereviz', 'mantar', 'taze fasulye', 'bezelye', 'mısır', 'avokado', 'zencefil', 'turp', 'pancar', 'enginar', 'bamya', 'nar', 'incir', 'ayva', 'yeşillik', 'sebze', 'meyve', 'fesleğen', 'biberiye', 'kuşkonmaz', 'börülce'],
+  'Dairy & Eggs': ['süt', 'peynir', 'yoğurt', 'yoğurd', 'tereyağ', 'kaymak', 'krema', 'yumurta', 'ayran', 'kefir', 'lor', 'labne', 'kaşar', 'tulum', 'mozarella', 'mozzarella', 'çökelek', 'süzme', 'margarin'],
+  'Meat & Seafood': ['tavuk', 'tavuğ', 'dana', 'kuzu', 'kıyma', 'et', 'köfte', 'sucuk', 'salam', 'sosis', 'pastırma', 'hindi', 'balık', 'balığ', 'somon', 'levrek', 'çipura', 'hamsi', 'ton', 'karides', 'kalamar', 'midye', 'bonfile', 'pirzola', 'antrikot', 'kanat', 'baget', 'ciğer', 'kavurma', 'jambon'],
+  'Grains & Pantry': ['pirinç', 'bulgur', 'makarna', 'şehriye', 'erişte', 'un', 'ekmek', 'ekmeğ', 'lavaş', 'yufka', 'mercimek', 'mercimeğ', 'nohut', 'kuru fasulye', 'barbunya', 'yulaf', 'irmik', 'şeker', 'tuz', 'karabiber', 'pul biber', 'kimyon', 'baharat', 'salça', 'zeytinyağ', 'ayçiçek', 'yağ', 'sirke', 'bal', 'reçel', 'pekmez', 'tahin', 'zeytin', 'ceviz', 'fındık', 'badem', 'fıstık', 'kaju', 'susam', 'çay', 'kahve', 'kakao', 'çikolata', 'bisküvi', 'galeta', 'maya', 'kabartma', 'nişasta', 'konserve', 'sos', 'ketçap', 'mayonez', 'hardal', 'bulyon', 'tarçın', 'kekik', 'sumak', 'vanilya', 'kuru üzüm', 'kinoa', 'kuskus'],
+  'Frozen': ['dondurulmuş', 'donuk', 'dondurma', 'buz']
+};
+
 function guessCategory(name){
-  const lower = name.toLowerCase();
-  const words = lower.split(/[^a-z0-9]+/).filter(Boolean);
+  const lower = (name || '').toLocaleLowerCase('tr-TR');
+  const words = lower.split(/[^\p{L}\p{N}]+/u).filter(Boolean);
   let bestCategory = null;
   let bestLength = 0;
+  for (const cat of CATEGORY_ORDER){
+    for (const kw of (CATEGORY_KEYWORDS_TR[cat] || [])){
+      const isMatch = kw.includes(' ') ? lower.includes(kw)
+        : (kw.length <= 3 ? words.includes(kw) : words.some(w => w.startsWith(kw)));
+      if (isMatch && kw.length > bestLength){ bestLength = kw.length; bestCategory = cat; }
+    }
+  }
   for (const cat of CATEGORY_ORDER){
     const keywords = CATEGORY_KEYWORDS[cat];
     if (!keywords) continue;
@@ -6075,6 +6250,7 @@ function renderChipsInto(container, items, selectable){
           qtyText.textContent = '· ' + item.quantity;
           chip.appendChild(qtyText);
         }
+        if (selectable){ const ex = expiryChipEl(item); if (ex) chip.appendChild(ex); }
         if (!selectable){
           const qtyInput = document.createElement('input');
           qtyInput.type = 'text';
@@ -6213,7 +6389,7 @@ function renderPantryList(container, items){
   if (items.length === 0) return;
 
   const groups = [];
-  const soon = items.filter(i => i.useSoon);
+  const soon = items.filter(i => i.useSoon).sort(bySoonestExpiry);
   if (soon.length) groups.push({ key: USE_SOON_GROUP, label: t('use_soon_group'), items: soon });
   CATEGORY_ORDER.forEach(cat => {
     const g = items.filter(i => !i.useSoon && (i.category || 'Other') === cat);
@@ -6260,6 +6436,8 @@ function renderPantryList(container, items){
           q.textContent = '· ' + item.quantity;
           chip.appendChild(q);
         }
+        const ex = expiryChipEl(item);
+        if (ex) chip.appendChild(ex);
         chip.addEventListener('click', () => {
           expandedPantryItemId = isEditing ? null : item.id;
           renderPantry();
@@ -6335,6 +6513,40 @@ function buildPantryEditPanel(item){
   catRow.appendChild(catSelect);
   panel.appendChild(catRow);
 
+  // expiry date
+  const expRow = document.createElement('label');
+  expRow.className = 'pantry-edit-row';
+  expRow.innerHTML = `<span class="pantry-edit-label">${t('exp_label')}</span>`;
+  const expInput = document.createElement('input');
+  expInput.type = 'date';
+  expInput.className = 'pantry-edit-input pantry-edit-date';
+  expInput.value = item.expiresOn || '';
+  expInput.addEventListener('change', async () => {
+    const newDate = expInput.value || '';
+    const prev = { expiresOn: item.expiresOn, useSoon: item.useSoon };
+    item.expiresOn = newDate;
+    const update = { expires_on: newDate || null };
+    const days = daysUntil(newDate);
+    if (days !== null && days <= EXPIRY_AUTO_SOON_DAYS && !item.useSoon){ item.useSoon = true; update.use_soon = true; }
+    keepPantryItemVisible(item);
+    renderPantry();
+    const { error } = await supabaseClient.from('pantry_items').update(update).eq('id', item.id);
+    if (error){
+      console.error('Failed to update expiry date:', error);
+      item.expiresOn = prev.expiresOn; item.useSoon = prev.useSoon;
+      renderPantry();
+    }
+  });
+  expRow.appendChild(expInput);
+  const expHint = expiryLabel(daysUntil(item.expiresOn));
+  if (expHint){
+    const h = document.createElement('span');
+    h.className = 'pantry-edit-exp-hint';
+    h.textContent = expHint;
+    expRow.appendChild(h);
+  }
+  panel.appendChild(expRow);
+
   // actions
   const actions = document.createElement('div');
   actions.className = 'pantry-edit-actions';
@@ -6400,7 +6612,7 @@ function renderPantry(){
 }
 
 function dbToPantryItem(row){
-  return { id: row.id, name: row.name, category: row.category, useSoon: !!row.use_soon, quantity: row.quantity || '' };
+  return { id: row.id, name: row.name, category: row.category, useSoon: !!row.use_soon, quantity: row.quantity || '', expiresOn: row.expires_on || '' };
 }
 
 // "6 eggs", "500g rice", "2 adet limon" -> { quantity: "6", name: "eggs" }
@@ -6440,6 +6652,49 @@ async function addPantryItem(name, category, quantity){
   return item;
 }
 
+/* ---- expiry dates ---- */
+var EXPIRY_AUTO_SOON_DAYS = 2;   // this close to the date, an item moves to "use soon" by itself
+var EXPIRY_SHOW_DAYS = 7;        // show the countdown on the chip from a week out
+function daysUntil(iso){
+  if (!iso) return null;
+  const [y, m, d] = iso.split('-').map(Number);
+  if (!y || !m || !d) return null;
+  const now = new Date();
+  const today = Date.UTC(now.getFullYear(), now.getMonth(), now.getDate());
+  return Math.round((Date.UTC(y, m - 1, d) - today) / 86400000);
+}
+function expiryLabel(days){
+  if (days === null) return '';
+  if (days < 0) return t('exp_past');
+  if (days === 0) return t('exp_today');
+  if (days === 1) return t('exp_tomorrow');
+  return t('exp_days').replace('{n}', days);
+}
+function bySoonestExpiry(a, b){
+  const da = daysUntil(a.expiresOn), db = daysUntil(b.expiresOn);
+  if (da === null && db === null) return 0;
+  if (da === null) return 1;
+  if (db === null) return -1;
+  return da - db;
+}
+function expiryChipEl(item){
+  const days = daysUntil(item.expiresOn);
+  if (days === null || days > EXPIRY_SHOW_DAYS) return null;
+  const el = document.createElement('span');
+  el.className = 'chip-exp' + (days <= 1 ? ' urgent' : '');
+  el.textContent = expiryLabel(days);
+  return el;
+}
+// Items whose date is close move to "use soon" automatically (saved, so recipes prioritise them).
+async function autoFlagExpiring(){
+  const due = pantryItems.filter(i => !i.useSoon && i.expiresOn && daysUntil(i.expiresOn) <= EXPIRY_AUTO_SOON_DAYS);
+  if (!due.length) return;
+  due.forEach(i => { i.useSoon = true; });
+  renderPantry();
+  const { error } = await supabaseClient.from('pantry_items').update({ use_soon: true }).in('id', due.map(i => i.id));
+  if (error) console.error('Failed to flag expiring items:', error);
+}
+
 async function loadPantryFromDb(){
   const { data, error } = await supabaseClient
     .from('pantry_items')
@@ -6453,6 +6708,7 @@ async function loadPantryFromDb(){
 
   pantryItems = (data || []).map(dbToPantryItem);
   renderPantry();
+  autoFlagExpiring();
 }
 
 pantryPhotoBtn.addEventListener('click', () => pantryFileInput.click());
@@ -7293,6 +7549,7 @@ function renderRecipeOptions(){
           <div class="bubble-actions">
             <button class="bubble-cook-btn">${t('cook_mode')}</button>
             <button class="bubble-print-btn">${t('print')}</button>
+            <button class="bubble-share-btn">${t('share')}</button>
             ${saveBtnHtml}
             ${cookedBtnHtml}
             ${addBtnHtml}
@@ -7311,6 +7568,7 @@ function renderRecipeOptions(){
       openCookMode(recipe);
     });
 
+    bindShareBtn(bubble, recipe);
     bubble.querySelector('.bubble-print-btn').addEventListener('click', () => {
       printRecipe(recipe);
     });
@@ -7702,6 +7960,7 @@ function renderGuestMenu(){
         <button class="bubble-cook-btn">${t('cook_mode')}</button>
         <button class="bubble-edit-btn">${t('edit')}</button>
         <button class="bubble-print-btn">${t('print')}</button>
+            <button class="bubble-share-btn">${t('share')}</button>
         <button class="bubble-save-btn${alreadySaved ? ' saved' : ''}" ${alreadySaved ? 'disabled' : ''}>${alreadySaved ? t('saved_check') : t('save_recipe')}</button>
         ${missingList.length ? `<button class="bubble-list-btn">${addMissingLabel(missingList.length)}</button>` : ''}
       </div>`;
@@ -7736,6 +7995,7 @@ function renderGuestMenu(){
     }
     bubble.querySelector('.bubble-cook-btn').addEventListener('click', (e) => { e.stopPropagation(); openCookMode(recipe); });
     bubble.querySelector('.bubble-edit-btn').addEventListener('click', (e) => { e.stopPropagation(); editingRecipeKey = editKey; expandedGuestIndex = i; renderGuestMenu(); });
+    bindShareBtn(bubble, recipe);
     bubble.querySelector('.bubble-print-btn').addEventListener('click', (e) => { e.stopPropagation(); printRecipe(recipe, label); });
     const saveBtn = bubble.querySelector('.bubble-save-btn');
     if (saveBtn && !alreadySaved){
@@ -8064,6 +8324,81 @@ if ('serviceWorker' in navigator && (location.protocol === 'https:' || location.
   window.addEventListener('load', () => { navigator.serviceWorker.register('/sw.js').catch(err => console.warn('Service worker not registered:', err)); });
 }
 
+/* ============ SHARE A RECIPE (public link) ============ */
+// A shared recipe is a copy stored in `shared_recipes`; anyone with the link can read it through
+// the get_shared_recipe() function (the table itself can't be listed). The link opens r.html.
+function shareableRecipe(recipe){
+  const pick = (({ title, description, total_time, difficulty, servings, calories_per_serving, protein_g, carbs_g, fat_g, ingredients_used, missing_ingredients, steps }) =>
+    ({ title, description, total_time, difficulty, servings, calories_per_serving, protein_g, carbs_g, fat_g, ingredients_used, missing_ingredients, steps }))(recipe || {});
+  pick.lang = currentLanguage;
+  return JSON.parse(JSON.stringify(pick));
+}
+function shareCacheKey(r){ return (r.title || '') + '|' + (r.steps || []).join('|').slice(0, 400); }
+function readShareCache(){ try { return JSON.parse(localStorage.getItem('ftt_shares_' + (currentUserId || 'anon')) || '{}'); } catch (e) { return {}; } }
+function writeShareCache(map){ try { localStorage.setItem('ftt_shares_' + (currentUserId || 'anon'), JSON.stringify(map)); } catch (e) {} }
+
+async function getShareUrl(recipe){
+  const clean = shareableRecipe(recipe);
+  const key = shareCacheKey(clean);
+  const cache = readShareCache();
+  let id = cache[key];
+  if (!id){
+    const { data, error } = await supabaseClient.from('shared_recipes').insert({ recipe: clean }).select('id').single();
+    if (error) throw error;
+    id = data.id;
+    cache[key] = id;
+    writeShareCache(cache);
+  }
+  return window.location.origin + '/r.html?id=' + encodeURIComponent(id);
+}
+
+function flashButton(btn, text){
+  const original = btn.dataset.label || btn.textContent;
+  btn.dataset.label = original;
+  btn.textContent = text;
+  btn.classList.add('flash');
+  setTimeout(() => { btn.textContent = original; btn.classList.remove('flash'); }, 2200);
+}
+
+async function shareRecipe(recipe, btn){
+  if (btn.disabled) return;
+  btn.disabled = true;
+  try {
+    const url = await getShareUrl(recipe);
+    const title = recipe.title || t('untitled');
+    if (navigator.share){
+      try { await navigator.share({ title, text: t('share_text').replace('{title}', title), url }); return; }
+      catch (e){ if (e && e.name === 'AbortError') return; }
+    }
+    try {
+      await navigator.clipboard.writeText(url);
+      flashButton(btn, t('share_copied'));
+    } catch (e){
+      document.getElementById('shareLinkInput').value = url;
+      document.getElementById('shareOverlay').classList.add('open');
+      setTimeout(() => document.getElementById('shareLinkInput').select(), 50);
+    }
+  } catch (err){
+    console.error('Failed to share recipe:', err);
+    flashButton(btn, t('share_failed'));
+  } finally {
+    btn.disabled = false;
+  }
+}
+
+function bindShareBtn(bubble, recipe){
+  const btn = bubble.querySelector('.bubble-share-btn');
+  if (!btn) return;
+  btn.addEventListener('click', (e) => { e.stopPropagation(); shareRecipe(recipe, btn); });
+}
+document.getElementById('shareCloseBtn').addEventListener('click', () => document.getElementById('shareOverlay').classList.remove('open'));
+document.getElementById('shareCopyBtn').addEventListener('click', async () => {
+  const input = document.getElementById('shareLinkInput');
+  input.select();
+  try { await navigator.clipboard.writeText(input.value); } catch (e) { try { document.execCommand('copy'); } catch (e2) {} }
+  flashButton(document.getElementById('shareCopyBtn'), t('share_copied'));
+});
+
 /* ============ HOME ("Today") ============ */
 const CAT_GLYPH = {
   'Produce': '<path d="M6 18c0-7 5-12 12-12 0 7-5 12-12 12Z"/><path d="m6 18 6-6"/>',
@@ -8114,7 +8449,7 @@ function renderHome(){
   greetEl.textContent = name ? `${t(greetingKey())}, ${name}` : t(greetingKey());
 
   const items = (typeof pantryItems !== 'undefined') ? pantryItems : [];
-  const soon = items.filter(i => i.useSoon);
+  const soon = items.filter(i => i.useSoon).sort(bySoonestExpiry);
   const sum = document.getElementById('homeSummary');
   if (!items.length) sum.innerHTML = t('home_sum_empty');
   else if (soon.length) sum.innerHTML = t(soon.length === 1 ? 'home_sum_soon_one' : 'home_sum_soon').replace('{n}', soon.length);
@@ -8154,7 +8489,11 @@ function renderHome(){
         <span class="tile-title"></span>
         <span class="tile-sub"></span>`;
       tile.querySelector('.tile-title').textContent = item.name;
-      tile.querySelector('.tile-sub').textContent = item.quantity || categoryLabel(cat);
+      const expDays = daysUntil(item.expiresOn);
+      tile.querySelector('.tile-sub').textContent = (expDays !== null && expDays <= EXPIRY_SHOW_DAYS)
+        ? expiryLabel(expDays) + (item.quantity ? ' · ' + item.quantity : '')
+        : (item.quantity || categoryLabel(cat));
+      if (expDays !== null && expDays <= 1) tile.querySelector('.tile-sub').classList.add('tile-sub-urgent');
       tile.addEventListener('click', () => {
         goToPage('pantry');
         pantryOpenGroups.add(USE_SOON_GROUP);
