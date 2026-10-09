@@ -1827,6 +1827,10 @@
   #pantryChips .pantry-edit-input{ flex: 1 1 auto; min-width: 0; width: auto; box-sizing: border-box; background: var(--surface); }
   #pantryChips .pantry-edit-date{ flex: 0 1 170px; }
 
+  .step1-next{ margin: 4px 0 22px; }
+  .cook-mode-complete-actions{ display: flex; gap: 10px; flex-wrap: wrap; justify-content: center; }
+  .cook-mode-complete-actions .btn:not(.btn-solid){ background: var(--bg-soft); }
+
   /* share */
   .bubble-share-btn{ font: 600 13.5px var(--font-ui); padding: 10px 16px; margin: 0; border-radius: 999px; border: none; background: var(--bg-soft); color: var(--ink); cursor: pointer; display: inline-flex; align-items: center; gap: 6px; }
   .bubble-share-btn:hover{ background: var(--soft-hover); }
@@ -1963,6 +1967,11 @@
     <h1 class="screen-title" data-i18n="step1_title">What should we cook with?</h1>
     <p class="screen-sub" data-i18n="step1_sub">Everything in your kitchen is ready to use. Tap an item to leave it out, or star one to make it the focus tonight.</p>
 
+    <div class="nav-row step1-next">
+      <span></span>
+      <button class="btn btn-solid" id="toStep2Btn" disabled data-i18n="next">Next</button>
+    </div>
+
     <div class="row" style="justify-content: space-between; margin-top: 0;">
       <p class="section-label" style="margin: 0;" data-i18n="in_stock_label">in stock</p>
       <div class="row" style="margin-top: 0;">
@@ -1981,10 +1990,6 @@
       <button class="btn btn-ghost" id="manageInPantryBtn" data-i18n="manage_in_pantry">Manage in Kitchen</button>
     </div>
 
-    <div class="nav-row">
-      <span></span>
-      <button class="btn" id="toStep2Btn" disabled data-i18n="next">Next</button>
-    </div>
   </section>
 
   <!-- SCREEN 2: Preferences -->
@@ -2669,7 +2674,10 @@
       <div class="cook-mode-complete-icon">🎉</div>
       <p class="cook-mode-complete-title" id="cookModeCompleteTitle" data-i18n="enjoy">Enjoy!</p>
       <p class="cook-mode-complete-sub" data-i18n="enjoy_sub">Nice work finishing all the steps.</p>
-      <button class="btn btn-solid" id="cookModeMadeThisBtn" data-i18n="i_made_this">I made this</button>
+      <div class="cook-mode-complete-actions">
+        <button class="btn btn-solid" id="cookModeMadeThisBtn" data-i18n="i_made_this">I made this</button>
+        <button class="btn" id="cookModeShareBtn" data-i18n="share">Share</button>
+      </div>
     </div>
 
     <div class="cook-mode-nav" id="cookModeNavRow">
@@ -4557,7 +4565,11 @@ async function addToShoppingList(entries, source){
 
   if (!toInsert.length) return;
 
-  const { data, error } = await supabaseClient.from('shopping_list').insert(toInsert).select();
+  let { data, error } = await supabaseClient.from('shopping_list').insert(toInsert).select();
+  if (error && /category/i.test(error.message || '')){
+    // database not migrated yet (no aisle column): save without the aisle, the app still guesses it
+    ({ data, error } = await supabaseClient.from('shopping_list').insert(toInsert.map(({ category, ...rest }) => rest)).select());
+  }
   if (error){
     console.error('Failed to add shopping list items:', error);
     return;
@@ -8391,6 +8403,9 @@ function bindShareBtn(bubble, recipe){
   if (!btn) return;
   btn.addEventListener('click', (e) => { e.stopPropagation(); shareRecipe(recipe, btn); });
 }
+document.getElementById('cookModeShareBtn').addEventListener('click', (e) => {
+  if (cookRecipe) shareRecipe(cookRecipe, e.currentTarget);
+});
 document.getElementById('shareCloseBtn').addEventListener('click', () => document.getElementById('shareOverlay').classList.remove('open'));
 document.getElementById('shareCopyBtn').addEventListener('click', async () => {
   const input = document.getElementById('shareLinkInput');
