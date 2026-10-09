@@ -14,7 +14,7 @@ Pantry-based recipe and meal-planning web app. Owner: Hamza (works in Turkish �
 - Database changes: write the SQL and give it to the owner to run in the Supabase SQL Editor (no direct DB access).
 
 ## Database tables
-`pantry_items` (name, category, use_soon, quantity) · `saved_recipes` · `meal_history` (cooked_on) · `meal_plans` (start_date, days jsonb, prep jsonb) · `shopping_list` (name, amount, checked, source) · `profiles` (user_id PK; language, diet, goal, allow_missing, servings, allergies, plan_prefs jsonb, onboarded, display_name) · `guest_menus` (title, guests, dishes jsonb, timeline jsonb). · `feedback` (kind, message, page, language, user_agent; users can insert/read their own, the owner reads all in the Supabase Table Editor).
+`pantry_items` (name, category, use_soon, quantity) · `saved_recipes` · `meal_history` (cooked_on) · `meal_plans` (start_date, days jsonb, prep jsonb) · `shopping_list` (name, amount, checked, source) · `profiles` (user_id PK; language, diet, goal, allow_missing, servings, allergies, plan_prefs jsonb, onboarded, display_name) · `guest_menus` (title, guests, dishes jsonb, timeline jsonb). · `feedback` (kind, message, page, language, user_agent; users can insert/read their own, the owner reads all in the Supabase Table Editor) · `shared_recipes` (recipe jsonb; public read only via `get_shared_recipe`). `shopping_list.category`, `pantry_items.expires_on`.
 - `delete_my_account()` (Postgres function, security definer): deletes the caller's rows in every table and their `auth.users` row; the Profile "Delete my account" button calls it via `rpc`. Add any new table to it.
 
 ## Auth
@@ -28,6 +28,12 @@ Pantry-based recipe and meal-planning web app. Owner: Hamza (works in Turkish �
 - Shopping list offline: the list is cached in localStorage (`ftt_list_items_<uid>`), shown first and when loading fails; ticks made offline go to `ftt_list_pending_<uid>` and are written on the `online` event / next load. Adding/removing items still needs a connection.
 - `privacy.html`: standalone bilingual privacy policy (TR/EN, `?lang=`), linked from the sign-in card and the Profile footer. Update it (and its date) whenever the app starts collecting something new or uses a new provider. Contact is the in-app feedback until a custom email exists.
 
+## Shopping list aisles, expiry dates, recipe sharing
+- Shopping list items have a `category` (aisle), guessed by `guessCategory()` (English + Turkish keyword lists; Turkish keywords match word starts, short ones whole words). "By aisle" view (default, `ftt_list_view` in localStorage) groups in store order `LIST_AISLE_ORDER`, ticked items in a final "In the basket" group; tap a name to change its aisle. Bought items move to the kitchen with that category.
+- Kitchen items have `expires_on` (date). Within `EXPIRY_AUTO_SOON_DAYS` (2) they're auto-flagged use soon on load (saved); chips/home tiles show a countdown from `EXPIRY_SHOW_DAYS` (7); use-soon lists are sorted by date.
+- Share: `shared_recipes` (id uuid, user_id, recipe jsonb). Insert/read/delete own via RLS; the public reads one recipe only through `get_shared_recipe(share_id)` (security definer, granted to anon) so the table can't be listed. The link is `/r.html?id=<uuid>` (standalone page, escapes all text). Share uses `navigator.share`, else clipboard, else a copy-link card. Personal fields are stripped before sharing; share ids are cached per device (`ftt_shares_<uid>`) so re-sharing reuses the link.
+- SQL for these: `supabase/list_expiry_share.sql` (also updates `delete_my_account()`).
+
 ## Product decisions
 - **Sidebar/Profile = universal settings** (diet, allergies, servings, goal, language). They are the defaults everywhere.
 - **Recipes page** choices are temporary for that suggestion and never write to the profile (shows a "changed" badge + "reset to my defaults").
@@ -35,7 +41,7 @@ Pantry-based recipe and meal-planning web app. Owner: Hamza (works in Turkish �
 - **Guest menu**: courses with notes, guest count, occasion, prep time (3h/5h/10h/1d/2d), host timeline.
 - Everything is bilingual (English/Turkish): UI strings in the `translations` object (`t(key)`), option pills in `pillLabels`; AI is told to answer in the selected language. Brand: "Fridge-to-Table" / "Dolaptan Sofraya".
 - New accounts get a setup card + spotlight tour once (`profiles.onboarded`).
-- Navigation: floating bottom bar with 4 tabs — Today (home), Kitchen (pantry), Plan (meal prep + guest menu via a top switch), List (shopping list) — plus a round Profile button. Profile is a full page holding the universal settings, saved recipes and meal history. Recipes, saved and history are sub-pages with a back button.
+- Navigation: floating bottom bar with 4 tabs — Today (home), Kitchen (pantry), Plan (meal prep + guest menu via a top switch), List (shopping list) — plus a round Profile button. Profile is a full page with rows for saved recipes, meal history and settings, plus add-to-home-screen, feedback and the account footer. The universal settings live on their own sub-page (`#tabSettings`, `goToPage('settings')`). Recipes, saved, history and settings are sub-pages with a back button.
 
 ## Visual style
 - Page is a soft sage tint (`--bg`) with white cards (`--surface`); each section gets a color wash at the top (`body[data-page]` → `--wash`: home tomato, kitchen green, plan blue, list mustard, profile plum); home has faint kitchen line doodles behind the greeting. Elements inside white cards use `--bg-soft`.

@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<title>Tarif · Dolaptan Sofraya</title>
+<meta name="description" content="Dolaptan Sofraya'dan paylaşılan bir tarif.">
+<meta property="og:title" content="Dolaptan Sofraya'dan bir tarif">
+<meta property="og:description" content="Dolabındakilerle tarif, haftalık meal prep ve alışveriş listesi.">
+<meta property="og:image" content="/icons/icon-512.png">
+<link rel="icon" type="image/png" sizes="32x32" href="/icons/favicon-32.png">
+<link rel="apple-touch-icon" href="/icons/apple-touch-icon.png">
+<script>
+  (function(){
+    var choice = 'system';
+    try { choice = localStorage.getItem('ftt_theme') || 'system'; } catch (e) {}
+    var dark = choice === 'dark' || (choice === 'system' && window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches);
+    document.documentElement.setAttribute('data-theme', dark ? 'dark' : 'light');
+  })();
+</script>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Newsreader:opsz,wght@6..72,500;6..72,600&family=Instrument+Sans:wght@400;500;600&display=swap');
+  :root{
+    --bg: #EDF0E9; --surface: #FFFFFF; --soft: #F1F3EE; --ink: #15171A; --ink-soft: #5F645C; --line: #E3E6DF;
+    --tomato: #E5482D; --herb: #2E9E5B; --on-ink: #FFFFFF;
+    --font-ui: 'Instrument Sans', system-ui, -apple-system, sans-serif;
+    --font-display: 'Newsreader', Georgia, serif;
+  }
+  :root[data-theme="dark"]{ color-scheme: dark; --bg: #121412; --surface: #1B1E1B; --soft: #262A26; --ink: #ECEDE8; --ink-soft: #A2A89E; --line: #2C312C; --tomato: #E8573D; --herb: #34A865; --on-ink: #121412; }
+  *{ box-sizing: border-box; }
+  body{ margin: 0; background: var(--bg); color: var(--ink); font-family: var(--font-ui); font-size: 16px; line-height: 1.55; -webkit-font-smoothing: antialiased; }
+  body::before{ content: ""; position: absolute; inset: 0 0 auto 0; height: 360px; z-index: -1; background: linear-gradient(180deg, color-mix(in srgb, var(--tomato) 18%, var(--bg)) 0%, var(--bg) 100%); }
+  .wrap{ max-width: 640px; margin: 0 auto; padding: 28px 20px 56px; }
+  .brand{ display: inline-flex; align-items: center; gap: 10px; color: var(--ink); text-decoration: none; font-weight: 600; font-size: 15px; margin-bottom: 26px; }
+  .brand img{ width: 30px; height: 30px; border-radius: 9px; }
+  h1{ font-family: var(--font-display); font-weight: 600; font-size: 36px; line-height: 1.1; letter-spacing: -0.015em; margin: 0 0 10px; }
+  .desc{ color: var(--ink-soft); font-size: 16px; margin: 0 0 16px; max-width: 60ch; }
+  .badges{ display: flex; flex-wrap: wrap; gap: 8px; margin: 0 0 22px; padding: 0; list-style: none; }
+  .badges li{ background: var(--surface); border-radius: 999px; padding: 5px 12px; font-size: 13px; font-weight: 500; }
+  .card{ background: var(--surface); border-radius: 22px; padding: 22px; margin-bottom: 14px; }
+  h2{ font-family: var(--font-display); font-weight: 600; font-size: 21px; margin: 0 0 8px; }
+  .ing{ list-style: none; margin: 0; padding: 0; }
+  .ing li{ display: flex; gap: 10px; align-items: baseline; padding: 9px 0; border-bottom: 1px solid var(--line); }
+  .ing li:last-child{ border-bottom: 0; }
+  .ing li::before{ content: ""; width: 6px; height: 6px; border-radius: 50%; background: var(--herb); flex-shrink: 0; transform: translateY(-2px); }
+  .amt{ color: var(--ink-soft); margin-left: auto; white-space: nowrap; padding-left: 12px; }
+  .steps{ list-style: none; margin: 0; padding: 0; counter-reset: s; }
+  .steps li{ counter-increment: s; display: flex; gap: 14px; padding: 12px 0; border-bottom: 1px solid var(--line); }
+  .steps li:last-child{ border-bottom: 0; }
+  .steps li::before{ content: counter(s); flex-shrink: 0; width: 26px; height: 26px; border-radius: 50%; background: var(--soft); font-size: 13px; font-weight: 600; display: inline-flex; align-items: center; justify-content: center; }
+  .macros{ color: var(--ink-soft); font-size: 14px; margin: 12px 0 0; }
+  .cta{ background: var(--surface); border-radius: 22px; padding: 22px; margin-top: 22px; display: flex; flex-direction: column; gap: 12px; align-items: flex-start; }
+  .cta p{ margin: 0; color: var(--ink-soft); }
+  .btn{ display: inline-flex; background: var(--ink); color: var(--on-ink); text-decoration: none; font-weight: 600; font-size: 15px; padding: 12px 20px; border-radius: 999px; }
+  .state{ padding: 40px 0; color: var(--ink-soft); }
+  .note{ color: var(--ink-soft); font-size: 12.5px; margin: 14px 0 0; }
+  :focus-visible{ outline: 2px solid var(--ink); outline-offset: 2px; }
+</style>
+</head>
+<body>
+<div class="wrap">
+  <a class="brand" href="/"><img src="/icons/icon-192.png" alt=""><span id="brandName">Dolaptan Sofraya</span></a>
+  <div id="content"><p class="state" id="state">…</p></div>
+</div>
+<script>
+(function(){
+  var SUPABASE_URL = "https://fczlvftmrxvfncotmniw.supabase.co";
+  var SUPABASE_ANON_KEY = "sb_publishable_Dnfqu4Z62xQuRg9F2JbQpw_B-b6_W_4"; // public key; data is protected by RLS
+
+  var L = {
+    tr: { brand: 'Dolaptan Sofraya', loading: 'Tarif yükleniyor…', notFound: 'Bu tarif bulunamadı. Link eksik ya da tarif kaldırılmış olabilir.', error: 'Tarif yüklenemedi. Bağlantını kontrol edip sayfayı yenile.',
+          ingredients: 'Malzemeler', method: 'Yapılışı', serves: '{n} kişilik', perServing: 'kcal / porsiyon', macros: '{p}g protein · {c}g karbonhidrat · {f}g yağ (porsiyon başına, tahmini)',
+          ctaText: 'Bu tarif Dolaptan Sofraya ile hazırlandı. Dolabındakileri yaz ya da fotoğrafla, sana uygun tarifler ve haftalık plan çıkarsın.', ctaBtn: 'Uygulamayı aç',
+          note: 'Kalori ve besin değerleri tahminidir. Alerjin varsa malzemeleri kendin de kontrol et.', title: 'Tarif · Dolaptan Sofraya',
+          diff: { easy: 'Kolay', medium: 'Orta', hard: 'Zor' } },
+    en: { brand: 'Fridge-to-Table', loading: 'Loading recipe…', notFound: "This recipe wasn't found. The link may be incomplete or the recipe was removed.", error: "Couldn't load the recipe. Check your connection and refresh.",
+          ingredients: 'Ingredients', method: 'Method', serves: 'Serves {n}', perServing: 'kcal / serving', macros: '{p}g protein · {c}g carbs · {f}g fat (per serving, estimated)',
+          ctaText: 'This recipe was made with Fridge-to-Table. Type or photograph what you have and get recipes and a weekly plan that fit.', ctaBtn: 'Open the app',
+          note: 'Calories and nutrition are estimates. If you have an allergy, check the ingredients yourself.', title: 'Recipe · Fridge-to-Table',
+          diff: { easy: 'Easy', medium: 'Medium', hard: 'Hard' } }
+  };
+  var lang = null;
+  try { lang = localStorage.getItem('ftt_lang'); } catch (e) {}
+  if (lang !== 'tr' && lang !== 'en') lang = (navigator.language || '').toLowerCase().indexOf('tr') === 0 ? 'tr' : 'en';
+  var T = L[lang];
+  document.documentElement.lang = lang;
+  document.getElementById('brandName').textContent = T.brand;
+  document.title = T.title;
+
+  var content = document.getElementById('content');
+  var state = document.getElementById('state');
+  state.textContent = T.loading;
+
+  function el(tag, cls, text){ var e = document.createElement(tag); if (cls) e.className = cls; if (text != null) e.textContent = String(text); return e; }
+  function ingParts(x){
+    if (x == null) return { name: '', amount: '' };
+    if (typeof x === 'string') return { name: x, amount: '' };
+    return { name: x.item || x.name || '', amount: x.amount || '' };
+  }
+  function showMessage(msg){ content.innerHTML = ''; content.appendChild(el('p', 'state', msg)); }
+
+  var id = new URLSearchParams(location.search).get('id') || '';
+  if (!/^[0-9a-f-]{36}$/i.test(id)){ showMessage(T.notFound); return; }
+
+  fetch(SUPABASE_URL + '/rest/v1/rpc/get_shared_recipe', {
+    method: 'POST',
+    headers: { 'apikey': SUPABASE_ANON_KEY, 'Authorization': 'Bearer ' + SUPABASE_ANON_KEY, 'Content-Type': 'application/json' },
+    body: JSON.stringify({ share_id: id })
+  }).then(function(res){ if (!res.ok) throw new Error('HTTP ' + res.status); return res.json(); })
+    .then(function(r){
+      if (!r || typeof r !== 'object' || !r.title){ showMessage(T.notFound); return; }
+      content.innerHTML = '';
+      document.title = r.title + ' · ' + T.brand;
+
+      content.appendChild(el('h1', '', r.title));
+      if (r.description) content.appendChild(el('p', 'desc', r.description));
+
+      var badges = el('ul', 'badges');
+      if (r.total_time) badges.appendChild(el('li', '', r.total_time));
+      var d = String(r.difficulty || '').toLowerCase();
+      if (T.diff[d]) badges.appendChild(el('li', '', T.diff[d]));
+      if (r.servings) badges.appendChild(el('li', '', T.serves.replace('{n}', r.servings)));
+      if (r.calories_per_serving) badges.appendChild(el('li', '', Math.round(r.calories_per_serving) + ' ' + T.perServing));
+      if (badges.children.length) content.appendChild(badges);
+
+      var ings = [].concat(r.ingredients_used || [], r.missing_ingredients || []).map(ingParts).filter(function(x){ return x.name; });
+      if (ings.length){
+        var c1 = el('div', 'card'); c1.appendChild(el('h2', '', T.ingredients));
+        var ul = el('ul', 'ing');
+        ings.forEach(function(x){ var li = el('li'); li.appendChild(el('span', '', x.name)); if (x.amount) li.appendChild(el('span', 'amt', x.amount)); ul.appendChild(li); });
+        c1.appendChild(ul); content.appendChild(c1);
+      }
+      var steps = (r.steps || []).filter(Boolean);
+      if (steps.length){
+        var c2 = el('div', 'card'); c2.appendChild(el('h2', '', T.method));
+        var ol = el('ol', 'steps');
+        steps.forEach(function(s){ ol.appendChild(el('li', '', typeof s === 'string' ? s : (s.text || ''))); });
+        c2.appendChild(ol);
+        if (r.protein_g || r.carbs_g || r.fat_g){
+          c2.appendChild(el('p', 'macros', T.macros.replace('{p}', Math.round(r.protein_g || 0)).replace('{c}', Math.round(r.carbs_g || 0)).replace('{f}', Math.round(r.fat_g || 0))));
+        }
+        content.appendChild(c2);
+      }
+
+      var cta = el('div', 'cta');
+      cta.appendChild(el('p', '', T.ctaText));
+      var a = el('a', 'btn', T.ctaBtn); a.href = '/';
+      cta.appendChild(a);
+      content.appendChild(cta);
+      content.appendChild(el('p', 'note', T.note));
+    })
+    .catch(function(){ showMessage(T.error); });
+})();
+</script>
+</body>
+</html>
