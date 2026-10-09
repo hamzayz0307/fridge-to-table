@@ -22,6 +22,12 @@ Pantry-based recipe and meal-planning web app. Owner: Hamza (works in Turkish �
 - **Open reminder for the owner (domain + email, postponed):** no custom domain yet; the app uses its personal email and `fridge-to-table-delta.vercel.app`. Owner wants no subscriptions (no Google Workspace). When ready: buy the domain (was considering `agh-production.com`) at Cloudflare Registrar, set up free Cloudflare Email Routing (e.g. `destek@…` → Gmail), point a subdomain (e.g. `dolaptansofraya.agh-production.com`) at Vercel, then add it to Supabase Redirect URLs and Google Auth Platform authorized domains, and use the new address in the privacy policy / Google support email. Optional later: free Brevo SMTP as Supabase custom SMTP. Note: Vercel Hobby is non-commercial; switch to Pro when the app earns money.
 - **Open reminder for the owner:** the Google Auth Platform app is still in *Testing* (not published), so only Google accounts added as test users can sign in with Google. Remind Hamza to publish it (Audience → Publish app) before sharing the app more widely.
 
+## Installable app, offline, privacy
+- PWA: `manifest.webmanifest` (name "Dolaptan Sofraya", short "Sofraya"), icons in `icons/` (tomato square with a white pot; maskable variant), `sw.js` service worker. Pages are network-first with a cached fallback; icons/fonts/supabase-js are stale-while-revalidate; Supabase requests are never cached. Bump `CACHE` in `sw.js` if you change the shell file list.
+- Profile → "Add to home screen": uses `beforeinstallprompt` on Android/Chrome, shows Safari "Add to Home Screen" steps on iPhone; hidden when already running standalone.
+- Shopping list offline: the list is cached in localStorage (`ftt_list_items_<uid>`), shown first and when loading fails; ticks made offline go to `ftt_list_pending_<uid>` and are written on the `online` event / next load. Adding/removing items still needs a connection.
+- `privacy.html`: standalone bilingual privacy policy (TR/EN, `?lang=`), linked from the sign-in card and the Profile footer. Update it (and its date) whenever the app starts collecting something new or uses a new provider. Contact is the in-app feedback until a custom email exists.
+
 ## Product decisions
 - **Sidebar/Profile = universal settings** (diet, allergies, servings, goal, language). They are the defaults everywhere.
 - **Recipes page** choices are temporary for that suggestion and never write to the profile (shows a "changed" badge + "reset to my defaults").

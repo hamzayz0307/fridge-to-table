@@ -4,6 +4,13 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
 <meta name="theme-color" content="#EDF0E9" id="themeColorMeta">
+<link rel="manifest" href="/manifest.webmanifest">
+<link rel="icon" type="image/png" sizes="32x32" href="/icons/favicon-32.png">
+<link rel="apple-touch-icon" href="/icons/apple-touch-icon.png">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="default">
+<meta name="apple-mobile-web-app-title" content="Sofraya">
 <script>
   // Theme is a per-device choice: 'light' | 'dark' | 'system' (default).
   (function(){
@@ -1792,6 +1799,12 @@
   .confirm-actions .confirm-danger-btn:hover{ background: #C93C23; border-color: #C93C23; color: #fff; }
   .delete-account-link{ display: block; margin: 18px auto 0; color: var(--bad-ink); text-decoration-color: currentColor; font-weight: 500; }
 
+  /* privacy link, offline note */
+  .privacy-link{ display: block; width: fit-content; margin: 14px auto 0; font-size: 13px; color: var(--ink-soft); text-decoration: underline; text-underline-offset: 3px; text-decoration-color: var(--line-dark); }
+  .privacy-link:hover{ color: var(--ink); }
+  .auth-privacy{ margin-top: 16px; }
+  .offline-note{ margin: 14px 0 0; padding: 12px 14px; border-radius: 16px; background: var(--warn-bg); color: var(--warn-ink); font-size: 13.5px; line-height: 1.45; }
+
   /* bottom navigation */
   .bottom-nav{
     position: fixed; left: 0; right: 0; bottom: calc(12px + env(safe-area-inset-bottom));
@@ -1845,6 +1858,7 @@
     <p class="auth-note" id="authNote" style="display:none;"></p>
 
     <button class="btn btn-solid" id="authSubmitBtn" style="width:100%; margin-top: 16px; justify-content: center;" data-i18n="auth_signin_tab">Sign in</button>
+    <a class="privacy-link auth-privacy" href="/privacy.html" data-i18n="privacy_link">Privacy policy</a>
   </div>
 </div>
 
@@ -2136,6 +2150,7 @@
       <p class="empty-desc" data-i18n="list_empty_desc">Open a recipe in the Recipes tab and add its missing ingredients, or type your own above.</p>
     </div>
 
+    <p class="offline-note" id="listOfflineNote" style="display:none;" data-i18n="list_offline">You're offline. This is your list as last saved; items you tick will be saved when you're back online.</p>
     <ul class="shopping-list" id="shoppingListEl"></ul>
 
     <div class="row" id="listPrintRow" style="display:none; justify-content: flex-end;">
@@ -2533,6 +2548,14 @@
     </div>
 
     <div class="row-list profile-feedback">
+      <button class="row-card" id="installAppBtn" type="button" style="display:none;">
+        <span class="round-icon ic-tomato"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="7" y="3" width="10" height="18" rx="2.5"/><path d="M12 8v6M9.5 11.5 12 14l2.5-2.5"/></svg></span>
+        <span class="row-text">
+          <span class="row-title" data-i18n="install_title">Add to home screen</span>
+          <span class="row-sub" data-i18n="install_row_sub">Opens full screen, like an app</span>
+        </span>
+        <span class="row-end"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m9 6 6 6-6 6"/></svg></span>
+      </button>
       <button class="row-card" id="feedbackOpenBtn" type="button">
         <span class="round-icon ic-teal"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 5h14v10H10l-4 4v-4H5Z"/><path d="M9 9.5h6M9 12h4"/></svg></span>
         <span class="row-text">
@@ -2547,6 +2570,7 @@
       <button class="text-link tour-replay" id="tourReplayBtn" data-i18n="tour_replay">Show the tour again</button>
       <button class="btn btn-ghost" id="signOutBtn" style="width:100%; justify-content:center;" data-i18n="sign_out">Sign out</button>
       <button class="text-link delete-account-link" id="deleteAccountBtn" type="button" data-i18n="delete_link">Delete my account</button>
+      <a class="privacy-link" id="profilePrivacyLink" href="/privacy.html" data-i18n="privacy_link">Privacy policy</a>
     </div>
   </section>
 
@@ -2714,6 +2738,16 @@
     </div>
   </div>
 
+  <div class="confirm-overlay" id="installOverlay">
+    <div class="confirm-card account-card">
+      <h2 class="account-title" data-i18n="install_title">Add to home screen</h2>
+      <p class="account-sub" id="installSteps"></p>
+      <div class="confirm-actions">
+        <button class="btn btn-solid" id="installCloseBtn" data-i18n="ok_got_it">Got it</button>
+      </div>
+    </div>
+  </div>
+
   <div class="confirm-overlay" id="feedbackOverlay">
     <div class="confirm-card account-card">
       <h2 class="account-title" data-i18n="feedback_title">Send feedback</h2>
@@ -2793,6 +2827,14 @@ const translations = {
     delete_btn: "Delete account",
     delete_failed: "Couldn't delete the account. Try again in a moment.",
     delete_done: "Your account was deleted.",
+    privacy_link: "Privacy policy",
+    install_title: "Add to home screen",
+    install_row_sub: "Opens full screen, like an app",
+    ok_got_it: "Got it",
+    install_ios: "In Safari, tap the Share button (the square with an arrow) at the bottom, then choose \"Add to Home Screen\".",
+    install_ios_other: "On iPhone this works from Safari. Open this page in Safari, tap Share, then \"Add to Home Screen\".",
+    install_other: "Open your browser menu (⋮) and choose \"Install app\" or \"Add to Home screen\".",
+    list_offline: "You're offline. This is your list as last saved; items you tick will be saved when you're back online.",
     auth_signin_tab: "Sign in",
     auth_signup_tab: "Create account",
     auth_email_label: "Email",
@@ -3171,6 +3213,14 @@ const translations = {
     delete_btn: "Hesabı sil",
     delete_failed: "Hesap silinemedi. Biraz sonra tekrar dene.",
     delete_done: "Hesabın silindi.",
+    privacy_link: "Gizlilik politikası",
+    install_title: "Ana ekrana ekle",
+    install_row_sub: "Uygulama gibi tam ekran açılır",
+    ok_got_it: "Tamam",
+    install_ios: "Safari'de alttaki Paylaş düğmesine (oklu kare) dokun, sonra \"Ana Ekrana Ekle\"yi seç.",
+    install_ios_other: "iPhone'da bu Safari'den yapılıyor. Bu sayfayı Safari'de aç, Paylaş'a dokun, sonra \"Ana Ekrana Ekle\"yi seç.",
+    install_other: "Tarayıcı menüsünü (⋮) aç ve \"Uygulamayı yükle\" ya da \"Ana ekrana ekle\"yi seç.",
+    list_offline: "İnternet yok. Listen son kaydedilen haliyle gösteriliyor; işaretlediklerin bağlantı gelince kaydedilecek.",
     auth_signin_tab: "Giriş yap",
     auth_signup_tab: "Hesap oluştur",
     auth_email_label: "E-posta",
@@ -3620,6 +3670,7 @@ function applyTranslations(){
 
 // Re-draw every list so dynamic text (badges, labels) follows the current language.
 function refreshLanguageViews(){
+  document.querySelectorAll('.privacy-link').forEach(a => { a.href = '/privacy.html?lang=' + currentLanguage; });
   applyTranslations();
   if (typeof renderPantry === 'function' && typeof pantryItems !== 'undefined') renderPantry();
   if (typeof renderShoppingList === 'function') renderShoppingList();
@@ -3729,6 +3780,7 @@ function showApp(){
   }
 }
 function showAuthScreen(){
+  try { shoppingList = []; } catch (e) {} // don't let one account's list be cached under the next account
   appRoot.style.display = 'none';
   authOverlay.style.display = 'flex';
   appDataLoaded = false;
@@ -4355,20 +4407,63 @@ function dbToShoppingItem(row){
   return { id: row.id, name: row.name, amount: row.amount || '', checked: !!row.checked, source: row.source || 'manual' };
 }
 
+/* The list is also kept on the device so it opens in a shop with no signal.
+   Ticks made while offline are queued and written when the connection comes back. */
+function listCacheKey(kind){ return 'ftt_list_' + kind + '_' + (currentUserId || 'anon'); }
+function readListCache(kind, fallback){
+  try { const raw = localStorage.getItem(listCacheKey(kind)); return raw ? JSON.parse(raw) : fallback; } catch (e) { return fallback; }
+}
+function writeListCache(kind, value){
+  try { localStorage.setItem(listCacheKey(kind), JSON.stringify(value)); } catch (e) {}
+}
+function isOffline(){ return typeof navigator !== 'undefined' && navigator.onLine === false; }
+function setListOffline(on){
+  const el = document.getElementById('listOfflineNote');
+  if (el) el.style.display = on ? 'block' : 'none';
+}
+function queueListTick(id, checked){
+  const pending = readListCache('pending', {});
+  pending[id] = checked;
+  writeListCache('pending', pending);
+}
+async function flushListTicks(){
+  const pending = readListCache('pending', {});
+  const ids = Object.keys(pending);
+  if (!ids.length) return;
+  for (const id of ids){
+    const { error } = await supabaseClient.from('shopping_list').update({ checked: pending[id] }).eq('id', Number(id));
+    if (error) return; // still offline or failing: keep the queue
+    delete pending[id];
+    writeListCache('pending', pending);
+  }
+}
+
 async function loadShoppingListFromDb(){
+  // Show the saved copy first so the list is there instantly (and offline).
+  if (!shoppingList.length){
+    const cached = readListCache('items', null);
+    if (Array.isArray(cached) && cached.length){ shoppingList = cached; renderShoppingList(); }
+  }
+
+  await flushListTicks();
   const { data, error } = await supabaseClient
     .from('shopping_list')
     .select('*')
     .order('created_at', { ascending: true });
 
   if (error){
-    console.error('Failed to load shopping list:', error);
+    (isOffline() ? console.warn : console.error)('Failed to load shopping list:', error);
+    setListOffline(true);
     return;
   }
 
+  setListOffline(false);
   shoppingList = (data || []).map(dbToShoppingItem);
   renderShoppingList();
 }
+
+window.addEventListener('online', () => { if (currentUserId) loadShoppingListFromDb(); });
+window.addEventListener('offline', () => setListOffline(true));
 
 // entries can be plain names ("feta") or recipe ingredients ({ item: "feta", amount: "50g" })
 async function addToShoppingList(entries, source){
@@ -4396,6 +4491,7 @@ async function addToShoppingList(entries, source){
 }
 
 function renderShoppingList(){
+  writeListCache('items', shoppingList);
   shoppingListEl.innerHTML = '';
   const sorted = shoppingList.slice().sort((a, b) => (a.checked === b.checked) ? 0 : (a.checked ? 1 : -1));
 
@@ -4417,8 +4513,10 @@ function renderShoppingList(){
       const newChecked = !item.checked;
       item.checked = newChecked;
       renderShoppingList();
+      if (isOffline()){ queueListTick(item.id, newChecked); setListOffline(true); return; }
       const { error } = await supabaseClient.from('shopping_list').update({ checked: newChecked }).eq('id', item.id);
       if (error){
+        if (isOffline()){ queueListTick(item.id, newChecked); setListOffline(true); return; }
         console.error('Failed to update item:', error);
         item.checked = !newChecked;
         renderShoppingList();
@@ -7933,6 +8031,38 @@ try {
   if (mq.addEventListener) mq.addEventListener('change', onChange); else if (mq.addListener) mq.addListener(onChange);
 } catch (e) {}
 applyTheme();
+
+/* ============ INSTALL (add to home screen) + OFFLINE SHELL ============ */
+let deferredInstallPrompt = null;
+function isStandalone(){
+  return (window.matchMedia && window.matchMedia('(display-mode: standalone)').matches) || window.navigator.standalone === true;
+}
+function refreshInstallRow(){
+  const row = document.getElementById('installAppBtn');
+  if (row) row.style.display = isStandalone() ? 'none' : '';
+}
+window.addEventListener('beforeinstallprompt', (e) => { e.preventDefault(); deferredInstallPrompt = e; refreshInstallRow(); });
+window.addEventListener('appinstalled', () => { deferredInstallPrompt = null; refreshInstallRow(); });
+document.getElementById('installAppBtn').addEventListener('click', async () => {
+  if (deferredInstallPrompt){
+    deferredInstallPrompt.prompt();
+    try { await deferredInstallPrompt.userChoice; } catch (e) {}
+    deferredInstallPrompt = null;
+    refreshInstallRow();
+    return;
+  }
+  const ua = navigator.userAgent || '';
+  const iOS = /iPhone|iPad|iPod/.test(ua) || (/Macintosh/.test(ua) && navigator.maxTouchPoints > 1);
+  const safari = /Safari/.test(ua) && !/CriOS|FxiOS|EdgiOS|OPiOS/.test(ua);
+  document.getElementById('installSteps').textContent = t(iOS ? (safari ? 'install_ios' : 'install_ios_other') : 'install_other');
+  document.getElementById('installOverlay').classList.add('open');
+});
+document.getElementById('installCloseBtn').addEventListener('click', () => document.getElementById('installOverlay').classList.remove('open'));
+refreshInstallRow();
+
+if ('serviceWorker' in navigator && (location.protocol === 'https:' || location.hostname === 'localhost')){
+  window.addEventListener('load', () => { navigator.serviceWorker.register('/sw.js').catch(err => console.warn('Service worker not registered:', err)); });
+}
 
 /* ============ HOME ("Today") ============ */
 const CAT_GLYPH = {

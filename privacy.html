@@ -1,0 +1,194 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<title>Gizlilik politikası · Dolaptan Sofraya</title>
+<link rel="icon" type="image/png" sizes="32x32" href="/icons/favicon-32.png">
+<script>
+  (function(){
+    var choice = 'system';
+    try { choice = localStorage.getItem('ftt_theme') || 'system'; } catch (e) {}
+    var dark = choice === 'dark' || (choice === 'system' && window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches);
+    document.documentElement.setAttribute('data-theme', dark ? 'dark' : 'light');
+  })();
+</script>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Newsreader:opsz,wght@6..72,500;6..72,600&family=Instrument+Sans:wght@400;500;600&display=swap');
+  :root{
+    --bg: #EDF0E9; --surface: #FFFFFF; --ink: #15171A; --ink-soft: #5F645C; --line: #DDE0D9; --accent: #E5482D;
+    --font-ui: 'Instrument Sans', system-ui, -apple-system, sans-serif;
+    --font-display: 'Newsreader', Georgia, serif;
+  }
+  :root[data-theme="dark"]{ color-scheme: dark; --bg: #121412; --surface: #1B1E1B; --ink: #ECEDE8; --ink-soft: #A2A89E; --line: #2F342F; --accent: #F07A62; }
+  *{ box-sizing: border-box; }
+  body{ margin: 0; background: var(--bg); color: var(--ink); font-family: var(--font-ui); font-size: 16px; line-height: 1.6; -webkit-font-smoothing: antialiased; }
+  .wrap{ max-width: 680px; margin: 0 auto; padding: 28px 20px 64px; }
+  .top{ display: flex; align-items: center; justify-content: space-between; gap: 12px; margin-bottom: 28px; }
+  .back{ color: var(--ink); font-weight: 600; font-size: 14px; text-decoration: underline; text-underline-offset: 3px; text-decoration-color: var(--line); }
+  .lang{ display: flex; gap: 4px; background: rgba(127,127,127,.12); border-radius: 999px; padding: 4px; }
+  .lang button{ border: 0; background: transparent; color: var(--ink-soft); font: 600 13px var(--font-ui); padding: 7px 14px; border-radius: 999px; cursor: pointer; }
+  .lang button[aria-pressed="true"]{ background: var(--surface); color: var(--ink); }
+  h1{ font-family: var(--font-display); font-weight: 600; font-size: 38px; line-height: 1.1; letter-spacing: -0.015em; margin: 0 0 8px; }
+  .meta{ color: var(--ink-soft); font-size: 14px; margin: 0 0 28px; }
+  .card{ background: var(--surface); border-radius: 22px; padding: 22px 22px 8px; margin-bottom: 14px; }
+  h2{ font-family: var(--font-display); font-weight: 600; font-size: 22px; line-height: 1.25; margin: 0 0 10px; }
+  p, li{ max-width: 64ch; }
+  p{ margin: 0 0 14px; }
+  ul{ margin: 0 0 14px; padding-left: 20px; }
+  li{ margin-bottom: 6px; }
+  b{ font-weight: 600; }
+  .note{ color: var(--ink-soft); font-size: 14px; }
+  [data-lang]{ display: none; }
+  html[lang="tr"] [data-lang="tr"], html[lang="en"] [data-lang="en"]{ display: block; }
+  a{ color: inherit; }
+  :focus-visible{ outline: 2px solid var(--ink); outline-offset: 2px; }
+</style>
+</head>
+<body>
+<div class="wrap">
+  <div class="top">
+    <a class="back" href="/"><span data-lang="tr">Uygulamaya dön</span><span data-lang="en">Back to the app</span></a>
+    <div class="lang" role="group" aria-label="Language">
+      <button type="button" data-set-lang="tr" aria-pressed="true">Türkçe</button>
+      <button type="button" data-set-lang="en" aria-pressed="false">English</button>
+    </div>
+  </div>
+
+  <!-- ===================== TÜRKÇE ===================== -->
+  <div data-lang="tr">
+    <h1>Gizlilik politikası</h1>
+    <p class="meta">Dolaptan Sofraya · Son güncelleme: 9 Ekim 2026</p>
+
+    <div class="card">
+      <h2>Kısaca</h2>
+      <p>Dolaptan Sofraya, dolabındakilerle tarif önermek, haftalık yemek planı hazırlamak ve alışveriş listeni tutmak için gereken bilgileri saklar. Verilerini satmayız, reklam göstermeyiz ve seni takip eden analiz araçları kullanmayız. Hesabını istediğin an uygulamanın içinden silebilirsin.</p>
+    </div>
+
+    <div class="card">
+      <h2>Hangi bilgileri saklıyoruz</h2>
+      <ul>
+        <li><b>Hesap bilgileri:</b> e-posta adresin ve şifren (şifre şifrelenmiş olarak saklanır, kimse göremez). Google ile giriş yaparsan Google'ın paylaştığı ad ve e-posta adresi.</li>
+        <li><b>Profil tercihlerin:</b> sana nasıl hitap edeceğimiz, dil, diyet, alerjiler ve sevmediğin yiyecekler, porsiyon sayısı, beslenme hedefi ve plan ayarların. Alerji ve diyet bilgisi sağlıkla ilgili sayılabilir; bunları yalnızca tarifleri sana göre ayarlamak için kullanırız.</li>
+        <li><b>Uygulamada oluşturdukların:</b> mutfağındaki malzemeler, kaydettiğin tarifler, yemek planları, misafir menüleri, pişirme geçmişin ve alışveriş listen.</li>
+        <li><b>Geri bildirimler:</b> gönderdiğin mesaj, hangi sayfadan gönderdiğin, uygulama dili ve tarayıcı bilgisi (hatayı bulabilmemiz için).</li>
+      </ul>
+    </div>
+
+    <div class="card">
+      <h2>Fotoğraflar ve yapay zekâ</h2>
+      <p>Tarif, plan ya da menü istediğinde ve mutfağını fotoğrafla taradığında, gerekli bilgiler (malzeme listen, tercihlerin, yazdığın notlar ve yüklediğin fotoğraflar) yanıtı oluşturmak için sunucumuz üzerinden <b>Google Gemini</b> yapay zekâ servisine gönderilir. Fotoğrafların bizim veritabanımızda saklanmaz; yalnızca o istek için kullanılır. Google bu verileri kendi API koşulları çerçevesinde işler.</p>
+      <p>Yapay zekâ önerileri, kalori ve besin değerleri tahminidir. Alerjin varsa tarifteki malzemeleri her zaman kendin de kontrol et.</p>
+    </div>
+
+    <div class="card">
+      <h2>Verilerin nerede tutuluyor</h2>
+      <ul>
+        <li><b>Supabase:</b> hesabın ve uygulama verilerin Supabase'in bulut veritabanında tutulur. Her kullanıcı yalnızca kendi verisine erişebilir.</li>
+        <li><b>Vercel:</b> uygulamanın kendisi Vercel'de yayınlanır. Vercel, her web sitesinde olduğu gibi teknik bağlantı kayıtları tutabilir.</li>
+        <li><b>Google:</b> yapay zekâ yanıtları (Gemini) ve Google ile giriş için.</li>
+      </ul>
+      <p>Bu hizmet sağlayıcıların sunucuları Türkiye dışında olabilir.</p>
+    </div>
+
+    <div class="card">
+      <h2>Cihazında saklananlar</h2>
+      <p>Oturumunun açık kalması, seçtiğin dil, tema (açık/koyu) ve misafir menüsü tercihlerin ile internet yokken açılabilmesi için alışveriş listenin bir kopyası tarayıcının yerel depolamasında tutulur. Reklam ya da takip çerezi kullanmayız.</p>
+    </div>
+
+    <div class="card">
+      <h2>Ne kadar süre saklıyoruz, nasıl silersin</h2>
+      <p>Verilerin, hesabın açık olduğu sürece saklanır. Tek tek öğeleri uygulamanın içinden silebilirsin. <b>Profil → Hesabımı sil</b> ile hesabın ve ona bağlı tüm veriler kalıcı olarak silinir; bu işlem geri alınamaz.</p>
+      <p>Verilerine erişmek, düzeltmek ya da silinmesini istemek gibi haklarını (KVKK ve benzeri düzenlemeler kapsamında) uygulamanın içinden ya da aşağıdaki yolla bize ulaşarak kullanabilirsin.</p>
+    </div>
+
+    <div class="card">
+      <h2>Çocuklar</h2>
+      <p>Uygulama 13 yaşından küçükler için tasarlanmamıştır.</p>
+    </div>
+
+    <div class="card">
+      <h2>Değişiklikler ve iletişim</h2>
+      <p>Bu politikayı değiştirirsek bu sayfayı ve üstteki tarihi güncelleriz. Sorun ya da isteğin için uygulamada <b>Profil → Geri bildirim gönder</b>'i kullanabilirsin.</p>
+    </div>
+  </div>
+
+  <!-- ===================== ENGLISH ===================== -->
+  <div data-lang="en">
+    <h1>Privacy policy</h1>
+    <p class="meta">Fridge-to-Table · Last updated: October 9, 2026</p>
+
+    <div class="card">
+      <h2>In short</h2>
+      <p>Fridge-to-Table keeps the information it needs to suggest recipes from what you have, plan your week and keep your shopping list. We don't sell your data, show ads or use tracking analytics. You can delete your account from inside the app at any time.</p>
+    </div>
+
+    <div class="card">
+      <h2>What we store</h2>
+      <ul>
+        <li><b>Account:</b> your email address and password (stored hashed; nobody can read it). If you sign in with Google, the name and email address Google shares.</li>
+        <li><b>Profile preferences:</b> what to call you, language, diet, allergies and dislikes, servings, nutrition goal and plan settings. Allergies and diet can count as health information; we only use them to tailor recipes to you.</li>
+        <li><b>What you create:</b> your kitchen items, saved recipes, meal plans, guest menus, cooking history and shopping list.</li>
+        <li><b>Feedback:</b> your message, the page you sent it from, the app language and browser details (so we can find the bug).</li>
+      </ul>
+    </div>
+
+    <div class="card">
+      <h2>Photos and AI</h2>
+      <p>When you ask for a recipe, plan or menu, or scan your kitchen with a photo, the information needed (your item list, preferences, notes and the photos you add) is sent through our server to <b>Google Gemini</b> to produce the answer. Photos are not stored in our database; they are only used for that request. Google processes this data under its API terms.</p>
+      <p>AI suggestions and calorie or nutrition figures are estimates. If you have an allergy, always check the ingredients yourself.</p>
+    </div>
+
+    <div class="card">
+      <h2>Where your data lives</h2>
+      <ul>
+        <li><b>Supabase:</b> your account and app data are kept in Supabase's cloud database. Each user can only access their own data.</li>
+        <li><b>Vercel:</b> hosts the app itself and, like any website host, may keep technical connection logs.</li>
+        <li><b>Google:</b> for AI answers (Gemini) and Google sign-in.</li>
+      </ul>
+      <p>These providers' servers may be outside your country.</p>
+    </div>
+
+    <div class="card">
+      <h2>Stored on your device</h2>
+      <p>Your browser's local storage keeps you signed in, remembers your language, theme (light/dark) and guest-menu choices, and holds a copy of your shopping list so it opens without a connection. We don't use advertising or tracking cookies.</p>
+    </div>
+
+    <div class="card">
+      <h2>How long we keep it, and how to delete it</h2>
+      <p>Your data is kept while your account exists. You can delete individual items in the app. <b>Profile → Delete my account</b> permanently deletes your account and all data linked to it; this can't be undone.</p>
+      <p>You can exercise your rights to access, correct or delete your data (under GDPR, KVKK and similar laws) from inside the app or by contacting us as described below.</p>
+    </div>
+
+    <div class="card">
+      <h2>Children</h2>
+      <p>The app is not designed for children under 13.</p>
+    </div>
+
+    <div class="card">
+      <h2>Changes and contact</h2>
+      <p>If we change this policy we'll update this page and the date above. For questions or requests, use <b>Profile → Send feedback</b> in the app.</p>
+    </div>
+  </div>
+</div>
+<script>
+  (function(){
+    function setLang(lang){
+      document.documentElement.lang = lang;
+      document.title = lang === 'tr' ? 'Gizlilik politikası · Dolaptan Sofraya' : 'Privacy policy · Fridge-to-Table';
+      document.querySelectorAll('[data-set-lang]').forEach(function(b){ b.setAttribute('aria-pressed', String(b.getAttribute('data-set-lang') === lang)); });
+    }
+    var params = new URLSearchParams(location.search);
+    var lang = params.get('lang');
+    if (lang !== 'tr' && lang !== 'en'){
+      try { lang = localStorage.getItem('ftt_lang'); } catch (e) {}
+    }
+    if (lang !== 'tr' && lang !== 'en') lang = (navigator.language || '').toLowerCase().indexOf('tr') === 0 ? 'tr' : 'en';
+    setLang(lang);
+    document.querySelectorAll('[data-set-lang]').forEach(function(b){
+      b.addEventListener('click', function(){ setLang(b.getAttribute('data-set-lang')); });
+    });
+  })();
+</script>
+</body>
+</html>
