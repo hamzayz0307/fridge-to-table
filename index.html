@@ -2514,10 +2514,44 @@
         <span class="row-text"><span class="row-title" data-i18n="cell_history_name">Meal history</span><span class="row-sub" data-i18n="cell_history_desc">What you've actually cooked</span></span>
         <span class="row-end"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m9 6 6 6-6 6"/></svg></span>
       </button>
+      <button class="row-card" data-go="settings" id="settingsRowBtn">
+        <span class="round-icon ic-plum"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 7h10M18 7h2M4 17h4M12 17h8"/><circle cx="16" cy="7" r="2"/><circle cx="10" cy="17" r="2"/></svg></span>
+        <span class="row-text"><span class="row-title" data-i18n="profile_settings">Your settings</span><span class="row-sub" id="settingsRowSub" data-i18n="settings_row_sub">Language, appearance, diet, allergies, servings</span></span>
+        <span class="row-end"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m9 6 6 6-6 6"/></svg></span>
+      </button>
     </div>
 
-    <h2 class="profile-section-title" data-i18n="profile_settings">Your settings</h2>
-    <p class="screen-sub profile-sub" data-i18n="profile_sub">These apply automatically in Recipes, Meal Plan, and Surprise Me — change them here once instead of every time.</p>
+    <div class="row-list profile-feedback">
+      <button class="row-card" id="installAppBtn" type="button" style="display:none;">
+        <span class="round-icon ic-tomato"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="7" y="3" width="10" height="18" rx="2.5"/><path d="M12 8v6M9.5 11.5 12 14l2.5-2.5"/></svg></span>
+        <span class="row-text">
+          <span class="row-title" data-i18n="install_title">Add to home screen</span>
+          <span class="row-sub" data-i18n="install_row_sub">Opens full screen, like an app</span>
+        </span>
+        <span class="row-end"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m9 6 6 6-6 6"/></svg></span>
+      </button>
+      <button class="row-card" id="feedbackOpenBtn" type="button">
+        <span class="round-icon ic-teal"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 5h14v10H10l-4 4v-4H5Z"/><path d="M9 9.5h6M9 12h4"/></svg></span>
+        <span class="row-text">
+          <span class="row-title" data-i18n="feedback_title">Send feedback</span>
+          <span class="row-sub" data-i18n="feedback_row_sub">Report a bug or suggest an idea</span>
+        </span>
+        <span class="row-end"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m9 6 6 6-6 6"/></svg></span>
+      </button>
+    </div>
+
+    <div class="pref-block profile-footer">
+      <button class="text-link tour-replay" id="tourReplayBtn" data-i18n="tour_replay">Show the tour again</button>
+      <button class="btn btn-ghost" id="signOutBtn" style="width:100%; justify-content:center;" data-i18n="sign_out">Sign out</button>
+      <button class="text-link delete-account-link" id="deleteAccountBtn" type="button" data-i18n="delete_link">Delete my account</button>
+      <a class="privacy-link" id="profilePrivacyLink" href="/privacy.html" data-i18n="privacy_link">Privacy policy</a>
+    </div>
+  </section>
+
+  <!-- ============ PAGE: SETTINGS (from Profile) ============ -->
+  <section class="tab-page" id="tabSettings">
+    <h1 class="screen-title" data-i18n="profile_settings">Your settings</h1>
+    <p class="screen-sub" data-i18n="profile_sub">These apply automatically in Recipes, Meal Plan, and Surprise Me — change them here once instead of every time.</p>
 
     <div class="pref-block">
       <p class="pref-label" data-i18n="pref_language">language</p>
@@ -2582,32 +2616,6 @@
         <button class="pill" data-value="4">4</button>
         <button class="pill" data-value="6">6</button>
       </div>
-    </div>
-
-    <div class="row-list profile-feedback">
-      <button class="row-card" id="installAppBtn" type="button" style="display:none;">
-        <span class="round-icon ic-tomato"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="7" y="3" width="10" height="18" rx="2.5"/><path d="M12 8v6M9.5 11.5 12 14l2.5-2.5"/></svg></span>
-        <span class="row-text">
-          <span class="row-title" data-i18n="install_title">Add to home screen</span>
-          <span class="row-sub" data-i18n="install_row_sub">Opens full screen, like an app</span>
-        </span>
-        <span class="row-end"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m9 6 6 6-6 6"/></svg></span>
-      </button>
-      <button class="row-card" id="feedbackOpenBtn" type="button">
-        <span class="round-icon ic-teal"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 5h14v10H10l-4 4v-4H5Z"/><path d="M9 9.5h6M9 12h4"/></svg></span>
-        <span class="row-text">
-          <span class="row-title" data-i18n="feedback_title">Send feedback</span>
-          <span class="row-sub" data-i18n="feedback_row_sub">Report a bug or suggest an idea</span>
-        </span>
-        <span class="row-end"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m9 6 6 6-6 6"/></svg></span>
-      </button>
-    </div>
-
-    <div class="pref-block profile-footer">
-      <button class="text-link tour-replay" id="tourReplayBtn" data-i18n="tour_replay">Show the tour again</button>
-      <button class="btn btn-ghost" id="signOutBtn" style="width:100%; justify-content:center;" data-i18n="sign_out">Sign out</button>
-      <button class="text-link delete-account-link" id="deleteAccountBtn" type="button" data-i18n="delete_link">Delete my account</button>
-      <a class="privacy-link" id="profilePrivacyLink" href="/privacy.html" data-i18n="privacy_link">Privacy policy</a>
     </div>
   </section>
 
@@ -2903,6 +2911,7 @@ const translations = {
     share_title: "Share this recipe",
     share_sub: "Anyone with this link can see the recipe.",
     share_copy: "Copy link",
+    settings_row_sub: "Language, appearance, diet, allergies, servings",
     auth_signin_tab: "Sign in",
     auth_signup_tab: "Create account",
     auth_email_label: "Email",
@@ -3305,6 +3314,7 @@ const translations = {
     share_title: "Tarifi paylaş",
     share_sub: "Bu linke sahip olan herkes tarifi görebilir.",
     share_copy: "Linki kopyala",
+    settings_row_sub: "Dil, görünüm, diyet, alerjiler, porsiyon",
     auth_signin_tab: "Giriş yap",
     auth_signup_tab: "Hesap oluştur",
     auth_email_label: "E-posta",
@@ -4057,13 +4067,14 @@ const tabPages = {
   history: document.getElementById('tabHistory'),
   plan: document.getElementById('tabPlan'),
   guest: document.getElementById('tabGuest'),
-  profile: document.getElementById('tabProfile')
+  profile: document.getElementById('tabProfile'),
+  settings: document.getElementById('tabSettings')
 };
 const backBtn = document.getElementById('backBtn');
 
 // Which bottom-nav item lights up for each page, and where "back" goes for sub-pages.
-const NAV_FOR_PAGE = { home: 'home', recipes: 'home', pantry: 'pantry', plan: 'plan', guest: 'plan', list: 'list', profile: 'profile', saved: 'profile', history: 'profile' };
-const BACK_TARGET = { recipes: 'home', saved: 'profile', history: 'profile' };
+const NAV_FOR_PAGE = { home: 'home', recipes: 'home', pantry: 'pantry', plan: 'plan', guest: 'plan', list: 'list', profile: 'profile', saved: 'profile', history: 'profile', settings: 'profile' };
+const BACK_TARGET = { recipes: 'home', saved: 'profile', history: 'profile', settings: 'profile' };
 let currentPage = 'home';
 
 function goToPage(name){

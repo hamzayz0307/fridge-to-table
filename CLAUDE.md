@@ -41,7 +41,7 @@ Pantry-based recipe and meal-planning web app. Owner: Hamza (works in Turkish �
 - **Guest menu**: courses with notes, guest count, occasion, prep time (3h/5h/10h/1d/2d), host timeline.
 - Everything is bilingual (English/Turkish): UI strings in the `translations` object (`t(key)`), option pills in `pillLabels`; AI is told to answer in the selected language. Brand: "Fridge-to-Table" / "Dolaptan Sofraya".
 - New accounts get a setup card + spotlight tour once (`profiles.onboarded`).
-- Navigation: floating bottom bar with 4 tabs — Today (home), Kitchen (pantry), Plan (meal prep + guest menu via a top switch), List (shopping list) — plus a round Profile button. Profile is a full page holding the universal settings, saved recipes and meal history. Recipes, saved and history are sub-pages with a back button.
+- Navigation: floating bottom bar with 4 tabs — Today (home), Kitchen (pantry), Plan (meal prep + guest menu via a top switch), List (shopping list) — plus a round Profile button. Profile is a full page with rows for saved recipes, meal history and settings, plus add-to-home-screen, feedback and the account footer. The universal settings live on their own sub-page (`#tabSettings`, `goToPage('settings')`). Recipes, saved, history and settings are sub-pages with a back button.
 
 ## Visual style
 - Page is a soft sage tint (`--bg`) with white cards (`--surface`); each section gets a color wash at the top (`body[data-page]` → `--wash`: home tomato, kitchen green, plan blue, list mustard, profile plum); home has faint kitchen line doodles behind the greeting. Elements inside white cards use `--bg-soft`.
