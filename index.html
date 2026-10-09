@@ -1774,6 +1774,24 @@
   :root[data-theme="dark"] .modal-backdrop, :root[data-theme="dark"] .confirm-overlay{ background: rgba(0,0,0,.6); }
   @media print{ :root[data-theme="dark"]{ color-scheme: light; } }
 
+  /* account: Google button, forgot link, feedback, delete */
+  .auth-google-btn{ width: 100%; justify-content: center; display: flex; background: var(--bg-soft); border-color: transparent; }
+  .auth-google-btn:hover{ background: var(--soft-hover); border-color: transparent; }
+  .auth-divider{ margin: 16px 0 6px; }
+  .auth-forgot{ display: block; margin: 10px 0 0 auto; font-size: 13px; }
+  .account-card{ display: flex; flex-direction: column; gap: 12px; max-width: 440px; width: calc(100% - 32px); }
+  .account-title{ font-family: var(--font-display); font-weight: 600; font-size: 24px; letter-spacing: -0.01em; margin: 0; color: var(--ink); }
+  .account-sub{ margin: 0; font-size: 14.5px; line-height: 1.5; color: var(--ink-soft); }
+  .account-card textarea{ width: 100%; resize: vertical; min-height: 110px; }
+  .account-card .confirm-actions{ margin-top: 4px; }
+  .account-card .view-toggle{ display: flex; flex-wrap: wrap; gap: 8px; }
+  .account-card .pill:not(.selected){ background: var(--bg-soft); }
+  .account-card .edit-label{ margin: 4px 0 -4px; }
+  .profile-feedback{ margin-top: 30px; }
+  .confirm-actions .confirm-danger-btn, .confirm-actions .confirm-danger-btn:disabled:hover{ background: var(--ic-tomato); border-color: var(--ic-tomato); color: #fff; }
+  .confirm-actions .confirm-danger-btn:hover{ background: #C93C23; border-color: #C93C23; color: #fff; }
+  .delete-account-link{ display: block; margin: 18px auto 0; color: var(--bad-ink); text-decoration-color: currentColor; font-weight: 500; }
+
   /* bottom navigation */
   .bottom-nav{
     position: fixed; left: 0; right: 0; bottom: calc(12px + env(safe-area-inset-bottom));
@@ -1813,11 +1831,15 @@
       <button class="pill" data-view="signup" data-i18n="auth_signup_tab">Create account</button>
     </div>
 
+    <button class="btn auth-google-btn" id="authGoogleBtn" type="button" data-i18n="auth_google">Continue with Google</button>
+    <div class="divider-word auth-divider" data-i18n="auth_or">or</div>
+
     <label class="edit-label" data-i18n="auth_email_label">Email</label>
     <input type="email" class="edit-input" id="authEmail" placeholder="you@example.com" autocomplete="email">
 
     <label class="edit-label" data-i18n="auth_password_label">Password</label>
     <input type="password" class="edit-input" id="authPassword" placeholder="••••••••" autocomplete="current-password">
+    <button class="text-link auth-forgot" id="authForgotBtn" type="button" data-i18n="auth_forgot">Forgot password?</button>
 
     <p class="auth-error" id="authError" style="display:none;"></p>
     <p class="auth-note" id="authNote" style="display:none;"></p>
@@ -2510,9 +2532,21 @@
       </div>
     </div>
 
+    <div class="row-list profile-feedback">
+      <button class="row-card" id="feedbackOpenBtn" type="button">
+        <span class="round-icon ic-teal"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 5h14v10H10l-4 4v-4H5Z"/><path d="M9 9.5h6M9 12h4"/></svg></span>
+        <span class="row-text">
+          <span class="row-title" data-i18n="feedback_title">Send feedback</span>
+          <span class="row-sub" data-i18n="feedback_row_sub">Report a bug or suggest an idea</span>
+        </span>
+        <span class="row-end"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m9 6 6 6-6 6"/></svg></span>
+      </button>
+    </div>
+
     <div class="pref-block profile-footer">
       <button class="text-link tour-replay" id="tourReplayBtn" data-i18n="tour_replay">Show the tour again</button>
       <button class="btn btn-ghost" id="signOutBtn" style="width:100%; justify-content:center;" data-i18n="sign_out">Sign out</button>
+      <button class="text-link delete-account-link" id="deleteAccountBtn" type="button" data-i18n="delete_link">Delete my account</button>
     </div>
   </section>
 
@@ -2666,6 +2700,53 @@
     </div>
   </div>
 
+  <div class="confirm-overlay" id="resetOverlay">
+    <div class="confirm-card account-card">
+      <h2 class="account-title" data-i18n="reset_title">Set a new password</h2>
+      <p class="account-sub" data-i18n="reset_sub">Choose a new password for your account.</p>
+      <input type="password" class="edit-input" id="resetPasswordInput" autocomplete="new-password" data-i18n-placeholder="reset_placeholder" placeholder="New password (at least 6 characters)">
+      <p class="auth-error" id="resetError" style="display:none;"></p>
+      <p class="auth-note" id="resetDone" style="display:none;" data-i18n="reset_done">Password updated.</p>
+      <div class="confirm-actions">
+        <button class="btn btn-ghost" id="resetCancelBtn" data-i18n="cancel">Cancel</button>
+        <button class="btn btn-solid" id="resetSaveBtn" data-i18n="reset_save">Save password</button>
+      </div>
+    </div>
+  </div>
+
+  <div class="confirm-overlay" id="feedbackOverlay">
+    <div class="confirm-card account-card">
+      <h2 class="account-title" data-i18n="feedback_title">Send feedback</h2>
+      <p class="account-sub" data-i18n="feedback_sub">Found a bug or have an idea? It goes straight to the developer.</p>
+      <div class="view-toggle" id="feedbackKind">
+        <button class="pill selected" data-kind="bug" data-i18n="feedback_bug">Something's broken</button>
+        <button class="pill" data-kind="idea" data-i18n="feedback_idea">Idea</button>
+        <button class="pill" data-kind="other" data-i18n="feedback_other">Other</button>
+      </div>
+      <textarea id="feedbackText" rows="5" maxlength="2000" data-i18n-placeholder="feedback_placeholder" placeholder="What happened, or what would you like to see?"></textarea>
+      <p class="auth-error" id="feedbackError" style="display:none;"></p>
+      <p class="auth-note" id="feedbackDone" style="display:none;" data-i18n="feedback_thanks">Thanks! Your feedback was sent.</p>
+      <div class="confirm-actions">
+        <button class="btn btn-ghost" id="feedbackCancelBtn" data-i18n="cancel">Cancel</button>
+        <button class="btn btn-solid" id="feedbackSendBtn" data-i18n="feedback_send">Send</button>
+      </div>
+    </div>
+  </div>
+
+  <div class="confirm-overlay" id="deleteOverlay">
+    <div class="confirm-card account-card">
+      <h2 class="account-title" data-i18n="delete_title">Delete your account?</h2>
+      <p class="account-sub" data-i18n="delete_sub">This permanently deletes your account and everything in it: kitchen, saved recipes, plans, guest menus, history and shopping list. It can't be undone.</p>
+      <label class="edit-label" id="deleteTypeLabel"></label>
+      <input type="text" class="edit-input" id="deleteConfirmInput" autocomplete="off" autocapitalize="characters">
+      <p class="auth-error" id="deleteError" style="display:none;"></p>
+      <div class="confirm-actions">
+        <button class="btn btn-ghost" id="deleteCancelBtn" data-i18n="cancel">Cancel</button>
+        <button class="btn btn-solid confirm-danger-btn" id="deleteConfirmBtn" disabled data-i18n="delete_btn">Delete account</button>
+      </div>
+    </div>
+  </div>
+
   <div class="confirm-overlay" id="confirmOverlay">
     <div class="confirm-card">
       <p class="confirm-text" id="confirmText"></p>
@@ -2682,6 +2763,36 @@
 /* ============ TRANSLATIONS (English / Türkçe) ============ */
 const translations = {
   en: {
+    auth_google: "Continue with Google",
+    auth_or: "or",
+    auth_forgot: "Forgot password?",
+    auth_forgot_need_email: "Type your email above first, then tap \"Forgot password?\" again.",
+    auth_forgot_sent: "If an account exists for that email, a reset link is on its way. Check your inbox (and spam).",
+    reset_title: "Set a new password",
+    reset_sub: "Choose a new password for your account.",
+    reset_placeholder: "New password (at least 6 characters)",
+    reset_save: "Save password",
+    reset_too_short: "Use at least 6 characters.",
+    reset_done: "Password updated.",
+    feedback_title: "Send feedback",
+    feedback_row_sub: "Report a bug or suggest an idea",
+    feedback_sub: "Found a bug or have an idea? It goes straight to the developer.",
+    feedback_bug: "Something's broken",
+    feedback_idea: "Idea",
+    feedback_other: "Other",
+    feedback_placeholder: "What happened, or what would you like to see?",
+    feedback_send: "Send",
+    feedback_empty: "Write a few words first.",
+    feedback_thanks: "Thanks! Your feedback was sent.",
+    feedback_failed: "Couldn't send it. Check your connection and try again.",
+    delete_link: "Delete my account",
+    delete_title: "Delete your account?",
+    delete_sub: "This permanently deletes your account and everything in it: kitchen, saved recipes, plans, guest menus, history and shopping list. It can't be undone.",
+    delete_type: "Type {word} to confirm",
+    delete_word: "DELETE",
+    delete_btn: "Delete account",
+    delete_failed: "Couldn't delete the account. Try again in a moment.",
+    delete_done: "Your account was deleted.",
     auth_signin_tab: "Sign in",
     auth_signup_tab: "Create account",
     auth_email_label: "Email",
@@ -3030,6 +3141,36 @@ const translations = {
     missing_tag: "missing"
   },
   tr: {
+    auth_google: "Google ile devam et",
+    auth_or: "veya",
+    auth_forgot: "Şifremi unuttum",
+    auth_forgot_need_email: "Önce yukarıya e-postanı yaz, sonra \"Şifremi unuttum\"a tekrar dokun.",
+    auth_forgot_sent: "Bu e-postayla bir hesap varsa sıfırlama bağlantısı yolda. Gelen kutunu (ve spam klasörünü) kontrol et.",
+    reset_title: "Yeni şifre belirle",
+    reset_sub: "Hesabın için yeni bir şifre seç.",
+    reset_placeholder: "Yeni şifre (en az 6 karakter)",
+    reset_save: "Şifreyi kaydet",
+    reset_too_short: "En az 6 karakter kullan.",
+    reset_done: "Şifren güncellendi.",
+    feedback_title: "Geri bildirim gönder",
+    feedback_row_sub: "Bir hatayı bildir ya da fikir öner",
+    feedback_sub: "Bir hata mı buldun, aklına bir fikir mi geldi? Doğrudan geliştiriciye gider.",
+    feedback_bug: "Bir şey bozuk",
+    feedback_idea: "Fikir",
+    feedback_other: "Diğer",
+    feedback_placeholder: "Ne oldu, ya da ne görmek isterdin?",
+    feedback_send: "Gönder",
+    feedback_empty: "Önce birkaç kelime yaz.",
+    feedback_thanks: "Teşekkürler! Geri bildirimin iletildi.",
+    feedback_failed: "Gönderilemedi. Bağlantını kontrol edip tekrar dene.",
+    delete_link: "Hesabımı sil",
+    delete_title: "Hesabını silmek istiyor musun?",
+    delete_sub: "Hesabın ve içindeki her şey kalıcı olarak silinir: mutfağın, kayıtlı tariflerin, planların, misafir menülerin, geçmişin ve alışveriş listen. Geri alınamaz.",
+    delete_type: "Onaylamak için {word} yaz",
+    delete_word: "SİL",
+    delete_btn: "Hesabı sil",
+    delete_failed: "Hesap silinemedi. Biraz sonra tekrar dene.",
+    delete_done: "Hesabın silindi.",
     auth_signin_tab: "Giriş yap",
     auth_signup_tab: "Hesap oluştur",
     auth_email_label: "E-posta",
@@ -3597,13 +3738,162 @@ async function signOut(){
   await supabaseClient.auth.signOut();
 }
 
+// The address the user comes back to after Google sign-in or a password-reset email.
+function authReturnUrl(){ return window.location.origin + window.location.pathname; }
+
+/* ---- Google sign-in ---- */
+document.getElementById('authGoogleBtn').addEventListener('click', async () => {
+  authError.style.display = 'none';
+  const { error } = await supabaseClient.auth.signInWithOAuth({ provider: 'google', options: { redirectTo: authReturnUrl() } });
+  if (error) showAuthError(error.message || 'Something went wrong.');
+});
+
+/* ---- Forgot password: email a reset link ---- */
+document.getElementById('authForgotBtn').addEventListener('click', async () => {
+  const email = authEmail.value.trim();
+  if (!email){ showAuthError(t('auth_forgot_need_email')); authEmail.focus(); return; }
+  const btn = document.getElementById('authForgotBtn');
+  btn.disabled = true;
+  try {
+    const { error } = await supabaseClient.auth.resetPasswordForEmail(email, { redirectTo: authReturnUrl() });
+    if (error) throw error;
+    showAuthNote(t('auth_forgot_sent'));
+  } catch (err){
+    showAuthError(err.message || 'Something went wrong.');
+  } finally {
+    btn.disabled = false;
+  }
+});
+
+/* ---- New password (after following the reset link) ---- */
+const resetOverlay = document.getElementById('resetOverlay');
+function openResetPassword(){
+  document.getElementById('resetPasswordInput').value = '';
+  document.getElementById('resetError').style.display = 'none';
+  document.getElementById('resetDone').style.display = 'none';
+  resetOverlay.classList.add('open');
+  setTimeout(() => document.getElementById('resetPasswordInput').focus(), 50);
+}
+document.getElementById('resetCancelBtn').addEventListener('click', () => resetOverlay.classList.remove('open'));
+document.getElementById('resetSaveBtn').addEventListener('click', async () => {
+  const input = document.getElementById('resetPasswordInput');
+  const errEl = document.getElementById('resetError');
+  const password = input.value;
+  if (password.length < 6){ errEl.textContent = t('reset_too_short'); errEl.style.display = 'block'; return; }
+  const btn = document.getElementById('resetSaveBtn');
+  btn.disabled = true;
+  try {
+    const { error } = await supabaseClient.auth.updateUser({ password });
+    if (error) throw error;
+    document.getElementById('resetDone').style.display = 'block';
+    setTimeout(() => resetOverlay.classList.remove('open'), 1200);
+  } catch (err){
+    errEl.textContent = err.message || 'Something went wrong.';
+    errEl.style.display = 'block';
+  } finally {
+    btn.disabled = false;
+  }
+});
+
+/* ---- Feedback ---- */
+const feedbackOverlay = document.getElementById('feedbackOverlay');
+let feedbackKind = 'bug';
+let feedbackFromPage = 'profile';
+function openFeedback(){
+  feedbackKind = 'bug';
+  document.querySelectorAll('#feedbackKind .pill').forEach(p => p.classList.toggle('selected', p.dataset.kind === 'bug'));
+  document.getElementById('feedbackText').value = '';
+  document.getElementById('feedbackError').style.display = 'none';
+  document.getElementById('feedbackDone').style.display = 'none';
+  document.getElementById('feedbackSendBtn').disabled = false;
+  feedbackOverlay.classList.add('open');
+}
+document.querySelectorAll('#feedbackKind .pill').forEach(pill => {
+  pill.addEventListener('click', () => {
+    feedbackKind = pill.dataset.kind;
+    document.querySelectorAll('#feedbackKind .pill').forEach(p => p.classList.toggle('selected', p === pill));
+  });
+});
+document.getElementById('feedbackOpenBtn').addEventListener('click', openFeedback);
+document.getElementById('feedbackCancelBtn').addEventListener('click', () => feedbackOverlay.classList.remove('open'));
+document.getElementById('feedbackSendBtn').addEventListener('click', async () => {
+  const text = document.getElementById('feedbackText').value.trim();
+  const errEl = document.getElementById('feedbackError');
+  errEl.style.display = 'none';
+  if (!text){ errEl.textContent = t('feedback_empty'); errEl.style.display = 'block'; return; }
+  const btn = document.getElementById('feedbackSendBtn');
+  btn.disabled = true;
+  const { error } = await supabaseClient.from('feedback').insert({
+    kind: feedbackKind,
+    message: text.slice(0, 2000),
+    page: feedbackFromPage,
+    language: currentLanguage,
+    user_agent: (navigator.userAgent || '').slice(0, 300)
+  });
+  if (error){
+    console.error('Failed to send feedback:', error);
+    errEl.textContent = t('feedback_failed');
+    errEl.style.display = 'block';
+    btn.disabled = false;
+    return;
+  }
+  document.getElementById('feedbackDone').style.display = 'block';
+  setTimeout(() => feedbackOverlay.classList.remove('open'), 1400);
+});
+
+/* ---- Delete account ---- */
+const deleteOverlay = document.getElementById('deleteOverlay');
+function deleteWordMatches(){
+  const typed = document.getElementById('deleteConfirmInput').value.trim().toLocaleUpperCase(currentLanguage === 'tr' ? 'tr-TR' : 'en-US');
+  return typed === t('delete_word');
+}
+function openDeleteAccount(){
+  document.getElementById('deleteTypeLabel').textContent = t('delete_type').replace('{word}', t('delete_word'));
+  document.getElementById('deleteConfirmInput').value = '';
+  document.getElementById('deleteError').style.display = 'none';
+  document.getElementById('deleteConfirmBtn').disabled = true;
+  deleteOverlay.classList.add('open');
+}
+document.getElementById('deleteAccountBtn').addEventListener('click', openDeleteAccount);
+document.getElementById('deleteCancelBtn').addEventListener('click', () => deleteOverlay.classList.remove('open'));
+document.getElementById('deleteConfirmInput').addEventListener('input', () => {
+  document.getElementById('deleteConfirmBtn').disabled = !deleteWordMatches();
+});
+document.getElementById('deleteConfirmBtn').addEventListener('click', async () => {
+  if (!deleteWordMatches()) return;
+  const btn = document.getElementById('deleteConfirmBtn');
+  const errEl = document.getElementById('deleteError');
+  btn.disabled = true;
+  errEl.style.display = 'none';
+  const { error } = await supabaseClient.rpc('delete_my_account');
+  if (error){
+    console.error('Failed to delete account:', error);
+    errEl.textContent = t('delete_failed');
+    errEl.style.display = 'block';
+    btn.disabled = false;
+    return;
+  }
+  deleteOverlay.classList.remove('open');
+  await supabaseClient.auth.signOut();
+  showAuthNote(t('delete_done'));
+});
+
 document.getElementById('signOutBtn').addEventListener('click', signOut);
 
 let currentUserId = null;
+let accountName = '';
+// Google accounts come with a name; use its first word to pre-fill the setup card.
+function rememberAccountName(user){
+  const meta = (user && user.user_metadata) || {};
+  const full = meta.given_name || meta.full_name || meta.name || '';
+  accountName = String(full).trim().split(/\s+/)[0] || '';
+}
 
 supabaseClient.auth.onAuthStateChange((event, session) => {
+  if (event === 'PASSWORD_RECOVERY') setTimeout(openResetPassword, 0);
   if (session){
     currentUserId = session.user.id;
+    rememberAccountName(session.user);
     showApp();
   } else {
     currentUserId = null;
@@ -3640,6 +3930,7 @@ const BACK_TARGET = { recipes: 'home', saved: 'profile', history: 'profile' };
 let currentPage = 'home';
 
 function goToPage(name){
+  if (name === 'profile' && currentPage !== 'profile') { try { feedbackFromPage = currentPage; } catch (e) {} }
   currentPage = name;
   Object.entries(tabPages).forEach(([key, el]) => el.classList.toggle('active', key === name));
   const hasBack = !!BACK_TARGET[name];
@@ -7516,7 +7807,7 @@ function startOnboarding(){
   onboardChoice.servings = prefs.servings || '2';
   onboardChoice.diet = prefs.diet || 'no restrictions';
   document.getElementById('onboardAllergies').value = prefs.allergies || '';
-  document.getElementById('onboardName').value = prefs.displayName || '';
+  document.getElementById('onboardName').value = prefs.displayName || accountName || '';
   syncOnboardPills();
   onboardSetup.classList.add('open');
 }

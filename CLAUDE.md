@@ -14,7 +14,13 @@ Pantry-based recipe and meal-planning web app. Owner: Hamza (works in Turkish �
 - Database changes: write the SQL and give it to the owner to run in the Supabase SQL Editor (no direct DB access).
 
 ## Database tables
-`pantry_items` (name, category, use_soon, quantity) · `saved_recipes` · `meal_history` (cooked_on) · `meal_plans` (start_date, days jsonb, prep jsonb) · `shopping_list` (name, amount, checked, source) · `profiles` (user_id PK; language, diet, goal, allow_missing, servings, allergies, plan_prefs jsonb, onboarded, display_name) · `guest_menus` (title, guests, dishes jsonb, timeline jsonb).
+`pantry_items` (name, category, use_soon, quantity) · `saved_recipes` · `meal_history` (cooked_on) · `meal_plans` (start_date, days jsonb, prep jsonb) · `shopping_list` (name, amount, checked, source) · `profiles` (user_id PK; language, diet, goal, allow_missing, servings, allergies, plan_prefs jsonb, onboarded, display_name) · `guest_menus` (title, guests, dishes jsonb, timeline jsonb). · `feedback` (kind, message, page, language, user_agent; users can insert/read their own, the owner reads all in the Supabase Table Editor).
+- `delete_my_account()` (Postgres function, security definer): deletes the caller's rows in every table and their `auth.users` row; the Profile "Delete my account" button calls it via `rpc`. Add any new table to it.
+
+## Auth
+- Email/password, Google (Supabase Google provider), and password reset (`resetPasswordForEmail` → `PASSWORD_RECOVERY` event → new-password card). Redirects go to the current page URL, so the Vercel production and preview URLs must be in Supabase → Authentication → URL Configuration → Redirect URLs.
+- **Open reminder for the owner (domain + email, postponed):** no custom domain yet; the app uses its personal email and `fridge-to-table-delta.vercel.app`. Owner wants no subscriptions (no Google Workspace). When ready: buy the domain (was considering `agh-production.com`) at Cloudflare Registrar, set up free Cloudflare Email Routing (e.g. `destek@…` → Gmail), point a subdomain (e.g. `dolaptansofraya.agh-production.com`) at Vercel, then add it to Supabase Redirect URLs and Google Auth Platform authorized domains, and use the new address in the privacy policy / Google support email. Optional later: free Brevo SMTP as Supabase custom SMTP. Note: Vercel Hobby is non-commercial; switch to Pro when the app earns money.
+- **Open reminder for the owner:** the Google Auth Platform app is still in *Testing* (not published), so only Google accounts added as test users can sign in with Google. Remind Hamza to publish it (Audience → Publish app) before sharing the app more widely.
 
 ## Product decisions
 - **Sidebar/Profile = universal settings** (diet, allergies, servings, goal, language). They are the defaults everywhere.
