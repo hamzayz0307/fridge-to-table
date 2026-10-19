@@ -38,6 +38,7 @@ Pantry-based recipe and meal-planning web app. Owner: Hamza (works in Turkish â€
 - **Sidebar/Profile = universal settings** (diet, allergies, servings, goal, language). They are the defaults everywhere.
 - **Recipes page** choices are temporary for that suggestion and never write to the profile (shows a "changed" badge + "reset to my defaults").
 - **Meal plan page** has its own remembered settings (`profiles.plan_prefs`), independent of the sidebar. Default mode is **meal prep** (few dishes cooked once, eaten on several days; the app computes which dish is eaten which day and portion counts); **daily plan** is the alternative.
+- Plan page has two views: settings (`#planSetupView`) and, after generating, only the menu (`#planResultView`) with "Suggest a new menu" (regenerates with the same settings and tells the AI to avoid the previous dishes via `planAvoidTitles`) and "Change settings" (back to setup, with a "Back to the menu" link while a plan exists). Clearing the plan or leaving the page returns to settings.
 - **Guest menu**: courses with notes, guest count, occasion, prep time (3h/5h/10h/1d/2d), host timeline.
 - Everything is bilingual (English/Turkish): UI strings in the `translations` object (`t(key)`), option pills in `pillLabels`; AI is told to answer in the selected language. Brand: "Fridge-to-Table" / "Dolaptan Sofraya".
 - New accounts get a setup card + spotlight tour once (`profiles.onboarded`).

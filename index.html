@@ -1831,6 +1831,10 @@
   .cook-mode-complete-actions{ display: flex; gap: 10px; flex-wrap: wrap; justify-content: center; }
   .cook-mode-complete-actions .btn:not(.btn-solid){ background: var(--bg-soft); }
 
+  /* plan: result view */
+  .plan-result-tools{ display: flex; flex-wrap: wrap; gap: 8px; margin: 2px 0 18px; }
+  .plan-back-to-result{ display: inline-block; margin: -2px 0 14px; }
+
   /* share */
   .bubble-share-btn{ font: 600 13.5px var(--font-ui); padding: 10px 16px; margin: 0; border-radius: 999px; border: none; background: var(--bg-soft); color: var(--ink); cursor: pointer; display: inline-flex; align-items: center; gap: 6px; }
   .bubble-share-btn:hover{ background: var(--soft-hover); }
@@ -2281,8 +2285,10 @@
       <button class="plan-switch-btn" data-go="plan" data-i18n="switch_week">My week</button>
       <button class="plan-switch-btn" data-go="guest" data-i18n="switch_guests">Guests</button>
     </div>
+    <div id="planSetupView">
     <p class="eyebrow" data-i18n="plan_eyebrow">meal prep</p>
     <h1 class="screen-title" data-i18n="plan_title">Prep your week</h1>
+    <button class="text-link plan-back-to-result" id="planBackToResultBtn" type="button" style="display:none;" data-i18n="plan_back_to_menu">Back to the menu</button>
     <p class="screen-sub" data-i18n="plan_sub">Cook once and eat all week — or switch to a daily plan. Uses your pantry and profile.</p>
 
 
@@ -2397,6 +2403,15 @@
       <h2 class="empty-title" data-i18n="plan_empty_title">No plan yet</h2>
       <p class="empty-desc" data-i18n="plan_empty_desc">Pick your settings, then hit "Generate plan".</p>
     </div>
+    </div>
+
+    <div id="planResultView" style="display:none;">
+      <h1 class="screen-title" id="planResultTitle" data-i18n="plan_result_title">Your menu</h1>
+      <p class="screen-sub" id="planResultSub"></p>
+      <div class="plan-result-tools">
+        <button class="btn btn-solid" id="planRegenerateBtn" type="button" data-i18n="plan_regenerate">Suggest a new menu</button>
+        <button class="btn" id="planEditSettingsBtn" type="button" data-i18n="plan_edit_settings">Change settings</button>
+      </div>
 
     <div class="plan-calendar-strip" id="planCalendarStrip" style="display:none;"></div>
 
@@ -2411,6 +2426,7 @@
         <button class="btn" id="printPlanBtn" data-i18n="print_plan">Print plan</button>
         <button class="btn btn-ghost" id="clearPlanBtn" data-i18n="clear_plan">Clear plan</button>
       </div>
+    </div>
     </div>
   </section>
 
@@ -2912,6 +2928,14 @@ const translations = {
     share_sub: "Anyone with this link can see the recipe.",
     share_copy: "Copy link",
     settings_row_sub: "Language, appearance, diet, allergies, servings",
+    plan_result_title: "Your prep menu",
+    plan_result_title_daily: "Your plan",
+    plan_regenerate: "Suggest a new menu",
+    plan_edit_settings: "Change settings",
+    plan_back_to_menu: "Back to the menu",
+    plan_sum_days: "{n} days",
+    plan_sum_dishes: "{n} dishes",
+    plan_sum_recipes: "{n} recipes",
     auth_signin_tab: "Sign in",
     auth_signup_tab: "Create account",
     auth_email_label: "Email",
@@ -3315,6 +3339,14 @@ const translations = {
     share_sub: "Bu linke sahip olan herkes tarifi görebilir.",
     share_copy: "Linki kopyala",
     settings_row_sub: "Dil, görünüm, diyet, alerjiler, porsiyon",
+    plan_result_title: "Meal prep menün",
+    plan_result_title_daily: "Planın",
+    plan_regenerate: "Yeni menü öner",
+    plan_edit_settings: "Ayarları değiştir",
+    plan_back_to_menu: "Menüye dön",
+    plan_sum_days: "{n} gün",
+    plan_sum_dishes: "{n} yemek",
+    plan_sum_recipes: "{n} tarif",
     auth_signin_tab: "Giriş yap",
     auth_signup_tab: "Hesap oluştur",
     auth_email_label: "E-posta",
@@ -4129,6 +4161,7 @@ function resetPantryCapture(){
 }
 
 function resetPlanFlow(){
+  try { planViewMode = 'setup'; planAvoidTitles = []; } catch (e) {}
   mealPlan = [];
   expandedPlanIndex = null;
   planStartDate = todayIso();
@@ -5581,6 +5614,12 @@ document.getElementById('planSelectNoneBtn').addEventListener('click', () => {
 });
 
 // Meal prep: a few dishes cooked in one session and eaten on several days.
+function planAvoidLine(){
+  try {
+    return planAvoidTitles.length ? `\nThe user asked for a different suggestion. Do NOT repeat these dishes or close variations of them: ${planAvoidTitles.join(', ')}.` : '';
+  } catch (e) { return ''; }
+}
+
 function buildMealPrepPrompt(days){
   const meals = MEAL_ORDER.filter(m => planPrefs.meals.includes(m));
   const dishCount = parseInt(planPrefs.dishCount, 10) || 2;
@@ -5619,7 +5658,7 @@ function buildMealPrepPrompt(days){
     ? 'Every dish MUST be fully makeable from the available pool above (plus basic pantry staples) — missing_ingredients must be an empty array. Pick dishes that genuinely work with only what is listed.'
     : 'One shopping trip before prep day is fine: list what each dish needs beyond the pool under its missing_ingredients, sized for the whole batch.';
 
-  return `Available ingredients (a pool to choose from, not a checklist; amounts in parentheses are roughly what's on hand): ${selectedNames.join(', ')}.${priorityLine}${historyLine}${allergiesLine()}
+  return `Available ingredients (a pool to choose from, not a checklist; amounts in parentheses are roughly what's on hand): ${selectedNames.join(', ')}.${priorityLine}${historyLine}${planAvoidLine()}${allergiesLine()}
 This is a MEAL PREP plan: the user cooks everything in ONE prep session on day 1 (${dayName(0)} ${planStartDate}), portions it into containers, and eats the same dishes again on several days, reheating them from the fridge or freezer. Do not plan a different dish for every day.
 Create exactly these ${total} dishes (one recipe each):
 ${dishLines.join('\n')}
@@ -5713,7 +5752,7 @@ function buildMealPlanPrompt(days){
     ? 'Every meal MUST be fully makeable from the available pool above (plus basic pantry staples) — missing_ingredients must be an empty array for every recipe. Pick dishes that genuinely work with only what is listed, even if that means simpler meals.'
     : 'One shopping trip for the whole plan is fine: list what each recipe needs beyond the pool under its missing_ingredients, and reuse those extra purchases across days where sensible.';
 
-  return `Available ingredients (a pool to choose from, not a checklist; amounts in parentheses are roughly what's on hand, so don't call for more than that of those items): ${selectedNames.join(', ')}.${priorityLine}${historyLine}${allergiesLine()}
+  return `Available ingredients (a pool to choose from, not a checklist; amounts in parentheses are roughly what's on hand, so don't call for more than that of those items): ${selectedNames.join(', ')}.${priorityLine}${historyLine}${planAvoidLine()}${allergiesLine()}
 Plan dates: ${dayList}.
 Meals each day: ${meals.join(', ')}.
 Universal constraints: ${prefs.servings} servings per meal, dietary requirement: ${prefs.diet} (a hard constraint, never violate it).
@@ -5859,7 +5898,37 @@ function swapPlanDishes(a, b){
   mealPlan[b] = Object.assign(A, slotB);
 }
 
+// The plan page shows either the settings ("setup") or only the finished menu ("result").
+let planViewMode = 'setup';
+let planAvoidTitles = [];   // dishes from earlier suggestions, so "Suggest again" brings new ones
+function planResultSummary(){
+  const days = parseInt(planPrefs.planDays, 10) || mealPlan.length;
+  const isPrep = planPrefs.mode === 'prep';
+  const dishes = new Set(mealPlan.map(r => r.dish).filter(Boolean)).size || mealPlan.length;
+  const parts = [t('plan_sum_days').replace('{n}', days)];
+  if (isPrep) parts.push(t('plan_sum_dishes').replace('{n}', dishes));
+  else parts.push(t('plan_sum_recipes').replace('{n}', mealPlan.length));
+  try {
+    const end = addDaysIso(planStartDate, days - 1);
+    parts.push(`${formatDayLabel(planStartDate)} – ${formatDayLabel(end)}`);
+  } catch (e) {}
+  return parts.join(' · ');
+}
+function applyPlanView(){
+  const showResult = mealPlan.length > 0 && planViewMode === 'result';
+  document.getElementById('planSetupView').style.display = showResult ? 'none' : '';
+  document.getElementById('planResultView').style.display = showResult ? '' : 'none';
+  document.getElementById('planBackToResultBtn').style.display = (!showResult && mealPlan.length) ? '' : 'none';
+  if (showResult){
+    document.getElementById('planResultTitle').textContent = t(planPrefs.mode === 'prep' ? 'plan_result_title' : 'plan_result_title_daily');
+    document.getElementById('planResultSub').textContent = planResultSummary();
+  }
+}
+function showPlanResult(){ planViewMode = 'result'; applyPlanView(); window.scrollTo(0, 0); }
+function showPlanSetup(){ planViewMode = 'setup'; applyPlanView(); window.scrollTo(0, 0); }
+
 function renderMealPlan(){
+  applyPlanView();
   planEmptyResults.style.display = mealPlan.length ? 'none' : 'flex';
   planActionsRow.style.display = mealPlan.length ? 'flex' : 'none';
   renderPlanCalendarStrip();
@@ -6070,27 +6139,44 @@ async function generateMealPlan(){
   }
 }
 
-generatePlanBtn.addEventListener('click', async () => {
+async function runPlanGeneration(){
   if (selectedForRecipe.size === 0){
     showError(planErrorBox, t('err_select_ingredient'));
+    showPlanSetup();
     return;
   }
   clearError(planErrorBox);
+  const previous = mealPlan.slice();
   showLoadingOverlay(t('loading_plan'));
   await generateMealPlan();
   if (mealPlan.length){
     hideLoadingOverlay();
+    showPlanResult();
   } else {
+    if (previous.length){ mealPlan = previous; renderMealPlan(); }   // keep the old menu if the new one failed
     showLoadingError(planErrorBox.textContent || t('err_generate_plan'));
   }
+}
+
+generatePlanBtn.addEventListener('click', runPlanGeneration);
+
+document.getElementById('planRegenerateBtn').addEventListener('click', () => {
+  const titles = mealPlan.map(r => r.title).filter(Boolean);
+  planAvoidTitles = Array.from(new Set(planAvoidTitles.concat(titles))).slice(-12);
+  runPlanGeneration();
 });
+document.getElementById('planEditSettingsBtn').addEventListener('click', showPlanSetup);
+document.getElementById('planBackToResultBtn').addEventListener('click', showPlanResult);
 
 clearPlanBtn.addEventListener('click', () => {
   mealPlan = [];
   planPrep = [];
   expandedPlanIndex = null;
   planSaved = false;
+  planAvoidTitles = [];
+  planViewMode = 'setup';
   renderMealPlan();
+  window.scrollTo(0, 0);
 });
 
 document.getElementById('printPlanBtn').addEventListener('click', () => {
