@@ -34,6 +34,11 @@ Pantry-based recipe and meal-planning web app. Owner: Hamza (works in Turkish â€
 - Share: `shared_recipes` (id uuid, user_id, recipe jsonb). Insert/read/delete own via RLS; the public reads one recipe only through `get_shared_recipe(share_id)` (security definer, granted to anon) so the table can't be listed. The link is `/r.html?id=<uuid>` (standalone page, escapes all text). Share uses `navigator.share`, else clipboard, else a copy-link card. Personal fields are stripped before sharing; share ids are cached per device (`ftt_shares_<uid>`) so re-sharing reuses the link.
 - SQL for these: `supabase/list_expiry_share.sql` (also updates `delete_my_account()`).
 
+## Positioning (agreed Oct 2026, no work planned yet)
+- Competitor review: "recipes from what's in your fridge", photo scanning, expiry alerts and shopping lists are now standard (Samsung Food is the closest all-in-one rival; also Fridge AI, SuperCook, ChefGPT, Mealime; in Turkey Yemek.com / Nefis Yemek Tarifleri are recipe archives with ingredient search).
+- Position the app as a **Turkish, meal-prep- and guest-menu-focused smart kitchen**; don't lead with "recipes from your fridge". Differentiators: pantry-driven meal prep (cook once, eat across days), AI guest menu with prep-time budget and host timeline, Turkish cuisine/language and Turkish supermarket aisles, free for now.
+- Known gaps vs competitors: AI-generated (unverified) recipes, no receipt/barcode import, not in the app stores yet. Owner said not to act on this yet; keep it in mind for copy, onboarding and store listing later.
+
 ## Product decisions
 - **Sidebar/Profile = universal settings** (diet, allergies, servings, goal, language). They are the defaults everywhere.
 - **Recipes page** choices are temporary for that suggestion and never write to the profile (shows a "changed" badge + "reset to my defaults").
